@@ -1,6 +1,6 @@
 xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/unity/Editor/Unity \
  -batchmode \
- -projectPath ${pwd}/src \
+ -projectPath "${pwd}"/src \
  -runTests \
  -testPlatform PlayMode \
  -testResults ./results.xml \
