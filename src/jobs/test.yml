@@ -7,7 +7,7 @@ parameters:
   test-platform:
     type: string
     default: "PlayMode"
-  
+
 steps:
   - checkout
   - activate
