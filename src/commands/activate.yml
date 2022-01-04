@@ -5,17 +5,7 @@ description: >
   Requirement: It is necessary to have an environment variable with the 
   base64 encoded ULF license file contents.
 
-parameters:
-  encoded-ulf-var-name:
-    type: env_var_name
-    default: "ACTIVATION_ULF_ENC"
-    description: >
-      Envinronment variable containing the base 64 encoded ULF license file contents. 
-      To generate it, follow the instructions described here: https://docs.unity3d.com/Manual/ManualActivationGuide.html#ulf-commandline.
-      Bear in mind that the ALF file mentioned in the URL above, has to be generated inside a CircleCI job, otherwise the hardware ID will be invalid.
 steps:
   - run:
-      environment:
-        ACTIVATION_ULF_VAR_NAME: <<parameters.encoded-ulf-var-name>>
       name: Activate Unity
       command: <<include(scripts/activate.sh)>>

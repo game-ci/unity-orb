@@ -4,16 +4,12 @@ description: >
 executor: default
 
 parameters:
-  encoded-ulf-var-name:
-    type: string
-    default: "ACTIVATION_ULF_ENC"
   test-platform:
     type: string
     default: "PlayMode"
   
 steps:
   - checkout
-  - activate:
-      encoded-ulf-var-name: <<parameters.encoded-ulf-var-name>>
+  - activate
   - run-tests:
       test-platform: <<parameters.test-platform>>
