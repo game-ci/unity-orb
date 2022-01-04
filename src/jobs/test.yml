@@ -1,0 +1,15 @@
+description: >
+  Simple drop-in job to run tests for your Unity game.
+
+executor: default
+
+parameters:
+  test-platform:
+    type: string
+    default: "PlayMode"
+
+steps:
+  - checkout
+  - activate
+  - run-tests:
+      test-platform: <<parameters.test-platform>>
