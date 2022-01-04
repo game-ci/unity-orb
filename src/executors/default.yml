@@ -1,10 +1,10 @@
 description: >
   This is a sample executor using Docker and Node.
 docker:
-  - image: 'cimg/node:<<parameters.tag>>'
+  - image: 'unityci/editor:<<parameters.tag>>'
 parameters:
   tag:
-    default: lts
+    default: 2021.2.7f1-mac-mono-0.15
     description: >
       Pick a specific circleci/node image variant:
       https://hub.docker.com/r/cimg/node/tags
