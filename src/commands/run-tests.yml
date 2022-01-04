@@ -1,6 +1,6 @@
 description: >
   This command runs the standalone tests inside your unity project.
- 
+
   Requirement: Unity must be activated first.
 
 parameters:
