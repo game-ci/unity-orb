@@ -1,0 +1,30 @@
+description: >
+  This command builds an Unity project and stores the resulting artifact.
+
+parameters:
+  project-path:
+    type: string
+    default: "."
+    description: |
+      Enter the relative path of your Unity project.
+      This should be the directory that has an "Assets" folder inside it.
+  build-target:
+    type: string
+    description: |
+      The target platform of your build.
+      Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2021.2/Documentation/ScriptReference/BuildTarget.html
+  build-name:
+    type: string
+    default: "TestBuild"
+    description: |
+      Enter the name for this build.
+
+steps:
+  - run:
+      name: Build the Unity project
+      environment:
+        PARAM_BUILD_NAME: <<parameters.build-name>>
+        PARAM_BUILD_TARGET: <<parameters.build-target>>
+        PARAM_PROJECT_PATH: <<parameters.project-path>>
+      command: <<include(scripts/build.sh)>>
+      
