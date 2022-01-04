@@ -1,6 +1,6 @@
 description: >
   This command runs the standalone tests inside your unity project.
-  
+ 
   Requirement: Unity must be activated first.
 
 parameters:
@@ -9,7 +9,7 @@ parameters:
     default: "PlayMode"
     description: >
       Target plataform for tests to run. Due to unknown reasons, it's only working with "PlayMode".
-      Acceptable parameters can be found here: 
+      Acceptable parameters can be found here:
 steps:
   - run:
       environment:

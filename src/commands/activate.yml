@@ -2,7 +2,7 @@ description: >
   This command handles Unity's offline activation following the method described
   in here: https://docs.unity3d.com/Manual/ManualActivationGuide.html#ulf-commandline.
 
-  Requirement: It is necessary to have an environment variable with the 
+  Requirement: It is necessary to have an environment variable with the
   base64 encoded ULF license file contents.
 
 steps:
