@@ -23,4 +23,4 @@ steps:
       command: <<include(scripts/activate.sh)>>
       environment:
         PARAM_UNITY_LICENSE: <<parameters.license>>
-        PARAM_UNITY_VERBOSE: <<parameters.verbose>>
+        PARAM_VERBOSE: <<parameters.verbose>>

@@ -10,12 +10,6 @@ parameters:
     description: |
       Target platform for tests to run. Due to unknown reasons, it's only working with "PlayMode".
       Acceptable parameters can be found here: TODO include unity docs link
-  license:
-    type: env_var_name
-    default: "ENCODED_ULF_LICENSE"
-    description: |
-      Enter the name of the environment variable containing Unity's ULF license activation file encoded in base64.
-      For more information on how to get such file and encoded it, access the wiki page: TODO create and add wiki page.
   verbose:
     type: boolean
     default: false
@@ -24,7 +18,10 @@ parameters:
 steps:
   - run:
       environment:
-        PARAM_TEST_PLATFORM: <<parameters.test-platform>>
-        PARAM_UNITY_LICENSE: <<parameters.license>>
+        PARAM_UNITY_TEST_PLATFORM: <<parameters.test-platform>>
+        PARAM_VERBOSE: <<parameters.verbose>>
       name: Run tests
       command: <<include(scripts/run-tests.sh)>>
+
+  - store_artifacts:
+      path: $TEST_RESULTS

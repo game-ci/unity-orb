@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-UNITY_EDITOR="$UNITY_PATH/Editor/Unity"
 ENCODED_UNITY_LICENSE="${!PARAM_UNITY_LICENSE}"
+TMP_UNITY_DIR=$(mktemp -d 'unity-orb.XXXXXX')
+UNITY_ACTIVATION_LOG="$TMP_UNITY_DIR/activation.log"
+UNITY_EDITOR="$UNITY_PATH/Editor/Unity"
 
 stdmsg() {
     local IFS=' '
@@ -20,7 +22,6 @@ fi
 DECODED_UNITY_LICENSE=$(stdmsg "$ENCODED_UNITY_LICENSE" | base64 --decode)
 
 # Writing the decoded license to a temporary file
-TMP_UNITY_DIR=$(mktemp -d 'unity-orb.XXXXXX')
 TMP_UNITY_LICENSE_FILE="$TMP_UNITY_DIR/license.ulf"
 touch "$TMP_UNITY_LICENSE_FILE"
 chmod 0600 "$TMP_UNITY_LICENSE_FILE"
@@ -29,10 +30,10 @@ stdmsg "Writing the decoded license to \"${TMP_UNITY_LICENSE_FILE}\""
 stdmsg "$DECODED_UNITY_LICENSE" > "$TMP_UNITY_LICENSE_FILE"
 
 # Returning "true" after activation to bypass misleading exit code 1
-"$UNITY_EDITOR" -batchmode -manualLicenseFile "$TMP_UNITY_LICENSE_FILE" -logfile "$TMP_UNITY_DIR/activation-log.txt" || true
-if [[ "$PARAM_UNITY_VERBOSE" -eq 1 ]]; then cat "$TMP_UNITY_DIR/activation-log.txt"; fi
+"$UNITY_EDITOR" -batchmode -manualLicenseFile "$TMP_UNITY_LICENSE_FILE" -logfile "$UNITY_ACTIVATION_LOG" || true
+if [[ "$PARAM_VERBOSE" -eq 1 ]]; then cat "$UNITY_ACTIVATION_LOG"; fi
 
-if grep "License file loaded" "$TMP_UNITY_DIR/activation-log.txt" && grep "Next license update check is after" "$TMP_UNITY_DIR/activation-log.txt"; then
+if grep "License file loaded" "$UNITY_ACTIVATION_LOG" && grep "Next license update check is after" "$UNITY_ACTIVATION_LOG"; then
     stdmsg "Unity activated successfully."
 else
     errmsg "Error activating Unity."

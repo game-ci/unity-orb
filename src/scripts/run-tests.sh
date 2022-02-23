@@ -1,12 +1,35 @@
-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/unity/Editor/Unity \
+#!/usr/bin/env bash
+
+PROJECT_PATH="$CIRCLE_WORKING_DIRECTORY/src"
+TEST_RESULTS="$CIRCLE_WORKING_DIRECTORY/results.xml"
+TMP_UNITY_DIR=$(mktemp -d 'unity-orb.XXXXXX')
+UNITY_EDITOR="$UNITY_PATH/Editor/Unity"
+UNITY_LOG_FILE="$TMP_UNITY_DIR/runTests.log"
+
+stdmsg() {
+    local IFS=' '
+    printf '%s\n' "$*"
+}
+
+errmsg() {
+    stdmsg "$*" 1>&2
+}
+
+xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' "$UNITY_EDITOR" \
  -batchmode \
- -projectPath "$(pwd)/src" \
+ -projectPath "$PROJECT_PATH" \
  -runTests \
- -testPlatform PlayMode \
- -testResults ./results.xml \
- -logFile /dev/stdout
+ -testPlatform "$PARAM_UNITY_TEST_PLATFORM" \
+ -testResults "$TEST_RESULTS" \
+ -logFile "$UNITY_LOG_FILE"
 
 UNITY_EXIT_CODE=$?
+stdmsg "Unity exited with: $UNITY_EXIT_CODE"
 
-echo "Unity exited with: $UNITY_EXIT_CODE"
-cat src/results.xml
+if [[ "$PARAM_VERBOSE" -eq 1 ]]; then
+    stdmsg "Unity's \"runTests\" output:"
+    cat "$UNITY_LOG_FILE"
+
+    stdmsg "Test results:"
+    cat "$TEST_RESULTS"
+fi
