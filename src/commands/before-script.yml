@@ -6,21 +6,15 @@ description: >
   base64 encoded ULF license file contents.
 
 parameters:
-  license:
+  unity-license-var-name:
     type: env_var_name
-    default: "ENCODED_ULF_LICENSE"
     description: |
       Enter the name of the environment variable containing Unity's ULF license activation file encoded in base64.
       For more information on how to get such file and encoded it, access the wiki page: TODO create and add wiki page.
-  verbose:
-    type: boolean
-    default: false
-    description: |
-      If set to "true", all the Unity CLI commands will be output.
+
 steps:
   - run:
-      name: Activate Unity
-      command: <<include(scripts/activate.sh)>>
+      name: "Prepare environment"
       environment:
-        PARAM_UNITY_LICENSE: <<parameters.license>>
-        PARAM_UNITY_VERBOSE: <<parameters.verbose>>
+        UNITY_LICENSE_VAR_NAME: << parameters.unity-license-var-name >>
+      command: << include(scripts/before-script.sh) >>

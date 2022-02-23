@@ -1,0 +1,45 @@
+description: >
+  Simple drop-in job to build your Unity game.
+
+parameters:
+  tag:
+    default: 2021.2.7f1-mac-mono-0.15
+    description: >
+      Pick a specific unityci/editor image variant:
+      https://hub.docker.com/r/unityci/editor/tags
+    type: string
+  license:
+    type: env_var_name
+    description: |
+      Enter the name of the environment variable containing Unity's ULF license activation file encoded in base64.
+      For more information on how to get such file and encoded it, access the wiki page: TODO create and add wiki page.
+  project-path:
+    type: string
+    default: "."
+    description: |
+      Enter the path of your Unity project.
+      This should be the directory that has an "Assets" folder inside it.
+  build-target:
+    type: string
+    description: |
+      The target platform of your build.
+      Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2021.2/Documentation/ScriptReference/BuildTarget.html
+  build-name:
+    type: string
+    default: "TestBuild"
+    description: |
+      Enter the name for this build.
+
+docker:
+  - image: 'unityci/editor:<<parameters.tag>>'
+
+steps:
+  - checkout
+  - before-script:
+      unity-license-var-name: << parameters.license >>
+  - build:
+      build-name: <<parameters.build-name>>
+      build-target: <<parameters.build-target>>
+      project-path: <<parameters.project-path>>
+  - store_artifacts:
+      path: <<parameters.project-path>>/Builds/<<parameters.build-target>>
