@@ -7,12 +7,24 @@ parameters:
   test-platform:
     type: string
     default: "PlayMode"
-    description: >
-      Target plataform for tests to run. Due to unknown reasons, it's only working with "PlayMode".
-      Acceptable parameters can be found here:
+    description: |
+      Target platform for tests to run. Due to unknown reasons, it's only working with "PlayMode".
+      Acceptable parameters can be found here: TODO include unity docs link
+  license:
+    type: env_var_name
+    default: "ENCODED_ULF_LICENSE"
+    description: |
+      Enter the name of the environment variable containing Unity's ULF license activation file encoded in base64.
+      For more information on how to get such file and encoded it, access the wiki page: TODO create and add wiki page.
+  verbose:
+    type: boolean
+    default: false
+    description: |
+      If set to "true", all the Unity CLI commands will be output.
 steps:
   - run:
       environment:
-        TEST_PLATAFORM: <<parameters.test-platform>>
+        PARAM_TEST_PLATFORM: <<parameters.test-platform>>
+        PARAM_UNITY_LICENSE: <<parameters.license>>
       name: Run tests
       command: <<include(scripts/run-tests.sh)>>
