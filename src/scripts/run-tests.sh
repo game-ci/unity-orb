@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-PROJECT_PATH="$CIRCLE_WORKING_DIRECTORY/src"
-TEST_RESULTS="$CIRCLE_WORKING_DIRECTORY/results.xml"
+BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd -P )"
+
+TEST_RESULTS="$BASE_DIR/results.xml"
 TMP_UNITY_DIR=$(mktemp -d 'unity-orb.XXXXXX')
 UNITY_EDITOR="$UNITY_PATH/Editor/Unity"
-UNITY_LOG_FILE="$TMP_UNITY_DIR/runTests.log"
+UNITY_TEST_LOG="$TMP_UNITY_DIR/runTests.log"
 
 stdmsg() {
     local IFS=' '
@@ -15,21 +16,38 @@ errmsg() {
     stdmsg "$*" 1>&2
 }
 
+trap_exit() {
+  # It is critical that the first line capture the exit code. Nothing else can come before this.
+  # The exit code recorded here comes from the command that caused the script to exit.
+  local exit_status="$?"
+
+  rm -rf "$TMP_UNITY_DIR"
+
+  if [ "$exit_status" -ne 0 ]; then
+    errmsg 'The script did not complete successfully.'
+    errmsg 'The exit code was '"$exit_status"
+  fi
+}
+trap trap_exit EXIT
+
 xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' "$UNITY_EDITOR" \
  -batchmode \
- -projectPath "$PROJECT_PATH" \
+ -logFile "$UNITY_TEST_LOG" \
+ -projectPath "$BASE_DIR/src" \
  -runTests \
  -testPlatform "$PARAM_UNITY_TEST_PLATFORM" \
- -testResults "$TEST_RESULTS" \
- -logFile "$UNITY_LOG_FILE"
+ -testResults "$TEST_RESULTS"
 
 UNITY_EXIT_CODE=$?
-stdmsg "Unity exited with: $UNITY_EXIT_CODE"
 
-if [[ "$PARAM_VERBOSE" -eq 1 ]]; then
-    stdmsg "Unity's \"runTests\" output:"
-    cat "$UNITY_LOG_FILE"
+if   [ $UNITY_EXIT_CODE -eq 0 ]; then stdmsg "Run succeeded, no failures occurred.";
+elif [ $UNITY_EXIT_CODE -eq 2 ]; then stdmsg "Run succeeded, some tests failed.";
+elif [ $UNITY_EXIT_CODE -eq 3 ]; then errmsg "Run failure (other failure).";
+else errmsg "Unexpected exit code $UNITY_EXIT_CODE"; fi
 
-    stdmsg "Test results:"
-    cat "$TEST_RESULTS"
-fi
+if [[ "$PARAM_VERBOSE" -eq 1 ]]; then cat "$UNITY_TEST_LOG"; fi
+
+stdmsg "Test results:"
+cat "$TEST_RESULTS"
+
+exit $UNITY_TEST_EXIT_CODE

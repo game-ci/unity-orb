@@ -33,3 +33,4 @@ steps:
       verbose: <<parameters.verbose>>
   - run-tests:
       test-platform: <<parameters.test-platform>>
+      verbose: <<parameters.verbose>>

@@ -22,6 +22,5 @@ steps:
         PARAM_VERBOSE: <<parameters.verbose>>
       name: Run tests
       command: <<include(scripts/run-tests.sh)>>
-
   - store_artifacts:
-      path: $TEST_RESULTS
+      path: results.xml

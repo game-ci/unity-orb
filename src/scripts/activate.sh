@@ -14,6 +14,20 @@ errmsg() {
     stdmsg "$*" 1>&2
 }
 
+trap_exit() {
+  # It is critical that the first line capture the exit code. Nothing else can come before this.
+  # The exit code recorded here comes from the command that caused the script to exit.
+  local exit_status="$?"
+
+  rm -rf "$TMP_UNITY_DIR"
+
+  if [ "$exit_status" -ne 0 ]; then
+    errmsg 'The script did not complete successfully.'
+    errmsg 'The exit code was '"$exit_status"
+  fi
+}
+trap trap_exit EXIT
+
 if [[ -z "$ENCODED_UNITY_LICENSE" ]]; then
     errmsg "A Unity license file must be supplied. Check the \"license\" parameter."
     exit 1
@@ -29,11 +43,17 @@ chmod 0600 "$TMP_UNITY_LICENSE_FILE"
 stdmsg "Writing the decoded license to \"${TMP_UNITY_LICENSE_FILE}\""
 stdmsg "$DECODED_UNITY_LICENSE" > "$TMP_UNITY_LICENSE_FILE"
 
-# Returning "true" after activation to bypass misleading exit code 1
-"$UNITY_EDITOR" -batchmode -manualLicenseFile "$TMP_UNITY_LICENSE_FILE" -logfile "$UNITY_ACTIVATION_LOG" || true
+# The "true" is required post-command because it always return the exit code "1"
+stdmsg "Activating Unity."
+"$UNITY_EDITOR" \
+ -batchmode \
+ -logfile "$UNITY_ACTIVATION_LOG" \
+ -manualLicenseFile "$TMP_UNITY_LICENSE_FILE" \
+ || true
+
 if [[ "$PARAM_VERBOSE" -eq 1 ]]; then cat "$UNITY_ACTIVATION_LOG"; fi
 
-if grep "License file loaded" "$UNITY_ACTIVATION_LOG" && grep "Next license update check is after" "$UNITY_ACTIVATION_LOG"; then
+if grep "Next license update check is after" "$UNITY_ACTIVATION_LOG"; then
     stdmsg "Unity activated successfully."
 else
     errmsg "Error activating Unity."
