@@ -16,10 +16,11 @@ parameters:
     type: boolean
     default: false
     description: |
-      If set to "true", all the Unity CLI commands will be output.
+      If set to "true", all the outputs from the Unity CLI commands will be redirected to stdout.
+
 steps:
   - run:
-      name: Activate Unity
+      name: Activate the Unity Editor
       command: <<include(scripts/activate.sh)>>
       environment:
         PARAM_UNITY_LICENSE: <<parameters.license>>

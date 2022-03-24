@@ -1,0 +1,76 @@
+description: >
+  Simple drop-in job to build your Unity game.
+
+parameters:
+  tag:
+    default: 2021.2.7f1-mac-mono-0.15
+    description: >
+      Pick a specific unityci/editor image variant:
+      https://hub.docker.com/r/unityci/editor/tags
+    type: string
+  license:
+    type: env_var_name
+    default: "ENCODED_ULF_LICENSE"
+    description: |
+      Enter the name of the environment variable containing Unity's ULF license activation file encoded in base64.
+      For more information on how to get such file and encoded it, access the wiki page: TODO create and add wiki page.
+  project-path:
+    type: string
+    default: "."
+    description: |
+      Enter the path of your Unity project.
+      This should be the directory that has an "Assets" folder inside it.
+  build-target:
+    type: string
+    description: |
+      The target platform of your build.
+      Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2022.2/Documentation/Manual/EditorCommandLineArguments.html
+  execute-method:
+    type: string
+    default: "UnityBuilderAction.Builder.BuildProject"
+    description: |
+      Enter the static method that will execute when Unity opens the project.
+      The method must be declared static and be inside ".../Assets/Editor".
+      If left to the default, all enabled Scenes will be built.
+  build-artifact-path:
+    type: string
+    default: build/
+    description: |
+      Relative path to the working directory where the built artifact will be output to.
+  build-artifact-filename:
+    type: string
+    default: MyGame
+    description: |
+      Enter the filename of the artifact produced as result of the build command.
+  build-version:
+    type: string
+    description: |
+      Enter the version for this build.
+  build-name:
+    type: string
+    default: "TestBuild"
+    description: |
+      Enter the name for this build.
+  verbose:
+    type: boolean
+    default: false
+    description: |
+      If set to "true", all the outputs from the Unity CLI commands will be redirected to stdout.
+
+docker:
+  - image: 'unityci/editor:<<parameters.tag>>'
+
+steps:
+  - checkout
+  - activate:
+      license: <<parameters.license>>
+      verbose: <<parameters.verbose>>
+  - build:
+      build-artifact-filename: <<parameters.build-artifact-filename>>
+      build-artifact-path: <<parameters.build-artifact-path>>
+      build-name: <<parameters.build-name>>
+      build-target: <<parameters.build-target>>
+      build-version: <<parameters.build-version>>
+      execute-method: <<parameters.execute-method>>
+      project-path: <<parameters.project-path>>
+      verbose: <<parameters.verbose>>

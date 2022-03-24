@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd -P )"
-
+BASE_DIR="${CIRCLE_WORKING_DIRECTORY/\~/$HOME}"
 TEST_RESULTS="$BASE_DIR/results.xml"
 TMP_UNITY_DIR=$(mktemp -d 'unity-orb.XXXXXX')
 UNITY_EDITOR="$UNITY_PATH/Editor/Unity"
@@ -40,12 +39,12 @@ xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' "$UNITY_EDITOR" \
 
 UNITY_EXIT_CODE=$?
 
-if   [ $UNITY_EXIT_CODE -eq 0 ]; then stdmsg "Run succeeded, no failures occurred.";
-elif [ $UNITY_EXIT_CODE -eq 2 ]; then stdmsg "Run succeeded, some tests failed.";
-elif [ $UNITY_EXIT_CODE -eq 3 ]; then errmsg "Run failure (other failure).";
+if   [ "$UNITY_EXIT_CODE" -eq 0 ]; then stdmsg "Run succeeded, no failures occurred.";
+elif [ "$UNITY_EXIT_CODE" -eq 2 ]; then stdmsg "Run succeeded, some tests failed.";
+elif [ "$UNITY_EXIT_CODE" -eq 3 ]; then errmsg "Run failure (other failure).";
 else errmsg "Unexpected exit code $UNITY_EXIT_CODE"; fi
 
-if [[ "$PARAM_VERBOSE" -eq 1 ]]; then cat "$UNITY_TEST_LOG"; fi
+if [ "$PARAM_VERBOSE" -eq 1 ]; then cat "$UNITY_TEST_LOG"; fi
 
 stdmsg "Test results:"
 cat "$TEST_RESULTS"

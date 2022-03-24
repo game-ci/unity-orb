@@ -1,0 +1,61 @@
+description: >
+  This command builds an Unity project and stores the resulting artifact.
+
+parameters:
+  project-path:
+    type: string
+    default: "."
+    description: |
+      Enter the relative path of your Unity project.
+      This should be the directory that has an "Assets" folder inside it.
+  build-target:
+    type: string
+    description: |
+      The target platform of your build.
+      Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2022.2/Documentation/Manual/EditorCommandLineArguments.html
+  execute-method:
+    type: string
+    default: "UnityBuilderAction.Builder.BuildProject"
+    description: |
+      Enter the static method that will execute when Unity opens the project.
+      The method must be declared static and be inside ".../Assets/Editor".
+      If left to the default, all enabled Scenes will be built.
+  build-artifact-path:
+    type: string
+    default: build/
+    description: |
+      Relative path to the working directory where the built artifact will be output to.
+  build-artifact-filename:
+    type: string
+    default: MyGame
+    description: |
+      Enter the filename of the artifact produced as result of the build command.
+  build-version:
+    type: string
+    description: |
+      Enter the version for this build.
+  build-name:
+    type: string
+    default: "TestBuild"
+    description: |
+      Enter the name for this build.
+  verbose:
+    type: boolean
+    default: false
+    description: |
+      If set to "true", all the outputs from the Unity CLI commands will be redirected to stdout.
+
+steps:
+  - run:
+      name: Build the Unity project
+      environment:
+        PARAM_BUILD_ARTIFACT_FILENAME: <<parameters.build-artifact-filename>>
+        PARAM_BUILD_ARTIFACT_PATH: <<parameters.build-artifact-path>>
+        PARAM_BUILD_NAME: <<parameters.build-name>>
+        PARAM_BUILD_TARGET: <<parameters.build-target>>
+        PARAM_BUILD_VERSION: <<parameters.build-version>>
+        PARAM_EXECUTE_METHOD: <<parameters.execute-method>>
+        PARAM_PROJECT_PATH: <<parameters.project-path>>
+        PARAM_VERBOSE: <<parameters.verbose>>
+      command: <<include(scripts/build.sh)>>
+      
