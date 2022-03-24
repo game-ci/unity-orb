@@ -15,9 +15,15 @@ download_builder() {
   local unity_builder_version
   local unity_builder_download_url
 
-  unity_builder_tag_list=$(curl --location --request GET \
-    --url https://api.github.com/repos/game-ci/unity-builder/tags \
-    --header 'Accept: application/vnd.github.v3+json' | jq -r '.[].name' | grep -v '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -Vr)
+  unity_builder_tag_list=$(\
+    curl --location --request GET \
+      --url https://api.github.com/repos/game-ci/unity-builder/tags \
+      --header 'Accept: application/vnd.github.v3+json' \
+      | jq -r '.[].name' \
+      | grep -v '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+      | sort -Vr \
+  )
+  
   unity_builder_version=$(echo "$unity_builder_tag_list" | head -n 1)
   unity_builder_download_url="https://github.com/game-ci/unity-builder/archive/refs/tags/${unity_builder_version}.tar.gz"
 
@@ -39,6 +45,8 @@ set_builder() {
   mkdir -p "$unity_project_path/Assets/Editor/"
   tar -xzf "$unity_builder_temp_dir/$unity_builder_compressed_file" -C "$unity_builder_temp_dir" --strip-components 1
   cp -r "$unity_builder_temp_dir/dist/default-build-script/Assets/Editor" "$unity_project_path/Assets/Editor/"
+
+  rm -rf "$unity_builder_temp_dir"
 }
 
 install_jq() {
@@ -68,7 +76,7 @@ fi
 # Use GameCI's Unity Builder to build the project 
 if [ "$PARAM_EXECUTE_METHOD" == "UnityBuilderAction.Builder.BuildProject" ]; then
   printf '%s\n' "Using GameCI's build method."
-  printf '%s\n' "You can check the source code at: https://github.com/game-ci/unity-builder/blob/main/dist/default-build-script/Assets/Editor/UnityBuilderAction/Builder.cs"
+  printf '%s\n' "You can check what it does at: https://github.com/game-ci/unity-builder/blob/main/dist/default-build-script/Assets/Editor/UnityBuilderAction/Builder.cs"
 
   if ! set_builder; then
     printf '%s\n' "Failed to set Unity Builder."
@@ -80,4 +88,8 @@ if [ "$PARAM_EXECUTE_METHOD" == "UnityBuilderAction.Builder.BuildProject" ]; the
     printf '%s\n' "Please try again or open an issue on GitHub."
     exit 1
   fi
+
+else
+  printf '%s\n' "Using the provide build method: \"$PARAM_EXECUTE_METHOD\""
 fi
+
