@@ -34,3 +34,5 @@ steps:
   - run-tests:
       test-platform: <<parameters.test-platform>>
       verbose: <<parameters.verbose>>
+  - store_artifacts:
+      path: results.xml
