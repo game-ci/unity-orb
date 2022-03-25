@@ -24,8 +24,8 @@ parameters:
     type: string
     description: |
       The target platform of your build.
-      Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2022.2/Documentation/Manual/EditorCommandLineArguments.html
-  execute-method:
+      Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2021.2/Documentation/ScriptReference/BuildTarget.html
+  build-method:
     type: string
     default: "UnityBuilderAction.Builder.BuildProject"
     description: |
@@ -51,6 +51,12 @@ parameters:
     default: "TestBuild"
     description: |
       Enter the name for this build.
+  custom-parameters:
+    type: string
+    default: ""
+    description: |
+      Enter additional parameters supported by the Unity Editor CLI or by your custom builder method.
+      The supported arguments can be found on: https://docs.unity3d.com/2022.2/Documentation/Manual/EditorCommandLineArguments.html.
   verbose:
     type: boolean
     default: false
@@ -71,6 +77,9 @@ steps:
       build-name: <<parameters.build-name>>
       build-target: <<parameters.build-target>>
       build-version: <<parameters.build-version>>
-      execute-method: <<parameters.execute-method>>
+      custom-parameters: <<parameters.custom-parameters>>
+      build-method: <<parameters.build-method>>
       project-path: <<parameters.project-path>>
       verbose: <<parameters.verbose>>
+  - store_artifacts:
+      path: <<parameters.build-artifact-path>>

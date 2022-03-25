@@ -12,8 +12,8 @@ parameters:
     type: string
     description: |
       The target platform of your build.
-      Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2022.2/Documentation/Manual/EditorCommandLineArguments.html
-  execute-method:
+      Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2021.2/Documentation/ScriptReference/BuildTarget.html
+  build-method:
     type: string
     default: "UnityBuilderAction.Builder.BuildProject"
     description: |
@@ -39,6 +39,12 @@ parameters:
     default: "TestBuild"
     description: |
       Enter the name for this build.
+  custom-parameters:
+    type: string
+    default: ""
+    description: |
+      Enter additional parameters supported by the Unity Editor CLI or by your custom builder method.
+      The supported arguments can be found on: https://docs.unity3d.com/2022.2/Documentation/Manual/EditorCommandLineArguments.html.
   verbose:
     type: boolean
     default: false
@@ -54,7 +60,8 @@ steps:
         PARAM_BUILD_NAME: <<parameters.build-name>>
         PARAM_BUILD_TARGET: <<parameters.build-target>>
         PARAM_BUILD_VERSION: <<parameters.build-version>>
-        PARAM_EXECUTE_METHOD: <<parameters.execute-method>>
+        PARAM_CUSTOM_PARAMETERS: <<parameters.custom-parameters>>
+        PARAM_BUILD_METHOD: <<parameters.build-method>>
         PARAM_PROJECT_PATH: <<parameters.project-path>>
         PARAM_VERBOSE: <<parameters.verbose>>
       command: <<include(scripts/build.sh)>>
