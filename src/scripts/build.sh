@@ -12,6 +12,7 @@ printf '%s\n' "Build Name: \"$PARAM_BUILD_NAME\"."
 printf '%s\n' "Build Target: \"$PARAM_BUILD_TARGET\"."
 printf '%s\n' "Artifact Path: \"$build_artifact_full_path\"."
 
+# Extract this to a standalone command that needs to be run from the job.
 download_builder() {
   local unity_builder_tag_list
   local unity_builder_version
