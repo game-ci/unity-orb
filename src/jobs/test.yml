@@ -4,7 +4,7 @@ description: >
 parameters:
   step-name:
     type: string
-    default: Build the project
+    default: Run tests
     description: |
       Specify a custom step name for this command, if desired.
   tag:
@@ -24,19 +24,12 @@ parameters:
     description: |
       Enter the path of your Unity project.
       This should be the directory that has an "Assets" folder inside it.
-  build-target:
+  test-platform:
     type: string
-    description: |
-      The target platform of your build.
-      Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2021.2/Documentation/ScriptReference/BuildTarget.html
-  build-name:
-    type: string
-    default: "TestBuild"
-    description: |
-      Enter the name for this build.
+    default: "editmode"
 
 docker:
-  - image: 'unityci/editor:<<parameters.tag>>'
+  - image: 'unityci/editor:<< parameters.tag >>'
 
 steps:
   - checkout
@@ -45,10 +38,9 @@ steps:
       environment:
         PARAM_UNITY_LICENSE_VAR_NAME: << parameters.unity-license-var-name >>
       command: << include(scripts/before-script.sh) >>
-  - build:
+  - test:
       step-name: << parameters.step-name >>
-      build-name: <<parameters.build-name>>
-      build-target: <<parameters.build-target>>
-      project-path: <<parameters.project-path>>
-  - store_artifacts:
-      path: <<parameters.project-path>>/Builds/<<parameters.build-target>>
+      test-platform: << parameters.test-platform >>
+      project-path: << parameters.project-path >>
+  - store_test_results:
+      path: << parameters.project-path >>/<< parameters.test-platform >>-junit-results.xml

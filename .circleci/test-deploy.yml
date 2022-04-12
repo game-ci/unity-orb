@@ -1,0 +1,62 @@
+version: 2.1
+orbs:
+  unity: ericribeiro/unity@dev:<<pipeline.git.revision>>
+  orb-tools: circleci/orb-tools@11.1
+
+filters: &filters
+  tags:
+    only: /.*/
+
+workflows:
+  test-deploy:
+    jobs:
+      - unity/test:
+          pre-steps:
+            - run:
+                name: Clone the Unity demo repository
+                command: |
+                  git clone https://github.com/EricRibeiro/unity-orb.git .
+                  git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git Unity2D-Demo-Game-CI-CD
+          step-name: "Check if tests run and the results are stored"
+          unity-license-var-name: "ACTIVATION_ULF_ENC"
+          matrix:
+            parameters:
+              tag: [ "ubuntu-2021.2.7f1-linux-il2cpp-1" ]
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          test-platform: "playmode"
+          filters: *filters
+          context: orb-unity-testing
+      - unity/build:
+          pre-steps:
+            - run:
+                name: Clone the Unity demo repository
+                command: |
+                  git clone https://github.com/EricRibeiro/unity-orb.git .
+                  git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git Unity2D-Demo-Game-CI-CD
+          step-name: "Check if the project is built and artifacts are uploaded"
+          unity-license-var-name: "ACTIVATION_ULF_ENC"
+          matrix:
+            parameters:
+              tag: [ "ubuntu-2021.2.7f1-linux-il2cpp-1" ]
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: StandaloneLinux64
+          # requires:
+          #   - unity/test
+          filters: *filters
+          context: orb-unity-testing
+      - orb-tools/pack:
+          filters: *filters
+      - orb-tools/publish:
+          orb-name: ericribeiro/unity
+          vcs-type: << pipeline.project.type >>
+          pub-type: production
+          requires:
+            - orb-tools/pack
+            - unity/test
+            - unity/build
+          context: orb-publishing
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/

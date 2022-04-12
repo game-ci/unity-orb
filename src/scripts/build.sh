@@ -45,4 +45,10 @@ readonly BUILD_NAME="$PARAM_BUILD_NAME"
 readonly BUILD_TARGET="$PARAM_BUILD_TARGET"
 readonly UNITY_DIR="$unity_project_full_path"
 
+export BUILD_NAME
+export BUILD_TARGET
+export UNITY_DIR
+
+# Run the build script.
+# shellcheck source=/dev/null
 source "$base_dir/build.sh"

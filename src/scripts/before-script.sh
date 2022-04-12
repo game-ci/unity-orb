@@ -2,7 +2,6 @@
 
 readonly base_dir="${CIRCLE_WORKING_DIRECTORY/\~/$HOME}"
 
-# Download GameCI's script responsible for preparing the environment.
 download_before_script() {
   curl --silent --location \
     --request GET \
@@ -19,10 +18,14 @@ fi
 chmod +x "$base_dir/before_script.sh"
 
 # Decode Unity license.
-readonly encoded_unity_license="${!UNITY_LICENSE_VAR_NAME}"
+readonly encoded_unity_license="${!PARAM_UNITY_LICENSE_VAR_NAME}"
 readonly decoded_unity_license=$(printf '%s\n' "$encoded_unity_license" | base64 --decode)
 
 # Nomenclature required by the script.
 readonly UNITY_LICENSE="$decoded_unity_license"
 
+export UNITY_LICENSE
+
+# Run the test script.
+# shellcheck source=/dev/null
 source "$base_dir/before_script.sh"
