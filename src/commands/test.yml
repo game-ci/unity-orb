@@ -15,7 +15,11 @@ parameters:
       This should be the directory that has an "Assets" folder inside it.
   test-platform:
     type: string
-    default: "editmode"
+    default: "playmode"
+    description: |
+      Specify the test platform to run tests on.
+      Valid values are "editmode", "playmode" and Unity's target builds.
+      More information can be found on: https://docs.unity3d.com/Packages/com.unity.test-framework@2.0/manual/reference-command-line.html
 
 steps:
   - run:

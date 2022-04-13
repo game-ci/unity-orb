@@ -27,6 +27,10 @@ parameters:
   test-platform:
     type: string
     default: "editmode"
+    description: |
+      Specify the test platform to run tests on.
+      Valid values are "editmode", "playmode" and Unity's target builds.
+      More information can be found on: https://docs.unity3d.com/Packages/com.unity.test-framework@2.0/manual/reference-command-line.html
 
 docker:
   - image: 'unityci/editor:<< parameters.tag >>'
@@ -37,6 +41,7 @@ steps:
       name: Prepare the environment
       environment:
         PARAM_UNITY_LICENSE_VAR_NAME: << parameters.unity-license-var-name >>
+        PARAM_PROJECT_PATH: << parameters.project-path >>
       command: << include(scripts/before-script.sh) >>
   - test:
       step-name: << parameters.step-name >>
