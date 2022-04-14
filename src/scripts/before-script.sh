@@ -11,6 +11,14 @@ download_before_script() {
     --output "$base_dir/before_script.sh"
 }
 
+create_manual_activation_file() {
+  xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor \
+    -batchmode \
+    -nographics \
+    -createManualActivationFile \
+    -quit
+}
+
 check_license_and_editor_version() {
   local -r unity_project_version="$(grep -oP '(?<=m_EditorVersion: )[^\n]*' $unity_project_full_path/ProjectSettings/ProjectVersion.txt)"
   local -r unity_license_version="$(grep -oP '<ClientProvidedVersion Value\="\K.*?(?="/>)' <<< "$decoded_unity_license")"
@@ -26,6 +34,10 @@ check_license_and_editor_version() {
   if [ "$unity_license_major_version" -ne "$unity_editor_major_version" ]; then
     printf '%s\n' "The major version of your license ($unity_license_major_version) and Editor ($unity_editor_major_version) mismatch."
     printf '%s\n' "Make sure they match by changing your Editor version or generating a new license."
+    printf '%s\n' "Should you require a new activation license file, rerun the job with SSH and you will find it at \"${base_dir}/Unity_v${unity_editor_version}.alf\""
+
+    create_manual_activation_file
+
     exit 1
   fi
 
@@ -50,6 +62,10 @@ readonly decoded_unity_license=$(printf '%s\n' "$encoded_unity_license" | base64
 if [ -z "$decoded_unity_license" ]; then
   printf '%s\n' "Failed to decode the ULF in \"$PARAM_UNITY_LICENSE_VAR_NAME\"."
   printf '%s\n' "Make sure its value is correctly set in your context or project setting."
+  printf '%s\n' "Should you require a new activation license file, rerun the job with SSH and you will find it at \"${base_dir}/Unity_v${unity_editor_version}.alf\""
+
+  create_manual_activation_file
+
   exit 1
 else
   check_license_and_editor_version
