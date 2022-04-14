@@ -28,6 +28,7 @@ check_license_and_editor_version() {
   printf '%s\n' "Project Version: $unity_project_version"
   printf '%s\n' "License Version: $unity_license_version"
 
+  local -r unity_project_major_version="$(printf '%s\n' "$unity_project_version" | cut -d. -f 1)"
   local -r unity_license_major_version="$(printf '%s\n' "$unity_license_version" | cut -d. -f 1)"
   local -r unity_editor_major_version="$(printf '%s\n' "$unity_editor_version" | cut -d. -f 1)"
 
@@ -41,8 +42,8 @@ check_license_and_editor_version() {
     exit 1
   fi
 
-  if [ "$unity_project_version" -ne "$unity_editor_version" ]; then
-    printf '%s\n' "The major version of your project ($unity_project_version) and Editor ($unity_editor_version) mismatch."
+  if [ "$unity_project_major_version" -ne "$unity_editor_major_version" ]; then
+    printf '%s\n' "The major version of your project ($unity_project_major_version) and Editor ($unity_editor_major_version) mismatch."
     printf '%s\n' "This might cause unexpected behavior. Consider changing the Editor tag to match your project."
     printf '%s\n' "Available tags can be found at https://hub.docker.com/r/unityci/editor/tags and https://game.ci/docs/docker/versions."
   fi

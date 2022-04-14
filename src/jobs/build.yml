@@ -6,7 +6,7 @@ parameters:
     type: string
     default: Build the project
     description: |
-      Specify a custom step name for this command, if desired.
+      Specify a custom step name for the build command, if desired.
   tag:
     default: 2021.2.7f1-mac-mono-0.15
     description: >
@@ -40,12 +40,9 @@ docker:
 
 steps:
   - checkout
-  - run:
-      name: Prepare the environment
-      environment:
-        PARAM_UNITY_LICENSE_VAR_NAME: << parameters.unity-license-var-name >>
-        PARAM_PROJECT_PATH: << parameters.project-path >>
-      command: << include(scripts/before-script.sh) >>
+  - prepare-env:
+      unity-license-var-name: << parameters.unity-license-var-name >>
+      project-path: <<parameters.project-path>>
   - build:
       step-name: << parameters.step-name >>
       build-name: <<parameters.build-name>>
