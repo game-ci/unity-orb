@@ -62,7 +62,7 @@ readonly decoded_unity_license=$(printf '%s\n' "$encoded_unity_license" | base64
 
 if [ -z "$decoded_unity_license" ]; then
   printf '%s\n' "Failed to decode the ULF in \"$PARAM_UNITY_LICENSE_VAR_NAME\"."
-  printf '%s\n' "Make sure its value is correctly set in your context or project setting."
+  printf '%s\n' "Make sure its value is correctly set in your context or project settings."
   printf '%s\n' "Should you require a new activation license file, rerun the job with SSH and you will find it at \"${base_dir}/Unity_v${unity_editor_version}.alf\""
 
   create_manual_activation_file
