@@ -12,16 +12,12 @@ usage:
       jobs:
         - unity/test:
             unity-license-var-name: "ACTIVATION_ULF_ENC"
-            matrix:
-              parameters:
-                tag: [ "ubuntu-2021.2.7f1-linux-il2cpp-1" ]
+            tag: "ubuntu-2021.2.7f1-linux-il2cpp-1"
             project-path: "."
             test-platform: "playmode"
         - unity/build:
             unity-license-var-name: "ACTIVATION_ULF_ENC"
-            matrix:
-              parameters:
-                tag: [ "ubuntu-2021.2.7f1-linux-il2cpp-1" ]
+            tag: "ubuntu-2021.2.7f1-linux-il2cpp-1"
             project-path: "."
             build-target: StandaloneLinux64
             requires:
