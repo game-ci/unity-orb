@@ -1,5 +1,5 @@
 description: >
-  This command builds an Unity project and stores the resulting artifact.
+  This command tests an Unity project.
 
 parameters:
   step-name:

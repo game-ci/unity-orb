@@ -7,29 +7,129 @@ filters: &filters
   tags:
     only: /.*/
 
+jobs:
+  build:
+    parameters:
+      step-name:
+        type: string
+        default: Build the project
+        description: |
+          Specify a custom step name for the build command, if desired.
+      tag:
+        default: 2021.2.7f1-mac-mono-0.15
+        description: >
+          Pick a specific unityci/editor image variant:
+          https://hub.docker.com/r/unityci/editor/tags
+        type: string
+      unity-license-var-name:
+        type: env_var_name
+        description: |
+          Enter the name of the environment variable containing Unity's ULF license activation file encoded in base64.
+          For more information on how to get such file and encoded it, access the wiki page: TODO create and add wiki page.
+      project-path:
+        type: string
+        default: "."
+        description: |
+          Enter the path of your Unity project.
+          This should be the directory that has an "Assets" folder inside it.
+      build-target:
+        type: string
+        description: |
+          The target platform of your build.
+          Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2021.2/Documentation/ScriptReference/BuildTarget.html
+      build-name:
+        type: string
+        default: "UnityBuild"
+        description: |
+          Enter the name for this build.
+
+    docker:
+      - image: 'unityci/editor:<<parameters.tag>>'
+
+    steps:
+      - run:
+          name: "Clone CircleCI demo repository"
+          command: git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
+      - unity/prepare-env:
+          unity-license-var-name: << parameters.unity-license-var-name >>
+          project-path: <<parameters.project-path>>
+      - unity/build:
+          step-name: << parameters.step-name >>
+          build-name: <<parameters.build-name>>
+          build-target: <<parameters.build-target>>
+          project-path: <<parameters.project-path>>
+      - store_artifacts:
+          path: <<parameters.project-path>>/Builds/<<parameters.build-target>>
+  test:
+    parameters:
+      step-name:
+        type: string
+        default: Run tests
+        description: |
+          Specify a custom step name for the test command, if desired.
+      tag:
+        default: 2021.2.7f1-mac-mono-0.15
+        description: >
+          Pick a specific unityci/editor image variant:
+          https://hub.docker.com/r/unityci/editor/tags
+        type: string
+      unity-license-var-name:
+        type: env_var_name
+        description: |
+          Enter the name of the environment variable containing Unity's ULF license activation file encoded in base64.
+          For more information on how to get such file and encoded it, access the wiki page: TODO create and add wiki page.
+      project-path:
+        type: string
+        default: "."
+        description: |
+          Enter the path of your Unity project.
+          This should be the directory that has an "Assets" folder inside it.
+      test-platform:
+        type: string
+        default: "editmode"
+        description: |
+          Specify the test platform to run tests on.
+          Valid values are "editmode", "playmode" and Unity's target builds.
+          More information can be found on: https://docs.unity3d.com/Packages/com.unity.test-framework@2.0/manual/reference-command-line.html
+
+    docker:
+      - image: 'unityci/editor:<< parameters.tag >>'
+
+    steps:
+      - run:
+          name: "Clone CircleCI demo repository"
+          command: git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
+      - unity/prepare-env:
+          unity-license-var-name: << parameters.unity-license-var-name >>
+          project-path: <<parameters.project-path>>
+      - unity/test:
+          step-name: << parameters.step-name >>
+          test-platform: << parameters.test-platform >>
+          project-path: << parameters.project-path >>
+      - store_test_results:
+          path: << parameters.project-path >>/<< parameters.test-platform >>-junit-results.xml
+
 workflows:
-  test-deploy:
+  test-build:
     jobs:
-      # It's not possible to test this now because the orb repository itself doesn't have a test project
-      # And I am having a hard time cloning the repository because of CCI checkout step inner workings
-      # - unity/test:
-      #     step-name: "Check if tests run and the results are stored"
-      #     unity-license-var-name: "ACTIVATION_ULF_ENC"
-      #     tag: "ubuntu-2018.4.13f1-base-0.7"
-      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
-      #     test-platform: "playmode"
-      #     filters: *filters
-      #     context: orb-unity-testing
-      # - unity/build:
-      #     step-name: "Check if the project is built and artifacts are uploaded"
-      #     unity-license-var-name: "ACTIVATION_ULF_ENC"
-      #     tag: "ubuntu-2018.4.13f1-base-0.7"
-      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
-      #     build-target: StandaloneLinux64
-      #     requires:
-      #       - unity/test
-      #     filters: *filters
-      #     context: orb-unity-testing
+      - test:
+          step-name: "Check if tests run and the results are stored"
+          unity-license-var-name: "ACTIVATION_ULF_ENC_2020"
+          tag: "2020.1.0f1-linux-il2cpp-1"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          test-platform: "playmode"
+          filters: *filters
+          context: orb-unity-testing
+      - build:
+          step-name: "Check if the project is built and artifacts are uploaded"
+          unity-license-var-name: "ACTIVATION_ULF_ENC_2020"
+          tag: "2020.1.0f1-linux-il2cpp-1"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: StandaloneLinux64
+          requires:
+            - test
+          filters: *filters
+          context: orb-unity-testing
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
@@ -38,8 +138,8 @@ workflows:
           pub-type: production
           requires:
             - orb-tools/pack
-            # - unity/test
-            # - unity/build
+            - test
+            - build
           context: orb-publishing
           filters:
             branches:

@@ -11,6 +11,14 @@ download_before_script() {
     --output "$base_dir/before_script.sh"
 }
 
+create_manual_activation_file() {
+  xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor \
+    -batchmode \
+    -nographics \
+    -createManualActivationFile \
+    -quit
+}
+
 check_license_and_editor_version() {
   local -r unity_project_version="$(grep -oP '(?<=m_EditorVersion: )[^\n]*' $unity_project_full_path/ProjectSettings/ProjectVersion.txt)"
   local -r unity_license_version="$(grep -oP '<ClientProvidedVersion Value\="\K.*?(?="/>)' <<< "$decoded_unity_license")"
@@ -20,17 +28,22 @@ check_license_and_editor_version() {
   printf '%s\n' "Project Version: $unity_project_version"
   printf '%s\n' "License Version: $unity_license_version"
 
+  local -r unity_project_major_version="$(printf '%s\n' "$unity_project_version" | cut -d. -f 1)"
   local -r unity_license_major_version="$(printf '%s\n' "$unity_license_version" | cut -d. -f 1)"
   local -r unity_editor_major_version="$(printf '%s\n' "$unity_editor_version" | cut -d. -f 1)"
 
   if [ "$unity_license_major_version" -ne "$unity_editor_major_version" ]; then
     printf '%s\n' "The major version of your license ($unity_license_major_version) and Editor ($unity_editor_major_version) mismatch."
     printf '%s\n' "Make sure they match by changing your Editor version or generating a new license."
+    printf '%s\n' "Should you require a new activation license file, rerun the job with SSH and you will find it at \"${base_dir}/Unity_v${unity_editor_version}.alf\""
+
+    create_manual_activation_file
+
     exit 1
   fi
 
-  if [ "$unity_project_version" -ne "$unity_editor_version" ]; then
-    printf '%s\n' "The major version of your project ($unity_project_version) and Editor ($unity_editor_version) mismatch."
+  if [ "$unity_project_major_version" -ne "$unity_editor_major_version" ]; then
+    printf '%s\n' "The major version of your project ($unity_project_major_version) and Editor ($unity_editor_major_version) mismatch."
     printf '%s\n' "This might cause unexpected behavior. Consider changing the Editor tag to match your project."
     printf '%s\n' "Available tags can be found at https://hub.docker.com/r/unityci/editor/tags and https://game.ci/docs/docker/versions."
   fi
@@ -50,6 +63,10 @@ readonly decoded_unity_license=$(printf '%s\n' "$encoded_unity_license" | base64
 if [ -z "$decoded_unity_license" ]; then
   printf '%s\n' "Failed to decode the ULF in \"$PARAM_UNITY_LICENSE_VAR_NAME\"."
   printf '%s\n' "Make sure its value is correctly set in your context or project setting."
+  printf '%s\n' "Should you require a new activation license file, rerun the job with SSH and you will find it at \"${base_dir}/Unity_v${unity_editor_version}.alf\""
+
+  create_manual_activation_file
+
   exit 1
 else
   check_license_and_editor_version
