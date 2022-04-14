@@ -2,11 +2,6 @@ description: >
   This command prepares the environment for testing or building an Unity project.
 
 parameters:
-  step-name:
-    type: string
-    default: Prepare the environment
-    description: |
-      Specify a custom step name for this command, if desired.
   unity-license-var-name:
     type: env_var_name
     description: |
@@ -21,7 +16,7 @@ parameters:
 
 steps:
   - run:
-      name: << parameters.step-name >>
+      name: Prepare the environment
       environment:
         PARAM_UNITY_LICENSE_VAR_NAME: << parameters.unity-license-var-name >>
         PARAM_PROJECT_PATH: << parameters.project-path >>
