@@ -21,6 +21,7 @@ trap_test_script_exit() {
   apt-get update && apt-get install -y default-jre libsaxonb-java
 
   # Parse Unity's results xml to JUnit format.
+  # Inject nunit3-junit.xslt as an env variable like the templates in the slack orb
   saxonb-xslt -s $UNITY_DIR/$TEST_PLATFORM-results.xml -xsl $CI_PROJECT_DIR/ci/nunit-transforms/nunit3-junit.xslt >$UNITY_DIR/$TEST_PLATFORM-junit-results.xml
   
   rm -rf "$gameci_sample_project_dir"

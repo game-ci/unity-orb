@@ -85,4 +85,4 @@ export UNITY_LICENSE
 
 # Run the test script.
 # shellcheck source=/dev/null
-source "$base_dir/before_script.sh"
+source "$base_dir/before_script.sh" # replace this with original scripts
