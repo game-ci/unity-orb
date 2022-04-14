@@ -16,7 +16,11 @@ create_manual_activation_file() {
     -batchmode \
     -nographics \
     -createManualActivationFile \
-    -quit
+    -quit \
+    -logfile /dev/null
+
+  # Check if license file was created successfully.
+  if ls Unity_v* &> /dev/null; then return 0; else return 1; fi
 }
 
 check_license_and_editor_version() {
@@ -34,10 +38,11 @@ check_license_and_editor_version() {
 
   if [ "$unity_license_major_version" -ne "$unity_editor_major_version" ]; then
     printf '%s\n' "The major version of your license ($unity_license_major_version) and Editor ($unity_editor_major_version) mismatch."
-    printf '%s\n' "Make sure they match by changing your Editor version or generating a new license."
-    printf '%s\n' "Should you require a new activation license file, rerun the job with SSH and you will find it at \"${base_dir}/Unity_v${unity_editor_version}.alf\""
+    printf '%s\n' "Make sure they are the same by changing your Editor version or generating a new license."
 
-    create_manual_activation_file
+    if create_manual_activation_file; then
+      printf '%s\n' "Should you require a new activation license file, rerun the job with SSH and you will find it at \"${base_dir}/$(ls Unity_v*)\""
+    fi
 
     exit 1
   fi
@@ -63,9 +68,10 @@ readonly decoded_unity_license=$(printf '%s\n' "$encoded_unity_license" | base64
 if [ -z "$decoded_unity_license" ]; then
   printf '%s\n' "Failed to decode the ULF in \"$PARAM_UNITY_LICENSE_VAR_NAME\"."
   printf '%s\n' "Make sure its value is correctly set in your context or project settings."
-  printf '%s\n' "Should you require a new activation license file, rerun the job with SSH and you will find it at \"${base_dir}/Unity_v${unity_editor_version}.alf\""
 
-  create_manual_activation_file
+  if create_manual_activation_file; then
+    printf '%s\n' "Should you require a new activation license file, rerun the job with SSH and you will find it at \"${base_dir}/$(ls Unity_v*)\""
+  fi
 
   exit 1
 else
