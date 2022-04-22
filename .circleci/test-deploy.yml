@@ -130,19 +130,47 @@ workflows:
     jobs:
       - test:
           step-name: "Check if tests run and the results are stored"
-          unity-license-var-name: "ACTIVATION_ULF_ENC_2020"
+          unity-license-var-name: "ACTIVATION_ULF_ENC"
+          tag: "ubuntu-2021.3.0f1-linux-il2cpp-1"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           test-platform: "playmode"
           filters: *filters
           context: orb-unity-testing
       - build:
-          step-name: "Check if the project is built and artifacts are uploaded"
-          unity-license-var-name: "ACTIVATION_ULF_ENC_2020"
+          name: "build-linux64"
+          step-name: "Build StandaloneLinux64"
+          unity-license-var-name: "ACTIVATION_ULF_ENC"
           os: "ubuntu"
           target-platform: "linux-il2cpp"
-          editor-version: "2020.1.0f1"
+          editor-version: "2021.3.0f1"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
+          requires:
+            - test
+          filters: *filters
+          context: orb-unity-testing
+      - build:
+          name: "build-webgl"
+          step-name: "Build WebGL"
+          unity-license-var-name: "ACTIVATION_ULF_ENC"
+          os: "ubuntu"
+          target-platform: "webgl"
+          editor-version: "2021.3.0f1"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: "WebGL"
+          requires:
+            - test
+          filters: *filters
+          context: orb-unity-testing
+      - build:
+          name: "build-windows64"
+          step-name: "Build StandaloneWindows64"
+          unity-license-var-name: "ACTIVATION_ULF_ENC"
+          os: "ubuntu"
+          target-platform: "windows-mono"
+          editor-version: "2021.3.0f1"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: "StandaloneWindows64"
           requires:
             - test
           filters: *filters
@@ -156,7 +184,9 @@ workflows:
           requires:
             - orb-tools/pack
             - test
-            - build
+            - build-linux64
+            - build-webgl
+            - build-windows64
           context: orb-publishing
           filters:
             branches:
