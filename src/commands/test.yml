@@ -20,11 +20,29 @@ parameters:
       Specify the test platform to run tests on.
       Valid values are "editmode", "playmode" and Unity's target builds.
       More information can be found on: https://docs.unity3d.com/Packages/com.unity.test-framework@2.0/manual/reference-command-line.html
+  cache-version:
+    type: string
+    default: "v1"
+    description: |
+      Change the default cache version if you need to clear the cache for any reason.
+  include-branch-in-cache-key:
+      type: boolean
+      default: true
+      description: >
+          If true, this cache bucket will only apply to jobs within the same branch.
 
 steps:
+  - restore_cache:
+      keys:
+        - unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}
+        - unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}<</parameters.include-branch-in-cache-key>>
   - run:
       name: << parameters.step-name >>
       environment:
         PARAM_PROJECT_PATH: << parameters.project-path >>
         PARAM_TEST_PLATFORM: << parameters.test-platform >>
       command: << include(scripts/test.sh) >>
+  - save_cache:
+      key: unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}
+      paths:
+        - <<parameters.project-path>>/Library/

@@ -23,8 +23,22 @@ parameters:
     default: "UnityBuild"
     description: |
       Enter the name for this build.
+  cache-version:
+    type: string
+    default: "v1"
+    description: |
+      Change the default cache version if you need to clear the cache for any reason.
+  include-branch-in-cache-key:
+      type: boolean
+      default: true
+      description: >
+          If true, this cache bucket will only apply to jobs within the same branch.
 
 steps:
+  - restore_cache:
+      keys:
+        - unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}
+        - unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}<</parameters.include-branch-in-cache-key>>
   - run:
       name: << parameters.step-name >>
       environment:
@@ -32,3 +46,7 @@ steps:
         PARAM_BUILD_TARGET: << parameters.build-target >>
         PARAM_PROJECT_PATH: << parameters.project-path >>
       command: << include(scripts/build.sh) >>
+  - save_cache:
+      key: unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}
+      paths:
+        - <<parameters.project-path>>/Library/
