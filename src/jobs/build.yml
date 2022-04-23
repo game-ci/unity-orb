@@ -50,6 +50,13 @@ parameters:
     default: "UnityBuild"
     description: |
       Enter the name for this build.
+  compress:
+    type: boolean
+    default: true
+    description: |
+      Whether to compress the build output to a ".tar.gz" archive.
+      This is recommended if you want to download the build artifacts from the GameCI dashboard.
+      If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
 
 docker:
   - image: 'unityci/editor:<<parameters.os>>-<<parameters.editor-version>>-<<parameters.target-platform>>-1'
@@ -64,5 +71,4 @@ steps:
       build-name: <<parameters.build-name>>
       build-target: <<parameters.build-target>>
       project-path: <<parameters.project-path>>
-  - store_artifacts:
-      path: <<parameters.project-path>>/Builds/<<parameters.build-target>>
+      compress: <<parameters.compress>>

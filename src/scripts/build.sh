@@ -5,6 +5,31 @@ readonly unity_project_full_path="$base_dir/$PARAM_PROJECT_PATH"
 readonly gameci_sample_project_dir=$(mktemp -d)
 readonly sample_project_compressed_file="sample_project.tar.gz"
 
+trap_build_script_exit() {
+  local -r exit_status="$?"
+
+  # The build script has a "set -x" on it. This will disable it for the rest of the run.
+  set +x
+
+  if [ "$exit_status" -ne 0 ]; then
+    printf '%s\n' 'The script did not complete successfully.'
+    printf '%s\n' "The exit code was $exit_status"
+
+    rm -rf "$gameci_sample_project_dir"
+    exit "$exit_status"
+  fi
+
+  if [ "$PARAM_COMPRESS" -eq 1 ]; then
+    printf '%s\n' 'Compressing build artifacts...'
+
+    # Compress artifacts to store them in the artifacts bucket.
+    tar -czf "$base_dir/$PARAM_BUILD_NAME-$PARAM_BUILD_TARGET.tar.gz" -C "$unity_project_full_path/Builds/$PARAM_BUILD_TARGET" .
+  fi
+
+  # Clean up.
+  rm -rf "$gameci_sample_project_dir"
+}
+
 download_sample_project() {
   curl --silent \
     --location "https://gitlab.com/game-ci/unity3d-gitlab-ci-example/-/archive/main/unity3d-gitlab-ci-example-main.tar.gz" \
@@ -48,6 +73,9 @@ readonly UNITY_DIR="$unity_project_full_path"
 export BUILD_NAME
 export BUILD_TARGET
 export UNITY_DIR
+
+# Trap "build.sh" exit otherwise it won't be possible to zip the artifacts.
+trap trap_build_script_exit EXIT
 
 # Run the build script.
 # shellcheck source=/dev/null
