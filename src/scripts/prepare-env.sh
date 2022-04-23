@@ -30,7 +30,7 @@ check_license_and_editor_version() {
 
   printf '%s\n' "Editor Version: $unity_editor_version"
   printf '%s\n' "Project Version: $unity_project_version"
-  printf '%s\n' "License Version: $unity_license_version"
+  printf '%s\n\n' "License Version: $unity_license_version"
 
   local -r unity_project_major_version="$(printf '%s\n' "$unity_project_version" | cut -d. -f 1)"
   local -r unity_license_major_version="$(printf '%s\n' "$unity_license_version" | cut -d. -f 1)"

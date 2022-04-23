@@ -58,6 +58,13 @@ jobs:
         default: "UnityBuild"
         description: |
           Enter the name for this build.
+      compress:
+        type: boolean
+        default: true
+        description: |
+          Whether to compress the build output to a ".tar.gz" archive.
+          This is recommended if you want to download the built artifacts from the GameCI dashboard.
+          If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
 
     docker:
       - image: 'unityci/editor:<<parameters.os>>-<<parameters.editor-version>>-<<parameters.target-platform>>-1'
@@ -74,8 +81,7 @@ jobs:
           build-name: <<parameters.build-name>>
           build-target: <<parameters.build-target>>
           project-path: <<parameters.project-path>>
-      - store_artifacts:
-          path: <<parameters.project-path>>/Builds/<<parameters.build-target>>
+          compress: <<parameters.compress>>
   test:
     parameters:
       step-name:
@@ -145,6 +151,7 @@ workflows:
           editor-version: "2021.3.0f1"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
+          compress: true
           requires:
             - test
           filters: *filters
@@ -158,6 +165,7 @@ workflows:
           editor-version: "2021.3.0f1"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "WebGL"
+          compress: false
           requires:
             - test
           filters: *filters

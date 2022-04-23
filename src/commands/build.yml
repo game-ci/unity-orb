@@ -33,20 +33,38 @@ parameters:
       default: true
       description: >
           If true, this cache bucket will only apply to jobs within the same branch.
+  compress:
+    type: boolean
+    default: true
+    description: |
+      Whether to compress the build output to a ".tar.gz" archive.
+      This is recommended if you want to download the built artifacts from the GameCI dashboard.
+      If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
 
 steps:
   - restore_cache:
       keys:
-        - unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}
-        - unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}<</parameters.include-branch-in-cache-key>>
+        - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}-<</ parameters.include-branch-in-cache-key >>{{ checksum "<< parameters.project-path >>/Packages/packages-lock.json" }}
+        - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}<</ parameters.include-branch-in-cache-key >>
   - run:
       name: << parameters.step-name >>
       environment:
         PARAM_BUILD_NAME: << parameters.build-name >>
         PARAM_BUILD_TARGET: << parameters.build-target >>
         PARAM_PROJECT_PATH: << parameters.project-path >>
+        PARAM_COMPRESS: << parameters.compress >>
       command: << include(scripts/build.sh) >>
   - save_cache:
-      key: unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}
+      key: unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}-<</ parameters.include-branch-in-cache-key >>{{ checksum "<< parameters.project-path >>/Packages/packages-lock.json" }}
       paths:
-        - <<parameters.project-path>>/Library/
+        - << parameters.project-path >>/Library/
+  - when:
+      condition: << parameters.compress >>
+      steps:
+        - store_artifacts:
+            path: << parameters.build-name >>-<< parameters.build-target >>.tar.gz
+  - unless:
+      condition: << parameters.compress >>
+      steps:
+        - store_artifacts:
+            path: << parameters.project-path >>/Builds/<< parameters.build-target >>
