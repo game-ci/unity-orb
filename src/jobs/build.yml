@@ -29,11 +29,31 @@ parameters:
       Make sure to pick the same major version as the Unity version you generated the license for.
       Available options can be found at https://game.ci/docs/docker/versions.
     type: string
+  unity-username-var-name:
+    type: env_var_name
+    default: "UNITY_USERNAME"
+    description: |
+      Enter the name of the environment variable containing your Unity username.
+      This is only necessary if you have a Plus or Pro license.
+  unity-password-var-name:
+    type: env_var_name
+    default: "UNITY_PASSWORD"
+    description: |
+      Enter the name of the environment variable containing your Unity password.
+      This is only necessary if you have a Plus or Pro license.
+  unity-serial-var-name:
+    type: env_var_name
+    default: "UNITY_SERIAL"
+    description: |
+      Enter the name of the environment variable containing your Unity serial number.
+      This is only necessary if you have a Plus or Pro license.
   unity-license-var-name:
     type: env_var_name
+    default: "UNITY_ENCODED_LICENSE"
     description: |
-      Enter the name of the environment variable containing Unity's license file (ULF) encoded in base64.
-      For more information on how to get such file and encoded it, access the wiki page: TODO create and add wiki page.
+      Enter the name of the environment variable containing your Unity license file encoded in base64.
+      A different license must be provided for every Unity major version.
+      This is only necessary if you have a Personal license.
   project-path:
     type: string
     default: "."
@@ -64,6 +84,9 @@ docker:
 steps:
   - checkout
   - prepare-env:
+      unity-username-var-name: << parameters.unity-username-var-name >>
+      unity-password-var-name: << parameters.unity-password-var-name >>
+      unity-serial-var-name: << parameters.unity-serial-var-name >>
       unity-license-var-name: << parameters.unity-license-var-name >>
       project-path: <<parameters.project-path>>
   - build:
