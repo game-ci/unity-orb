@@ -46,3 +46,5 @@ steps:
       key: unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}
       paths:
         - <<parameters.project-path>>/Library/
+  - store_test_results:
+      path: << parameters.project-path >>/<< parameters.test-platform >>-junit-results.xml
