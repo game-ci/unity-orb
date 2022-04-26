@@ -18,28 +18,10 @@ jobs:
         default: Build the project
         description: |
           Specify a custom step name for the build command, if desired.
-      os:
-        default: ubuntu
+      executor:
+        type: executor
         description: |
-          Pick the base OS for the GameCI image.
-          The available options are "ubuntu" and "windows".
-          More details can be found at https://game.ci/docs/docker/versions.
-        type: enum
-        enum: ["ubuntu", "windows"]
-      target-platform:
-        default: linux-il2cpp
-        description: |
-          Pick the target platform for the GameCI image.
-          This differs from the "build-target" parameter in that it is used for the GameCI image, not Unity.
-          Available options can be found at https://game.ci/docs/docker/versions.
-        type: string
-      editor-version:
-        default: 2021.3.0f1
-        description: |
-          Pick the editor version for the GameCI image.
-          Make sure to pick the same major version as the Unity version you generated the license for.
-          Available options can be found at https://game.ci/docs/docker/versions.
-        type: string
+          Pick an Executor to run the build job with.
       unity-username-var-name:
         type: env_var_name
         default: "UNITY_USERNAME"
@@ -89,8 +71,7 @@ jobs:
           This is recommended if you want to download the build artifacts from the GameCI dashboard.
           If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
 
-    docker:
-      - image: 'unityci/editor:<<parameters.os>>-<<parameters.editor-version>>-<<parameters.target-platform>>-1'
+    executor: << parameters.executor >> 
 
     steps:
       - run:
@@ -119,28 +100,10 @@ jobs:
         default: Run tests
         description: |
           Specify a custom step name for the test command, if desired.
-      os:
-        default: ubuntu
+      executor:
+        type: executor
         description: |
-          Pick the base OS for the GameCI image.
-          The available options are "ubuntu" and "windows".
-          More details can be found at https://game.ci/docs/docker/versions.
-        type: enum
-        enum: ["ubuntu", "windows"]
-      target-platform:
-        default: linux-il2cpp
-        description: |
-          Pick the target platform for the GameCI image.
-          This differs from the "build-target" parameter in that it is used for the GameCI image, not Unity.
-          Available options can be found at https://game.ci/docs/docker/versions.
-        type: string
-      editor-version:
-        default: 2021.3.0f1
-        description: |
-          Pick the editor version for the GameCI image.
-          Make sure to pick the same major version as the Unity version you generated the license for.
-          Available options can be found at https://game.ci/docs/docker/versions.
-        type: string
+          Pick an Executor to run the build job with.
       unity-username-var-name:
         type: env_var_name
         default: "UNITY_USERNAME"
@@ -180,8 +143,7 @@ jobs:
           Valid values are "editmode", "playmode" and Unity's target builds.
           More information can be found on: https://docs.unity3d.com/Packages/com.unity.test-framework@2.0/manual/reference-command-line.html
 
-    docker:
-      - image: 'unityci/editor:<<parameters.os>>-<<parameters.editor-version>>-<<parameters.target-platform>>-1'
+    executor: << parameters.executor >>
 
     steps:
       - run:
@@ -205,9 +167,9 @@ workflows:
           name: "test"
           step-name: "Check if the tests run and results are uploaded"
           unity-license-var-name: "ACTIVATION_ULF_ENC"
-          os: "ubuntu"
-          target-platform: "linux-il2cpp"
-          editor-version: "2021.3.0f1"
+          executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "linux-il2cpp"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           test-platform: "playmode"
           filters: *filters
@@ -216,9 +178,9 @@ workflows:
           name: "build-linux64"
           step-name: "Build StandaloneLinux64"
           unity-license-var-name: "ACTIVATION_ULF_ENC"
-          os: "ubuntu"
-          target-platform: "linux-il2cpp"
-          editor-version: "2021.3.0f1"
+          executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "linux-il2cpp"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
           compress: true
@@ -230,9 +192,9 @@ workflows:
           name: "build-webgl"
           step-name: "Build WebGL"
           unity-license-var-name: "ACTIVATION_ULF_ENC"
-          os: "ubuntu"
-          target-platform: "webgl"
-          editor-version: "2021.3.0f1"
+          executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "webgl"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "WebGL"
           compress: false
@@ -244,9 +206,9 @@ workflows:
           name: "build-windows64"
           step-name: "Build StandaloneWindows64"
           unity-license-var-name: "ACTIVATION_ULF_ENC"
-          os: "ubuntu"
-          target-platform: "windows-mono"
-          editor-version: "2021.3.0f1"
+          executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "windows-mono"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "StandaloneWindows64"
           requires:
