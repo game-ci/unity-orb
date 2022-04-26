@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  unity: ericribeiro/unity@dev:<<pipeline.git.revision>>
+  unity: game-ci/unity@dev:<<pipeline.git.revision>>
   orb-tools: circleci/orb-tools@11.1
 
 filters: &filters
@@ -76,7 +76,7 @@ jobs:
     steps:
       - run:
           name: "Clone CircleCI demo repository"
-          command: git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
+          command: git clone https://github.com/game-ci/Unity2D-Demo-Game-CI-CD.git
       - unity/prepare-env:
           unity-username-var-name: << parameters.unity-username-var-name >>
           unity-password-var-name: << parameters.unity-password-var-name >>
@@ -148,7 +148,7 @@ jobs:
     steps:
       - run:
           name: "Clone CircleCI demo repository"
-          command: git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
+          command: git clone https://github.com/game-ci/Unity2D-Demo-Game-CI-CD.git
       - unity/prepare-env:
           unity-username-var-name: << parameters.unity-username-var-name >>
           unity-password-var-name: << parameters.unity-password-var-name >>
@@ -218,7 +218,7 @@ workflows:
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
-          orb-name: ericribeiro/unity
+          orb-name: game-ci/unity
           vcs-type: << pipeline.project.type >>
           pub-type: production
           requires:
