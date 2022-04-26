@@ -14,21 +14,21 @@ usage:
             unity-username-var-name: "UNITY_USERNAME"
             unity-password-var-name: "UNITY_PASSWORD"
             unity-serial-var-name: "UNITY_SERIAL"
-            os: "ubuntu"
-            target-platform: "linux-il2cpp"
-            editor-version: "2021.3.0f1"
             test-platform: "playmode"
+            executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "linux-il2cpp"
             context: unity-orb # context with the UNITY_USERNAME, UNITY_PASSWORD and UNITY_SERIAL variables
         - unity/build:
             name: "build-linux64"
             unity-username-var-name: "UNITY_USERNAME"
             unity-password-var-name: "UNITY_PASSWORD"
             unity-serial-var-name: "UNITY_SERIAL"
-            os: "ubuntu"
-            target-platform: "linux-il2cpp"
-            editor-version: "2021.3.0f1"
             build-target: StandaloneLinux64
             compress: true
+            executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "linux-il2cpp"
             requires:
               - test
             context: unity-orb # context with the UNITY_USERNAME, UNITY_PASSWORD and UNITY_SERIAL variables
@@ -37,12 +37,11 @@ usage:
             unity-username-var-name: "UNITY_USERNAME"
             unity-password-var-name: "UNITY_PASSWORD"
             unity-serial-var-name: "UNITY_SERIAL"
-            os: "ubuntu"
-            target-platform: "webgl"
-            editor-version: "2021.3.0f1"
-            project-path: "Unity2D-Demo-Game-CI-CD/src"
             build-target: "WebGL"
             compress: false
+            executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "webgl"
             requires:
               - test
             context: unity-orb # context with the UNITY_USERNAME, UNITY_PASSWORD and UNITY_SERIAL variables
@@ -52,10 +51,10 @@ usage:
             unity-username-var-name: "UNITY_USERNAME"
             unity-password-var-name: "UNITY_PASSWORD"
             unity-serial-var-name: "UNITY_SERIAL"
-            os: "ubuntu"
-            target-platform: "windows-mono"
-            editor-version: "2021.3.0f1"
             build-target: "StandaloneWindows64"
+            executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "windows-mono"
             requires:
               - test
             context: unity-orb # context with the UNITY_USERNAME, UNITY_PASSWORD and UNITY_SERIAL variables

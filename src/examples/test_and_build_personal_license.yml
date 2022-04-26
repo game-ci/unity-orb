@@ -12,42 +12,40 @@ usage:
       jobs:
         - unity/test:
             unity-license-var-name: "UNITY_ENCODED_LICENSE"
-            os: "ubuntu"
-            target-platform: "linux-il2cpp"
-            editor-version: "2021.3.0f1"
             test-platform: "playmode"
+            executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "linux-il2cpp"
             context: unity-orb # context with the UNITY_ENCODED_LICENSE variable
         - unity/build:
             name: "build-linux64"
             unity-license-var-name: "UNITY_ENCODED_LICENSE"
-            os: "ubuntu"
-            target-platform: "linux-il2cpp"
-            editor-version: "2021.3.0f1"
             build-target: StandaloneLinux64
             compress: true
+            executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "linux-il2cpp"
             requires:
               - test
             context: unity-orb # context with the UNITY_ENCODED_LICENSE variable
         - unity/build:
             name: "build-webgl"
             unity-license-var-name: "UNITY_ENCODED_LICENSE"
-            os: "ubuntu"
-            target-platform: "webgl"
-            editor-version: "2021.3.0f1"
-            project-path: "Unity2D-Demo-Game-CI-CD/src"
             build-target: "WebGL"
             compress: false
+            executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "webgl"
             requires:
               - test
             context: unity-orb # context with the UNITY_ENCODED_LICENSE variable
         - unity/build:
             name: "build-windows64"
-            step-name: "Build StandaloneWindows64"
             unity-license-var-name: "UNITY_ENCODED_LICENSE"
-            os: "ubuntu"
-            target-platform: "windows-mono"
-            editor-version: "2021.3.0f1"
             build-target: "StandaloneWindows64"
+            executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "windows-mono"
             requires:
               - test
             context: unity-orb # context with the UNITY_ENCODED_LICENSE variable

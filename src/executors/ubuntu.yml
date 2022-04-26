@@ -12,7 +12,6 @@ parameters:
     type: enum
     enum: [ "android", "base", "ios", "linux-il2cpp", "mac-mono", "webgl", "windows-mono" ]
   editor-version:
-    default: 2021.3.0f1
     description: |
       Pick the editor version for the GameCI image.
       Make sure to pick the same major version as the Unity version you generated the license for.
