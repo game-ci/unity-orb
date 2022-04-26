@@ -1,0 +1,17 @@
+description: |
+    Select the Target Platform for the GameCI image.
+    This Executor uses the last available minor version of the Editor for the 2019 release.
+
+parameters:
+  target-platform:
+    description: |
+      Pick the target platform for the GameCI image.
+      More information can be found at: https://game.ci/docs/docker/docker-images.
+    type: enum
+    enum: [ "android", "base", "ios", "linux-il2cpp", "mac-mono", "webgl", "windows-mono" ]
+
+docker:
+  - image: 'unityci/editor:ubuntu-2019.4.38f1-<< parameters.target-platform >>-1'
+    environment:
+      - GAMECI_EDITOR_VERSION="2019.4.38f1"
+      - GAMECI_TARGET_PLATFORM=<< parameters.target-platform >>
