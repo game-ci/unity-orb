@@ -21,7 +21,7 @@ workflows:
           exclude: SC2148,SC2038,SC2086,SC2002,SC2016
           filters: *filters
       - orb-tools/publish:
-          orb-name: ericribeiro/unity
+          orb-name: game-ci/unity
           vcs-type: << pipeline.project.type >>
           requires:
             [orb-tools/lint, orb-tools/review, orb-tools/pack, shellcheck/check]
