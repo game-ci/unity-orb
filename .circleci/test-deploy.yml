@@ -76,7 +76,7 @@ jobs:
     steps:
       - run:
           name: "Clone CircleCI demo repository"
-          command: git clone https://github.com/game-ci/Unity2D-Demo-Game-CI-CD.git
+          command: git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
       - unity/prepare-env:
           unity-username-var-name: << parameters.unity-username-var-name >>
           unity-password-var-name: << parameters.unity-password-var-name >>
@@ -148,7 +148,7 @@ jobs:
     steps:
       - run:
           name: "Clone CircleCI demo repository"
-          command: git clone https://github.com/game-ci/Unity2D-Demo-Game-CI-CD.git
+          command: git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
       - unity/prepare-env:
           unity-username-var-name: << parameters.unity-username-var-name >>
           unity-password-var-name: << parameters.unity-password-var-name >>
