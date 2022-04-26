@@ -25,12 +25,12 @@ create_manual_activation_file() {
 
 check_license_and_editor_version() {
   local -r unity_project_version="$(grep -oP '(?<=m_EditorVersion: )[^\n]*' $unity_project_full_path/ProjectSettings/ProjectVersion.txt)"
-  local -r unity_license_version="$(grep -oP '<ClientProvidedVersion Value\="\K.*?(?="/>)' <<< "$decoded_unity_license")"
+  local -r unity_license_version="$(grep -oP '<ClientProvidedVersion Value\="\K.*?(?="/>)' <<< "$unity_license")"
   local -r unity_editor_version="$(cat $UNITY_PATH/version)"
 
   printf '%s\n' "Editor Version: $unity_editor_version"
   printf '%s\n' "Project Version: $unity_project_version"
-  printf '%s\n' "License Version: $unity_license_version"
+  printf '%s\n\n' "License Version: $unity_license_version"
 
   local -r unity_project_major_version="$(printf '%s\n' "$unity_project_version" | cut -d. -f 1)"
   local -r unity_license_major_version="$(printf '%s\n' "$unity_license_version" | cut -d. -f 1)"
@@ -54,6 +54,56 @@ check_license_and_editor_version() {
   fi
 }
 
+resolve_unity_license() {
+  if [ -n "$unity_encoded_license" ]; then
+    # Decode Personal Unity License File.
+    unity_license=$(printf '%s\n' "$unity_encoded_license" | base64 --decode)
+
+  elif [ -n "$unity_username" ] && [ -n "$unity_password" ] && [ -n "$unity_serial" ]; then
+    # Generate Plus or Pro Unity License File.
+    xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor \
+      -logFile /dev/stdout \
+      -batchmode \
+      -nographics \
+      -quit \
+      -username "$unity_username" \
+      -password "$unity_password" \
+      -serial "$unity_serial"
+
+    if [ -e "/root/.local/share/unity3d/Unity/Unity_lic.ulf" ]; then
+      unity_license="$(cat /root/.local/share/unity3d/Unity/Unity_lic.ulf)"
+    else
+      printf '%s\n' "Failed to generate Unity license file."
+      printf '%s\n' "Make sure you have entered the correct username, password and serial and try again."
+      printf '%s\n' "If you are still having problems, please open an issue."
+
+      exit 1
+    fi
+
+  else
+    printf '%s\n' "If you own a Personal Unity License File (.ulf), please provide it as a base64 encoded string."  
+    printf '%s\n' "If you own a Plus or Pro Unity license, please provide your username, password and serial."
+
+    if create_manual_activation_file; then
+      printf '%s\n' "Should you require a new Personal Activation License File (.alf), rerun the job with SSH and you will find it at \"${base_dir}/$(ls Unity_v*)\""
+    fi
+
+    exit 1
+  fi
+}
+
+# Expand environment name variable parameters.
+readonly unity_username="${!PARAM_UNITY_USERNAME_VAR_NAME}"
+readonly unity_password="${!PARAM_UNITY_PASSWORD_VAR_NAME}"
+readonly unity_serial="${!PARAM_UNITY_SERIAL_VAR_NAME}"
+readonly unity_encoded_license="${!PARAM_UNITY_LICENSE_VAR_NAME}"
+
+unity_license=""
+
+resolve_unity_license
+check_license_and_editor_version
+
+# Download before_script.sh from GameCI.
 if ! download_before_script; then
   printf '%s\n' "Failed to download \"before_script.sh\"."
   exit 1
@@ -61,25 +111,8 @@ fi
 
 chmod +x "$base_dir/before_script.sh"
 
-# Decode Unity license.
-readonly encoded_unity_license="${!PARAM_UNITY_LICENSE_VAR_NAME}"
-readonly decoded_unity_license=$(printf '%s\n' "$encoded_unity_license" | base64 --decode)
-
-if [ -z "$decoded_unity_license" ]; then
-  printf '%s\n' "Failed to decode the ULF in \"$PARAM_UNITY_LICENSE_VAR_NAME\"."
-  printf '%s\n' "Make sure its value is correctly set in your context or project settings."
-
-  if create_manual_activation_file; then
-    printf '%s\n' "Should you require a new activation license file, rerun the job with SSH and you will find it at \"${base_dir}/$(ls Unity_v*)\""
-  fi
-
-  exit 1
-else
-  check_license_and_editor_version
-fi
-
 # Nomenclature required by the script.
-readonly UNITY_LICENSE="$decoded_unity_license"
+readonly UNITY_LICENSE="$unity_license"
 
 export UNITY_LICENSE
 

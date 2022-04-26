@@ -7,17 +7,53 @@ parameters:
     default: Build the project
     description: |
       Specify a custom step name for the build command, if desired.
-  tag:
-    default: 2021.2.7f1-mac-mono-0.15
-    description: >
-      Pick a specific unityci/editor image variant:
-      https://hub.docker.com/r/unityci/editor/tags
+  os:
+    default: ubuntu
+    description: |
+      Pick the base OS for the GameCI image.
+      The available options are "ubuntu" and "windows".
+      More details can be found at https://game.ci/docs/docker/versions.
+    type: enum
+    enum: ["ubuntu", "windows"]
+  target-platform:
+    default: linux-il2cpp
+    description: |
+      Pick the target platform for the GameCI image.
+      This differs from the "build-target" parameter in that it is used for the GameCI image, not Unity.
+      Available options can be found at https://game.ci/docs/docker/versions.
     type: string
+  editor-version:
+    default: 2021.3.0f1
+    description: |
+      Pick the editor version for the GameCI image.
+      Make sure to pick the same major version as the Unity version you generated the license for.
+      Available options can be found at https://game.ci/docs/docker/versions.
+    type: string
+  unity-username-var-name:
+    type: env_var_name
+    default: "UNITY_USERNAME"
+    description: |
+      Enter the name of the environment variable containing your Unity username.
+      This is only necessary if you have a Plus or Pro license.
+  unity-password-var-name:
+    type: env_var_name
+    default: "UNITY_PASSWORD"
+    description: |
+      Enter the name of the environment variable containing your Unity password.
+      This is only necessary if you have a Plus or Pro license.
+  unity-serial-var-name:
+    type: env_var_name
+    default: "UNITY_SERIAL"
+    description: |
+      Enter the name of the environment variable containing your Unity serial number.
+      This is only necessary if you have a Plus or Pro license.
   unity-license-var-name:
     type: env_var_name
+    default: "UNITY_ENCODED_LICENSE"
     description: |
-      Enter the name of the environment variable containing Unity's ULF license activation file encoded in base64.
-      For more information on how to get such file and encoded it, access the wiki page: TODO create and add wiki page.
+      Enter the name of the environment variable containing your Unity license file encoded in base64.
+      A different license must be provided for every Unity major version.
+      This is only necessary if you have a Personal license.
   project-path:
     type: string
     default: "."
@@ -28,19 +64,29 @@ parameters:
     type: string
     description: |
       The target platform of your build.
-      Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2021.2/Documentation/ScriptReference/BuildTarget.html
+      Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2022.2/Documentation/ScriptReference/BuildTarget.html
   build-name:
     type: string
     default: "UnityBuild"
     description: |
       Enter the name for this build.
+  compress:
+    type: boolean
+    default: true
+    description: |
+      Whether to compress the build output to a ".tar.gz" archive.
+      This is recommended if you want to download the build artifacts from the GameCI dashboard.
+      If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
 
 docker:
-  - image: 'unityci/editor:<<parameters.tag>>'
+  - image: 'unityci/editor:<<parameters.os>>-<<parameters.editor-version>>-<<parameters.target-platform>>-1'
 
 steps:
   - checkout
   - prepare-env:
+      unity-username-var-name: << parameters.unity-username-var-name >>
+      unity-password-var-name: << parameters.unity-password-var-name >>
+      unity-serial-var-name: << parameters.unity-serial-var-name >>
       unity-license-var-name: << parameters.unity-license-var-name >>
       project-path: <<parameters.project-path>>
   - build:
@@ -48,5 +94,4 @@ steps:
       build-name: <<parameters.build-name>>
       build-target: <<parameters.build-target>>
       project-path: <<parameters.project-path>>
-  - store_artifacts:
-      path: <<parameters.project-path>>/Builds/<<parameters.build-target>>
+      compress: <<parameters.compress>>

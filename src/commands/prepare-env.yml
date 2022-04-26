@@ -2,16 +2,31 @@ description: >
   This command prepares the environment for testing or building an Unity project.
 
 parameters:
-  step-name:
-    type: string
-    default: Prepare the environment
+  unity-username-var-name:
+    type: env_var_name
+    default: "UNITY_USERNAME"
     description: |
-      Specify a custom step name for this command, if desired.
+      Enter the name of the environment variable containing your Unity username.
+      This is only necessary if you have a Plus or Pro license.
+  unity-password-var-name:
+    type: env_var_name
+    default: "UNITY_PASSWORD"
+    description: |
+      Enter the name of the environment variable containing your Unity password.
+      This is only necessary if you have a Plus or Pro license.
+  unity-serial-var-name:
+    type: env_var_name
+    default: "UNITY_SERIAL"
+    description: |
+      Enter the name of the environment variable containing your Unity serial number.
+      This is only necessary if you have a Plus or Pro license.
   unity-license-var-name:
     type: env_var_name
+    default: "UNITY_ENCODED_LICENSE"
     description: |
-      Enter the name of the environment variable containing Unity's ULF license activation file encoded in base64.
-      For more information on how to get such file and encoded it, access the wiki page: TODO create and add wiki page.
+      Enter the name of the environment variable containing your Unity license file encoded in base64.
+      A different license must be provided for every Unity major version.
+      This is only necessary if you have a Personal license.
   project-path:
     type: string
     default: "."
@@ -21,8 +36,11 @@ parameters:
 
 steps:
   - run:
-      name: << parameters.step-name >>
+      name: Prepare the environment
       environment:
+        PARAM_UNITY_USERNAME_VAR_NAME: << parameters.unity-username-var-name >>
+        PARAM_UNITY_PASSWORD_VAR_NAME: << parameters.unity-password-var-name >>
+        PARAM_UNITY_SERIAL_VAR_NAME: << parameters.unity-serial-var-name >>
         PARAM_UNITY_LICENSE_VAR_NAME: << parameters.unity-license-var-name >>
         PARAM_PROJECT_PATH: << parameters.project-path >>
       command: << include(scripts/prepare-env.sh) >>
