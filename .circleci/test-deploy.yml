@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  unity: ericribeiro/unity@dev:<<pipeline.git.revision>>
+  unity: game-ci/unity@dev:<<pipeline.git.revision>>
   orb-tools: circleci/orb-tools@11.1
 
 filters: &filters
@@ -166,18 +166,18 @@ workflows:
       - test:
           name: "test"
           step-name: "Check if the tests run and results are uploaded"
-          unity-license-var-name: "ACTIVATION_ULF_ENC"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
           executor:
               name: "unity/ubuntu-2021"
               target-platform: "linux-il2cpp"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           test-platform: "playmode"
           filters: *filters
-          context: orb-unity-testing
+          context: orb-testing-unity
       - build:
           name: "build-linux64"
           step-name: "Build StandaloneLinux64"
-          unity-license-var-name: "ACTIVATION_ULF_ENC"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
           executor:
               name: "unity/ubuntu-2021"
               target-platform: "linux-il2cpp"
@@ -187,11 +187,11 @@ workflows:
           requires:
             - test
           filters: *filters
-          context: orb-unity-testing
+          context: orb-testing-unity
       - build:
           name: "build-webgl"
           step-name: "Build WebGL"
-          unity-license-var-name: "ACTIVATION_ULF_ENC"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
           executor:
               name: "unity/ubuntu-2021"
               target-platform: "webgl"
@@ -201,11 +201,11 @@ workflows:
           requires:
             - test
           filters: *filters
-          context: orb-unity-testing
+          context: orb-testing-unity
       - build:
           name: "build-windows64"
           step-name: "Build StandaloneWindows64"
-          unity-license-var-name: "ACTIVATION_ULF_ENC"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
           executor:
               name: "unity/ubuntu-2021"
               target-platform: "windows-mono"
@@ -214,11 +214,11 @@ workflows:
           requires:
             - test
           filters: *filters
-          context: orb-unity-testing
+          context: orb-testing-unity
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
-          orb-name: ericribeiro/unity
+          orb-name: game-ci/unity
           vcs-type: << pipeline.project.type >>
           pub-type: production
           requires:
