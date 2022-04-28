@@ -17,9 +17,18 @@ parameters:
       Make sure to pick the same major version as the Unity version you generated the license for.
       Available options can be found at https://game.ci/docs/docker/versions.
     type: string
+  resource-class:
+    description: |
+      Resource class used for the executor.
+      If you are receiving a "CircleCI received exit code 137" from the build job, you may need to increase the resource class.
+    type: enum
+    default: large
+    enum: [ small, medium, medium+, large, xlarge, 2xlarge, 2xlarge+ ]
 
 docker:
   - image: 'unityci/editor:ubuntu-<<parameters.editor-version>>-<<parameters.target-platform>>-1'
     environment:
       - GAMECI_EDITOR_VERSION=<< parameters.editor-version >>
       - GAMECI_TARGET_PLATFORM=<< parameters.target-platform >>
+
+resource_class: << parameters.resource-class >>
