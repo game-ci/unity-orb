@@ -9,9 +9,18 @@ parameters:
       More information can be found at: https://game.ci/docs/docker/docker-images.
     type: enum
     enum: [ "android", "base", "ios", "linux-il2cpp", "mac-mono", "webgl", "windows-mono" ]
+  resource-class:
+    description: |
+      Resource class used for the executor.
+      If you are receiving a "CircleCI received exit code 137" from the build job, you may need to increase the resource class.
+    type: enum
+    default: large
+    enum: [ small, medium, medium+, large, xlarge, 2xlarge, 2xlarge+ ]
 
 docker:
   - image: 'unityci/editor:ubuntu-2020.3.33f1-<< parameters.target-platform >>-1'
     environment:
       - GAMECI_EDITOR_VERSION="2020.3.33f1"
       - GAMECI_TARGET_PLATFORM=<< parameters.target-platform >>
+
+resource_class: << parameters.resource-class >>

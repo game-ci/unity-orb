@@ -181,6 +181,7 @@ workflows:
           executor:
               name: "unity/ubuntu-2021"
               target-platform: "linux-il2cpp"
+              resource-class: "medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
           compress: true
@@ -195,6 +196,7 @@ workflows:
           executor:
               name: "unity/ubuntu-2021"
               target-platform: "webgl"
+              resource-class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "WebGL"
           compress: false
@@ -209,8 +211,23 @@ workflows:
           executor:
               name: "unity/ubuntu-2021"
               target-platform: "windows-mono"
+              resource-class: "medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "StandaloneWindows64"
+          requires:
+            - test
+          filters: *filters
+          context: orb-testing-unity
+      - build:
+          name: "build-osx"
+          step-name: "Build StandaloneOSX"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "mac-mono"
+              resource-class: "medium"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: "StandaloneOSX"
           requires:
             - test
           filters: *filters
@@ -227,6 +244,7 @@ workflows:
             - build-linux64
             - build-webgl
             - build-windows64
+            - build-osx
           context: orb-publishing
           filters:
             branches:
