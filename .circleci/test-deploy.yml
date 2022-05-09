@@ -8,7 +8,7 @@ filters: &filters
     only: /.*/
 
 jobs:
-  build:
+  build-il2cpp:
     description: >
       Simple drop-in job to build your Unity game.
 
@@ -76,7 +76,11 @@ jobs:
     steps:
       - run:
           name: "Clone CircleCI demo repository"
-          command: git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
+          command: |
+            git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
+            cd Unity2D-Demo-Game-CI-CD
+            git fetch --all
+            git checkout windows-il2cpp
       - unity/prepare-env:
           unity-username-var-name: << parameters.unity-username-var-name >>
           unity-password-var-name: << parameters.unity-password-var-name >>
@@ -84,22 +88,25 @@ jobs:
           unity-license-var-name: << parameters.unity-license-var-name >>
           project-path: <<parameters.project-path>>
       - unity/build:
+          unity-username-var-name: << parameters.unity-username-var-name >>
+          unity-password-var-name: << parameters.unity-password-var-name >>
+          unity-serial-var-name: << parameters.unity-serial-var-name >>
           step-name: << parameters.step-name >>
           build-name: <<parameters.build-name>>
           build-target: <<parameters.build-target>>
           project-path: <<parameters.project-path>>
           compress: <<parameters.compress>>
-
-  test:
+  
+  build-mono:
     description: >
       Simple drop-in job to build your Unity game.
 
     parameters:
       step-name:
         type: string
-        default: Run tests
+        default: Build the project
         description: |
-          Specify a custom step name for the test command, if desired.
+          Specify a custom step name for the build command, if desired.
       executor:
         type: executor
         description: |
@@ -135,103 +142,92 @@ jobs:
         description: |
           Enter the path of your Unity project.
           This should be the directory that has an "Assets" folder inside it.
-      test-platform:
+      build-target:
         type: string
-        default: "editmode"
         description: |
-          Specify the test platform to run tests on.
-          Valid values are "editmode", "playmode" and Unity's target builds.
-          More information can be found on: https://docs.unity3d.com/Packages/com.unity.test-framework@2.0/manual/reference-command-line.html
+          The target platform of your build.
+          Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2022.2/Documentation/ScriptReference/BuildTarget.html
+      build-name:
+        type: string
+        default: "UnityBuild"
+        description: |
+          Enter the name for this build.
+      compress:
+        type: boolean
+        default: true
+        description: |
+          Whether to compress the build output to a ".tar.gz" archive.
+          This is recommended if you want to download the build artifacts from the GameCI dashboard.
+          If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
 
-    executor: << parameters.executor >>
+    executor: << parameters.executor >> 
 
     steps:
       - run:
           name: "Clone CircleCI demo repository"
-          command: git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
+          command: |
+            git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
       - unity/prepare-env:
           unity-username-var-name: << parameters.unity-username-var-name >>
           unity-password-var-name: << parameters.unity-password-var-name >>
           unity-serial-var-name: << parameters.unity-serial-var-name >>
           unity-license-var-name: << parameters.unity-license-var-name >>
           project-path: <<parameters.project-path>>
-      - unity/test:
+      - unity/build:
+          unity-username-var-name: << parameters.unity-username-var-name >>
+          unity-password-var-name: << parameters.unity-password-var-name >>
+          unity-serial-var-name: << parameters.unity-serial-var-name >>
           step-name: << parameters.step-name >>
-          test-platform: << parameters.test-platform >>
-          project-path: << parameters.project-path >>
+          build-name: <<parameters.build-name>>
+          build-target: <<parameters.build-target>>
+          project-path: <<parameters.project-path>>
+          compress: <<parameters.compress>>
+
+executors:
+  windows-runner:
+    machine: true
+    resource_class: ericribeiro/unity-runner
 
 workflows:
   test-build:
     jobs:
-      - test:
-          name: "test"
-          step-name: "Check if the tests run and results are uploaded"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+      # - build-mono:
+      #     name: "build-Windows64-mono"
+      #     step-name: "Build StandaloneWindows64"
+      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+      #     executor:
+      #         name: "unity/ubuntu-2021"
+      #         target-platform: "windows-mono"
+      #         resource-class: "medium"
+      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
+      #     build-target: "StandaloneWindows64"
+      #     filters: *filters
+      #     context: orb-testing-unity
+      - build-il2cpp:
+          name: "build-Windows64-il2cpp"
+          step-name: "Build StandaloneWindows64 il2cpp"
+          unity-serial-var-name: "UNITY_SERIAL_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
           executor:
-              name: "unity/ubuntu-2021"
-              target-platform: "linux-il2cpp"
+              name: "windows-runner"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
-          test-platform: "playmode"
-          filters: *filters
-          context: orb-testing-unity
-      - build:
-          name: "build-linux64"
-          step-name: "Build StandaloneLinux64"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          executor:
-              name: "unity/ubuntu-2021"
-              target-platform: "linux-il2cpp"
-              resource-class: "medium"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: StandaloneLinux64
+          build-target: StandaloneWindows64
           compress: true
-          requires:
-            - test
           filters: *filters
           context: orb-testing-unity
-      - build:
-          name: "build-webgl"
-          step-name: "Build WebGL"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          executor:
-              name: "unity/ubuntu-2021"
-              target-platform: "webgl"
-              resource-class: "large"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: "WebGL"
-          compress: false
-          requires:
-            - test
-          filters: *filters
-          context: orb-testing-unity
-      - build:
-          name: "build-windows64"
-          step-name: "Build StandaloneWindows64"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          executor:
-              name: "unity/ubuntu-2021"
-              target-platform: "windows-mono"
-              resource-class: "medium"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: "StandaloneWindows64"
-          requires:
-            - test
-          filters: *filters
-          context: orb-testing-unity
-      - build:
-          name: "build-osx"
-          step-name: "Build StandaloneOSX"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          executor:
-              name: "unity/ubuntu-2021"
-              target-platform: "mac-mono"
-              resource-class: "medium"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: "StandaloneOSX"
-          requires:
-            - test
-          filters: *filters
-          context: orb-testing-unity
+      # - build-mono:
+      #     name: "build-android"
+      #     step-name: "Build Android"
+      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+      #     executor:
+      #       name: "unity/ubuntu-2021"
+      #       target-platform: "android"
+      #       resource-class: "large"
+      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
+      #     build-target: "Android"
+      #     filters: *filters
+      #     context: orb-testing-unity
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
@@ -240,11 +236,8 @@ workflows:
           pub-type: production
           requires:
             - orb-tools/pack
-            - test
-            - build-linux64
-            - build-webgl
-            - build-windows64
-            - build-osx
+            # - build-Windows64-mono
+            - build-Windows64-il2cpp
           context: orb-publishing
           filters:
             branches:

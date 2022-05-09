@@ -92,30 +92,48 @@ resolve_unity_license() {
   fi
 }
 
-# Expand environment name variable parameters.
-readonly unity_username="${!PARAM_UNITY_USERNAME_VAR_NAME}"
-readonly unity_password="${!PARAM_UNITY_PASSWORD_VAR_NAME}"
-readonly unity_serial="${!PARAM_UNITY_SERIAL_VAR_NAME}"
-readonly unity_encoded_license="${!PARAM_UNITY_LICENSE_VAR_NAME}"
+readonly platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
 
-unity_license=""
+case "$platform" in
+  linux*)
+    printf '%s\n' "Detected OS: Linux."
+    
+    # Expand environment name variable parameters.
+    readonly unity_username="${!PARAM_UNITY_USERNAME_VAR_NAME}"
+    readonly unity_password="${!PARAM_UNITY_PASSWORD_VAR_NAME}"
+    readonly unity_serial="${!PARAM_UNITY_SERIAL_VAR_NAME}"
+    readonly unity_encoded_license="${!PARAM_UNITY_LICENSE_VAR_NAME}"
 
-resolve_unity_license
-check_license_and_editor_version
+    unity_license=""
 
-# Download before_script.sh from GameCI.
-if ! download_before_script; then
-  printf '%s\n' "Failed to download \"before_script.sh\"."
-  exit 1
-fi
+    resolve_unity_license
+    check_license_and_editor_version
 
-chmod +x "$base_dir/before_script.sh"
+    # Download before_script.sh from GameCI.
+    if ! download_before_script; then
+      printf '%s\n' "Failed to download \"before_script.sh\"."
+      exit 1
+    fi
 
-# Nomenclature required by the script.
-readonly UNITY_LICENSE="$unity_license"
+    chmod +x "$base_dir/before_script.sh"
 
-export UNITY_LICENSE
+    # Nomenclature required by the script.
+    readonly UNITY_LICENSE="$unity_license"
 
-# Run the test script.
-# shellcheck source=/dev/null
-source "$base_dir/before_script.sh"
+    export UNITY_LICENSE
+
+    # Run the test script.
+    # shellcheck source=/dev/null
+    source "$base_dir/before_script.sh"
+    ;;
+  darwin*)
+    printf '%s\n' "Detected OS: macOS."
+    ;;
+  msys*|cygwin*)
+    printf '%s\n' "Detected OS: Windows."
+    ;;
+  *)
+    echo "Unsupported OS: \"$platform\"."
+    exit 1
+    ;;
+esac
