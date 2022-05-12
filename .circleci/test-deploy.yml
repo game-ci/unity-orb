@@ -232,6 +232,20 @@ workflows:
             - test
           filters: *filters
           context: orb-testing-unity
+      - build:
+          name: "build-android"
+          step-name: "Build Android"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          executor:
+            name: "unity/ubuntu-2021"
+            target-platform: "Android"
+            resource-class: "medium"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: "Android"
+          requires:
+            - test
+          filters: *filters
+          context: unity-orb-testing
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
@@ -245,6 +259,7 @@ workflows:
             - build-webgl
             - build-windows64
             - build-osx
+            - build-android
           context: orb-publishing
           filters:
             branches:
