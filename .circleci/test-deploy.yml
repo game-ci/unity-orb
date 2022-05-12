@@ -238,7 +238,7 @@ workflows:
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
           executor:
             name: "unity/ubuntu-2021"
-            target-platform: "Android"
+            target-platform: "android"
             resource-class: "medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "Android"
