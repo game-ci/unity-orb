@@ -20,4 +20,6 @@ docker cp "$container_name":"$PARAM_BUILD_NAME"-"$PARAM_BUILD_TARGET".tar.gz "$b
 
 # Copy the Library to the host
 rm -rf "$unity_project_full_path"/Library
+
+# shellcheck disable=SC2140
 docker cp "$container_name":"C:/unity_project/Library" "$base_dir"/unity_project/Library
