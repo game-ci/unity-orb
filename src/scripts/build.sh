@@ -92,7 +92,9 @@ case "$platform" in
     ;;
   msys*|cygwin*)
     printf '%s\n' "Detected OS: Windows."
-    $SCRIPT_BUILD_WINDOWS
+    printf '$s\n' "$SCRIPT_BUILD_WINDOWS" > "$base_dir/build-windows.sh"
+    chmod +x "$base_dir/build-windows.sh"
+    . "$base_dir/build-windows.sh"
     ;;
   *)
     echo "Unsupported OS: \"$platform\"."

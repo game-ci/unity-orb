@@ -1,3 +1,4 @@
+#!/bin/false
 # shellcheck disable=SC2154
 
 # Install the Windows 10 SDK.
