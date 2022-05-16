@@ -22,8 +22,6 @@ set -x
 # shellcheck disable=SC2140
 docker run -dit \
   --name "$container_name" \
-  --env BUILD_NAME="$PARAM_BUILD_NAME" \
-  --env BUILD_TARGET="$PARAM_BUILD_TARGET" \
   --env PROJECT_PATH="C:/unity_project" \
   --env UNITY_USERNAME="$unity_username" \
   --env UNITY_PASSWORD="$unity_password" \
