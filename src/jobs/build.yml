@@ -11,31 +11,6 @@ parameters:
     type: executor
     description: |
       Pick an Executor to run the build job with.
-  unity-username-var-name:
-    type: env_var_name
-    default: "UNITY_USERNAME"
-    description: |
-      Enter the name of the environment variable containing your Unity username.
-      This is only necessary if you have a Plus or Pro license.
-  unity-password-var-name:
-    type: env_var_name
-    default: "UNITY_PASSWORD"
-    description: |
-      Enter the name of the environment variable containing your Unity password.
-      This is only necessary if you have a Plus or Pro license.
-  unity-serial-var-name:
-    type: env_var_name
-    default: "UNITY_SERIAL"
-    description: |
-      Enter the name of the environment variable containing your Unity serial number.
-      This is only necessary if you have a Plus or Pro license.
-  unity-license-var-name:
-    type: env_var_name
-    default: "UNITY_ENCODED_LICENSE"
-    description: |
-      Enter the name of the environment variable containing your Unity license file encoded in base64.
-      A different license must be provided for every Unity major version.
-      This is only necessary if you have a Personal license.
   project-path:
     type: string
     default: "."
