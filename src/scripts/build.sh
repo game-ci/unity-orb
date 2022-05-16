@@ -33,25 +33,20 @@ if ! copy_builder_to_project; then
   exit 1
 fi
 
-readonly platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+if [ "$PLATFORM" = "linux" ]; then
+  printf '%s\n' "$SCRIPT_BUILD_LINUX" > "$base_dir/build.sh"
 
-case "$platform" in
-  linux*)
-    printf '%s\n' "Detected OS: Linux."
-    printf '%s\n' "$SCRIPT_BUILD_LINUX" > "$base_dir/build.sh"
-    ;;
-  darwin*)
-    printf '%s\n' "Detected OS: macOS."
-    ;;
-  msys*|cygwin*)
-    printf '%s\n' "Detected OS: Windows."
-    printf '%s\n' "$SCRIPT_BUILD_WINDOWS" > "$base_dir/build.sh"
-    ;;
-  *)
-    echo "Unsupported OS: \"$platform\"."
-    exit 1
-    ;;
-esac
+elif [ "$PLATFORM" = "macos" ]; then
+  printf '%s\n' "Detected OS: macOS."
+
+elif [ "$PLATFORM" = "windows" ]; then
+  printf '%s\n' "$SCRIPT_BUILD_WINDOWS" > "$base_dir/build.sh"
+
+else
+  printf '%s\n' "Failed to detect OS."
+  printf '%s\n' "Please try again or open an issue."
+  exit 1
+fi
 
 chmod +x "$base_dir/build.sh"
 
