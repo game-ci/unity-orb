@@ -25,3 +25,5 @@ docker cp "$container_name":library.tar.gz "$base_dir"/library.tar.gz
 # Update Library folder to update the cache.
 rm -rf "$unity_project_full_path"/Library
 tar -xzf "$base_dir"/library.tar.gz -C "$unity_project_full_path"
+
+ls "$unity_project_full_path"/Library
