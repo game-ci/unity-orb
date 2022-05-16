@@ -18,7 +18,7 @@ docker exec "$container_name" powershell '& "C:\Program Files\Unity\Hub\Editor\2
 docker exec "$container_name" powershell 'tar -czf "C:/$Env:BUILD_NAME-$Env:BUILD_TARGET.tar.gz" -C "C:/build" .'
 docker exec "$container_name" powershell 'tar -czf "C:/library.tar.gz" -C "C:/unity_project/Library" .'
 
-# Copy the build and Library to the host.
+# Copy the build and Library directories to the host.
 docker cp "$container_name":"$PARAM_BUILD_NAME"-"$PARAM_BUILD_TARGET".tar.gz "$base_dir"/"$PARAM_BUILD_NAME"-"$PARAM_BUILD_TARGET".tar.gz
 docker cp "$container_name":library.tar.gz "$base_dir"/library.tar.gz
 
