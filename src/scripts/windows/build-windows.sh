@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-
-readonly base_dir="${CIRCLE_WORKING_DIRECTORY/\~/$HOME}"
-readonly unity_project_full_path="$base_dir/$PARAM_PROJECT_PATH"
+# shellcheck disable=SC2154
 
 # Install the Windows 10 SDK.
 choco upgrade windows-sdk-10.1 visualstudio2022-workload-vctools --no-progress -y
