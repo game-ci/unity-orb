@@ -4,6 +4,8 @@
 
 readonly container_name="unity_container"
 
+docker exec "$container_name" powershell ls "$unity_project_full_path"
+
 # Create the build folder
 docker exec "$container_name" powershell mkdir C:/build
 
