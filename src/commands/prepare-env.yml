@@ -36,6 +36,9 @@ parameters:
 
 steps:
   - run:
+      name: "Detect OS"
+      command: << include(scripts/detect-os.sh) >>
+  - run:
       name: Prepare the environment
       environment:
         PARAM_UNITY_USERNAME_VAR_NAME: << parameters.unity-username-var-name >>
