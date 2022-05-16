@@ -8,8 +8,8 @@ readonly container_name="unity_container"
 docker exec "$container_name" powershell mkdir C:/build
 
 # Add the build target and build name in the environment variables.
-docker exec "$container_name" powershell "\$Env:BUILD_NAME = $PARAM_BUILD_NAME"
-docker exec "$container_name" powershell "\$Env:BUILD_TARGET = $PARAM_BUILD_TARGET"
+docker exec "$container_name" powershell "\$Env:BUILD_NAME = '$PARAM_BUILD_NAME'"
+docker exec "$container_name" powershell "\$Env:BUILD_TARGET = '$PARAM_BUILD_TARGET'"
 
 # Run the scripts
 docker exec "$container_name" powershell '& "C:\Program Files\Unity\Hub\Editor\2021.3.2f1\Editor\Unity.exe" -batchmode -quit -nographics -projectPath $Env:PROJECT_PATH -buildTarget $Env:BUILD_TARGET -customBuildTarget $Env:BUILD_TARGET -customBuildName $Env:BUILD_NAME -customBuildPath "C:/build/" -buildVersion "1.0.0" -executeMethod BuildCommand.PerformBuild -logfile | Out-Host'
