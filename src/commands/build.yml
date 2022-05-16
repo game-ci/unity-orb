@@ -2,24 +2,6 @@ description: >
   This command builds an Unity project.
 
 parameters:
-  unity-username-var-name:
-    type: env_var_name
-    default: "UNITY_USERNAME"
-    description: |
-      Enter the name of the environment variable containing your Unity username.
-      This is only necessary if you have a Plus or Pro license.
-  unity-password-var-name:
-    type: env_var_name
-    default: "UNITY_PASSWORD"
-    description: |
-      Enter the name of the environment variable containing your Unity password.
-      This is only necessary if you have a Plus or Pro license.
-  unity-serial-var-name:
-    type: env_var_name
-    default: "UNITY_SERIAL"
-    description: |
-      Enter the name of the environment variable containing your Unity serial number.
-      This is only necessary if you have a Plus or Pro license.
   step-name:
     type: string
     default: Build the project
@@ -60,9 +42,6 @@ parameters:
       If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
 
 steps:
-  - run:
-      name: "Detect OS"
-      command: << include(scripts/detect-os.sh) >>
   - restore_cache:
       keys:
         - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}-<</ parameters.include-branch-in-cache-key >>{{ checksum "<< parameters.project-path >>/Packages/packages-lock.json" }}
