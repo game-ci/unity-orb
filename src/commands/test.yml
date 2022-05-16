@@ -33,13 +33,6 @@ parameters:
 
 steps:
   - run:
-      name: "Detect OS"
-      command: << include(scripts/detect-os.sh) >>
-  - restore_cache:
-      keys:
-        - unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}
-        - unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}<</parameters.include-branch-in-cache-key>>
-  - run:
       name: << parameters.step-name >>
       environment:
         PARAM_PROJECT_PATH: << parameters.project-path >>

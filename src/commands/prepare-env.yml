@@ -27,6 +27,16 @@ parameters:
       Enter the name of the environment variable containing your Unity license file encoded in base64.
       A different license must be provided for every Unity major version.
       This is only necessary if you have a Personal license.
+  cache-version:
+    type: string
+    default: "v1"
+    description: |
+      Change the default cache version if you need to clear the cache for any reason.
+  include-branch-in-cache-key:
+      type: boolean
+      default: true
+      description: >
+          If true, this cache bucket will only apply to jobs within the same branch.
   project-path:
     type: string
     default: "."
@@ -38,6 +48,10 @@ steps:
   - run:
       name: "Detect OS"
       command: << include(scripts/detect-os.sh) >>
+  - restore_cache:
+      keys:
+        - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}-<</ parameters.include-branch-in-cache-key >>{{ checksum "<< parameters.project-path >>/Packages/packages-lock.json" }}
+        - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}<</ parameters.include-branch-in-cache-key >>
   - run:
       name: Prepare the environment
       environment:
