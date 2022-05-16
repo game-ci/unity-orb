@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+readonly base_dir="${CIRCLE_WORKING_DIRECTORY/\~/$HOME}"
+readonly unity_project_full_path="$base_dir/$PARAM_PROJECT_PATH"
+
 # Install the Windows 10 SDK.
 choco upgrade windows-sdk-10.1 visualstudio2022-workload-vctools --no-progress -y
 mkdir -p "$base_dir/regkeys"
@@ -27,6 +30,7 @@ mv "$gameci_sample_project_dir" "$base_dir"/sample_project
 set -x
 
 # run the container and prevent it from exiting
+# shellcheck disable=SC2140
 docker run -dit \
   --name "$container_name" \
   --env BUILD_NAME="$PARAM_BUILD_NAME" \
