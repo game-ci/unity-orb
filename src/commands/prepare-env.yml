@@ -46,4 +46,6 @@ steps:
         PARAM_UNITY_SERIAL_VAR_NAME: << parameters.unity-serial-var-name >>
         PARAM_UNITY_LICENSE_VAR_NAME: << parameters.unity-license-var-name >>
         PARAM_PROJECT_PATH: << parameters.project-path >>
+        SCRIPT_PREPARE_ENV_LINUX: << include(scripts/linux/prepare-env.sh) >>
+        SCRIPT_PREPARE_ENV_WINDOWS: << include(scripts/windows/prepare-env.sh) >>
       command: << include(scripts/prepare-env.sh) >>
