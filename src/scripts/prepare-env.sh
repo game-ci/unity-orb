@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034
 
 readonly base_dir="${CIRCLE_WORKING_DIRECTORY/\~/$HOME}"
 readonly unity_project_full_path="$base_dir/$PARAM_PROJECT_PATH"
