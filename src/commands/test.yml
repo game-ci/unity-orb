@@ -32,6 +32,9 @@ parameters:
           If true, this cache bucket will only apply to jobs within the same branch.
 
 steps:
+  - run:
+      name: "Detect OS"
+      command: << include(scripts/detect-os.sh) >>
   - restore_cache:
       keys:
         - unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}
