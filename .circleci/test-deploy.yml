@@ -191,18 +191,18 @@ executors:
 workflows:
   test-build:
     jobs:
-      # - build-mono:
-      #     name: "build-Windows64-mono"
-      #     step-name: "Build StandaloneWindows64"
-      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-      #     executor:
-      #         name: "unity/ubuntu-2021"
-      #         target-platform: "windows-mono"
-      #         resource-class: "medium"
-      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
-      #     build-target: "StandaloneWindows64"
-      #     filters: *filters
-      #     context: orb-testing-unity
+      - build-mono:
+          name: "build-Windows64-mono"
+          step-name: "Build StandaloneWindows64"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          executor:
+              name: "unity/ubuntu-2021"
+              target-platform: "windows-mono"
+              resource-class: "medium"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: "StandaloneWindows64"
+          filters: *filters
+          context: orb-testing-unity
       - build-il2cpp:
           name: "build-Windows64-il2cpp"
           step-name: "Build StandaloneWindows64 il2cpp"
