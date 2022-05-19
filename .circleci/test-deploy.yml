@@ -179,39 +179,6 @@ jobs:
           project-path: <<parameters.project-path>>
           compress: <<parameters.compress>>
 
-executors:
-  windows-runner:
-    parameters:
-      editor-version:
-        description: |
-          Pick the editor version for the GameCI image.
-          Make sure to pick the same major version as the Unity version you generated the license for.
-          Available options can be found at https://game.ci/docs/docker/versions.
-        type: string
-      resource-class:
-        description: |
-          Enter the resource class of your CircleCI runner.
-        type: string
-      working-directory:
-        description: |
-          Enter the working directory of your CircleCI runner.
-        type: string
-        default: "C:\\Users\\circleci\\AppData\\Local\\Temp\\Workdir"
-      target-platform:
-        description: |
-          Pick the target platform for the GameCI image.
-          Available options can be found at https://game.ci/docs/docker/versions.
-          The 2018 release doesn't support the "linux-il2cpp" target platform.
-        type: enum
-        enum: [ "appletv", "base", "universal-windows-platform", "windows-il2cpp" ]
-  
-    machine: true
-    resource_class: << parameters.resource-class >>
-    working_directory: << parameters.working-directory >>
-    environment:
-      - GAMECI_EDITOR_VERSION=<< parameters.editor-version >>
-      - GAMECI_TARGET_PLATFORM=<< parameters.target-platform >>
-
 workflows:
   test-build:
     jobs:
@@ -234,10 +201,10 @@ workflows:
           unity-username-var-name: "UNITY_USERNAME"
           unity-password-var-name: "UNITY_PASSWORD"
           executor:
-              name: "windows-runner"
+              name: "unity/windows-runner"
               resource-class: "ericribeiro/unity-runner"
               working-directory: "C:\\Users\\circleci\\AppData\\Local\\Temp\\Workdir"
-              editor-version: "2021.3.1f1"
+              editor-version: "2021.3.2f1"
               target-platform: "windows-il2cpp"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneWindows64
