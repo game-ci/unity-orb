@@ -1,34 +1,40 @@
 description: |
     Select the Editor version and Target Platform for the GameCI image.
     Available target platforms can be found at: https://game.ci/docs/docker/versions.
-    This executor only supports the "windows" OS and should be used with a CircleCI Runner.
-    For information on how to setup a Runner agent, see: https://circleci.com/docs/2.0/runner-overview/.
 
 parameters:
-  target-platform:
+  target_platform:
     description: |
       Pick the target platform for the GameCI image.
       Available options can be found at https://game.ci/docs/docker/versions.
       The 2018 release doesn't support the "linux-il2cpp" target platform.
     type: enum
     enum: [ "appletv", "base", "universal-windows-platform", "windows-il2cpp" ]
-  editor-version:
+  editor_version:
     description: |
       Pick the editor version for the GameCI image.
       Make sure to pick the same major version as the Unity version you generated the license for.
       Available options can be found at https://game.ci/docs/docker/versions.
     type: string
-  resource-class:
-    description: |
-      Resource class used for the executor.
-      If you are receiving a "CircleCI received exit code 137" from the build job, you may need to increase the resource class.
-    type: enum
+  size:
     default: large
-    enum: [ small, medium, large ]
+    description: 'The size of Windows resource to use.'
+    enum:
+      - medium
+      - large
+      - xlarge
+      - 2xlarge
+    type: enum
+  version:
+    default: current
+    description: |
+      The Windows image version to use.
+    type: string
 
-machine: true
-resource_class: << parameters.resource-class >>
-working_directory: << parameters.working-directory >>
+machine:
+  image: windows-server-2019-vs2019:<< parameters.version >>
+  resource_class: windows.<< parameters.size >>
+  shell: bash.exe
 environment:
-  - GAMECI_EDITOR_VERSION=<< parameters.editor-version >>
-  - GAMECI_TARGET_PLATFORM=<< parameters.target-platform >>
+  - GAMECI_EDITOR_VERSION=<< parameters.editor_version >>
+  - GAMECI_TARGET_PLATFORM=<< parameters.target_platform >>

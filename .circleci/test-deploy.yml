@@ -187,9 +187,10 @@ workflows:
           step-name: "Build StandaloneWindows64"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
           executor:
-              name: "unity/ubuntu-2021"
-              target-platform: "windows-mono"
-              resource-class: "medium"
+              name: "unity/ubuntu"
+              target_platform: "windows-mono"
+              editor_version: "2021.3.2f1"
+              resource_class: "medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "StandaloneWindows64"
           filters: *filters
@@ -202,10 +203,26 @@ workflows:
           unity-password-var-name: "UNITY_PASSWORD"
           executor:
               name: "unity/windows-runner"
-              resource-class: "ericribeiro/unity-runner"
-              working-directory: "C:\\Users\\circleci\\AppData\\Local\\Temp\\Workdir"
-              editor-version: "2021.3.2f1"
-              target-platform: "windows-il2cpp"
+              resource_class: "ericribeiro/unity-runner"
+              working_directory: "C:\\Users\\circleci\\AppData\\Local\\Temp\\Workdir"
+              editor_version: "2021.3.2f1"
+              target_platform: "windows-il2cpp"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: StandaloneWindows64
+          compress: true
+          filters: *filters
+          context: orb-testing-unity
+      - build-il2cpp:
+          name: "build-Windows64-il2cpp-cci"
+          step-name: "Build StandaloneWindows64 il2cpp"
+          unity-serial-var-name: "UNITY_SERIAL_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
+          executor:
+              name: "unity/windows-2019"
+              size: "large"
+              editor_version: "2021.3.2f1"
+              target_platform: "windows-il2cpp"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneWindows64
           compress: true
