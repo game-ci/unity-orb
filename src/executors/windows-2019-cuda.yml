@@ -1,0 +1,38 @@
+description: |
+    Select the Editor version and Target Platform for the GameCI image.
+    Available target platforms can be found at: https://game.ci/docs/docker/versions.
+
+parameters:
+  target_platform:
+    description: |
+      Pick the target platform for the GameCI image.
+      Available options can be found at https://game.ci/docs/docker/versions.
+      The 2018 release doesn't support the "linux-il2cpp" target platform.
+    type: enum
+    enum: [ "appletv", "base", "universal-windows-platform", "windows-il2cpp" ]
+  editor_version:
+    description: |
+      Pick the editor version for the GameCI image.
+      Make sure to pick the same major version as the Unity version you generated the license for.
+      Available options can be found at https://game.ci/docs/docker/versions.
+    type: string
+  size:
+    default: large
+    description: 'The size of Windows resource to use.'
+    enum:
+      - small
+      - medium
+    type: enum
+  version:
+    default: current
+    description: |
+      The Windows image version to use.
+    type: string
+
+machine:
+  image: windows-server-2019-cuda:<< parameters.version >>
+  resource_class: windows.gpu.nvidia.<< parameters.size >>
+  shell: bash.exe
+environment:
+  - GAMECI_EDITOR_VERSION=<< parameters.editor_version >>
+  - GAMECI_TARGET_PLATFORM=<< parameters.target_platform >>
