@@ -321,7 +321,16 @@ jobs:
       - run:
           name: "Clone CircleCI demo repository"
           command: |
-            git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
+            if [ -d "Unity2D-Demo-Game-CI-CD" ] && [ -d "Unity2D-Demo-Game-CI-CD/.git" ]; then
+              cd Unity2D-Demo-Game-CI-CD
+              git pull
+            else
+              if docker ps -q -f name=unity_container &> /dev/null; then
+                docker rm -f unity_container
+              fi
+              rm -rf Unity2D-Demo-Game-CI-CD
+              git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
+            fi
       - unity/prepare-env:
           unity-username-var-name: << parameters.unity-username-var-name >>
           unity-password-var-name: << parameters.unity-password-var-name >>
@@ -337,7 +346,7 @@ workflows:
   test-build:
     jobs:
       - test:
-          name: "test"
+          name: "test-linux"
           step-name: "Check if the tests run and results are uploaded"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
           executor:
@@ -349,6 +358,37 @@ workflows:
           test-platform: "playmode"
           filters: *filters
           context: orb-testing-unity
+      - test:
+          name: "test-windows"
+          step-name: "Check if the tests run and results are uploaded"
+          unity-serial-var-name: "UNITY_SERIAL_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
+          executor:
+              name: "unity/windows-2019"
+              size: "large"
+              editor_version: "2021.3.2f1"
+              target_platform: "windows-il2cpp"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          test-platform: "playmode"
+          filters: *filters
+          context: orb-testing-unity
+      # - test:
+      #     name: "test-windows"
+      #     step-name: "Check if the tests run and results are uploaded"
+      #     unity-serial-var-name: "UNITY_SERIAL_2021"
+      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-password-var-name: "UNITY_PASSWORD"
+      #     executor:
+      #         name: "unity/windows-runner"
+      #         resource_class: "ericribeiro/unity-runner"
+      #         working_directory: "C:\\Users\\circleci\\AppData\\Local\\Temp\\Workdir"
+      #         editor_version: "2021.3.2f1"
+      #         target_platform: "windows-il2cpp"
+      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
+      #     test-platform: "playmode"
+      #     filters: *filters
+      #     context: orb-testing-unity
       - build-il2cpp:
           name: "build-linux64-il2cpp"
           step-name: "Build StandaloneLinux64"
@@ -362,7 +402,7 @@ workflows:
           build-target: StandaloneLinux64
           compress: true
           requires:
-            - test
+            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build-il2cpp:
@@ -379,6 +419,8 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneWindows64
           compress: true
+          requires:
+            - test-windows
           filters: *filters
           context: orb-testing-unity
       - build-il2cpp:
@@ -395,6 +437,8 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneWindows64
           compress: true
+          requires:
+            - test-windows
           filters: *filters
           context: orb-testing-unity
       - build-mono:
@@ -410,7 +454,7 @@ workflows:
           build-target: StandaloneLinux64
           compress: true
           requires:
-            - test
+            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build-mono:
@@ -424,6 +468,8 @@ workflows:
               resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "StandaloneWindows64"
+          requires:
+            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build-mono:
@@ -438,7 +484,7 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "StandaloneOSX"
           requires:
-            - test
+            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build:
@@ -454,7 +500,7 @@ workflows:
           build-target: "WebGL"
           compress: false
           requires:
-            - test
+            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build:
@@ -468,6 +514,8 @@ workflows:
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "Android"
+          requires:
+            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build:
@@ -481,6 +529,8 @@ workflows:
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "iOS"
+          requires:
+            - test-linux
           filters: *filters
           context: orb-testing-unity
       - orb-tools/pack:
@@ -491,8 +541,17 @@ workflows:
           pub-type: production
           requires:
             - orb-tools/pack
-            # - build-Windows64-mono
+            - test-linux
+            - test-windows
+            - build-linux64-il2cpp
+            - build-Windows64-il2cpp-cuda
             - build-Windows64-il2cpp
+            - build-linux64-mono
+            - build-Windows64-mono
+            - build-osx-mono
+            - build-webgl
+            - build-android
+            - build-ios
           context: orb-publishing
           filters:
             branches:
