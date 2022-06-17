@@ -179,41 +179,123 @@ jobs:
           project-path: <<parameters.project-path>>
           compress: <<parameters.compress>>
 
+  build:
+    description: >
+      Simple drop-in job to build your Unity game.
+
+    parameters:
+      step-name:
+        type: string
+        default: Build the project
+        description: |
+          Specify a custom step name for the build command, if desired.
+      executor:
+        type: executor
+        description: |
+          Pick an Executor to run the build job with.
+      unity-username-var-name:
+        type: env_var_name
+        default: "UNITY_USERNAME"
+        description: |
+          Enter the name of the environment variable containing your Unity username.
+          This is only necessary if you have a Plus or Pro license.
+      unity-password-var-name:
+        type: env_var_name
+        default: "UNITY_PASSWORD"
+        description: |
+          Enter the name of the environment variable containing your Unity password.
+          This is only necessary if you have a Plus or Pro license.
+      unity-serial-var-name:
+        type: env_var_name
+        default: "UNITY_SERIAL"
+        description: |
+          Enter the name of the environment variable containing your Unity serial number.
+          This is only necessary if you have a Plus or Pro license.
+      unity-license-var-name:
+        type: env_var_name
+        default: "UNITY_ENCODED_LICENSE"
+        description: |
+          Enter the name of the environment variable containing your Unity license file encoded in base64.
+          A different license must be provided for every Unity major version.
+          This is only necessary if you have a Personal license.
+      project-path:
+        type: string
+        default: "."
+        description: |
+          Enter the path of your Unity project.
+          This should be the directory that has an "Assets" folder inside it.
+      build-target:
+        type: string
+        description: |
+          The target platform of your build.
+          Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2022.2/Documentation/ScriptReference/BuildTarget.html
+      build-name:
+        type: string
+        default: "UnityBuild"
+        description: |
+          Enter the name for this build.
+      compress:
+        type: boolean
+        default: true
+        description: |
+          Whether to compress the build output to a ".tar.gz" archive.
+          This is recommended if you want to download the build artifacts from the GameCI dashboard.
+          If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
+
+    executor: << parameters.executor >> 
+
+    steps:
+      - run:
+          name: "Clone CircleCI demo repository"
+          command: |
+            git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
+      - unity/prepare-env:
+          unity-username-var-name: << parameters.unity-username-var-name >>
+          unity-password-var-name: << parameters.unity-password-var-name >>
+          unity-serial-var-name: << parameters.unity-serial-var-name >>
+          unity-license-var-name: << parameters.unity-license-var-name >>
+          project-path: <<parameters.project-path>>
+      - unity/build:
+          step-name: << parameters.step-name >>
+          build-name: <<parameters.build-name>>
+          build-target: <<parameters.build-target>>
+          project-path: <<parameters.project-path>>
+          compress: <<parameters.compress>>
+
 workflows:
   test-build:
     jobs:
-      - build-mono:
-          name: "build-Windows64-mono"
-          step-name: "Build StandaloneWindows64"
+      - test:
+          name: "test"
+          step-name: "Check if the tests run and results are uploaded"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
           executor:
               name: "unity/ubuntu"
-              target_platform: "windows-mono"
-              editor_version: "2021.3.2f1"
+              target_platform: "linux-il2cpp"
+              editor_version: "2021.3.1f1"
               resource_class: "medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: "StandaloneWindows64"
+          test-platform: "playmode"
           filters: *filters
           context: orb-testing-unity
       - build-il2cpp:
-          name: "build-Windows64-il2cpp"
-          step-name: "Build StandaloneWindows64 il2cpp"
-          unity-serial-var-name: "UNITY_SERIAL_2021"
-          unity-username-var-name: "UNITY_USERNAME"
-          unity-password-var-name: "UNITY_PASSWORD"
+          name: "build-linux64-il2cpp"
+          step-name: "Build StandaloneLinux64"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
           executor:
-              name: "unity/windows-runner"
-              resource_class: "ericribeiro/unity-runner"
-              working_directory: "C:\\Users\\circleci\\AppData\\Local\\Temp\\Workdir"
-              editor_version: "2021.3.2f1"
-              target_platform: "windows-il2cpp"
+              name: "unity/ubuntu"
+              target_platform: "linux-il2cpp"
+              editor_version: "2021.3.1f1"
+              resource_class: "medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: StandaloneWindows64
+          build-target: StandaloneLinux64
           compress: true
+          requires:
+            - test
           filters: *filters
           context: orb-testing-unity
       - build-il2cpp:
-          name: "build-Windows64-il2cpp-cci"
+          name: "build-Windows64-il2cpp-cuda"
           step-name: "Build StandaloneWindows64 il2cpp"
           unity-serial-var-name: "UNITY_SERIAL_2021"
           unity-username-var-name: "UNITY_USERNAME"
@@ -228,18 +310,108 @@ workflows:
           compress: true
           filters: *filters
           context: orb-testing-unity
-      # - build-mono:
-      #     name: "build-android"
-      #     step-name: "Build Android"
-      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-      #     executor:
-      #       name: "unity/ubuntu-2021"
-      #       target-platform: "android"
-      #       resource-class: "large"
-      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
-      #     build-target: "Android"
-      #     filters: *filters
-      #     context: orb-testing-unity
+      - build-il2cpp:
+          name: "build-Windows64-il2cpp"
+          step-name: "Build StandaloneWindows64 il2cpp"
+          unity-serial-var-name: "UNITY_SERIAL_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
+          executor:
+              name: "unity/windows-2019"
+              size: "large"
+              editor_version: "2021.3.2f1"
+              target_platform: "windows-il2cpp"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: StandaloneWindows64
+          compress: true
+          filters: *filters
+          context: orb-testing-unity
+      - build-mono:
+          name: "build-linux64-mono"
+          step-name: "Build StandaloneLinux64"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          executor:
+              name: "unity/ubuntu"
+              target_platform: "base"
+              editor_version: "2021.3.1f1"
+              resource_class: "medium"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: StandaloneLinux64
+          compress: true
+          requires:
+            - test
+          filters: *filters
+          context: orb-testing-unity
+      - build-mono:
+          name: "build-Windows64-mono"
+          step-name: "Build StandaloneWindows64"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          executor:
+              name: "unity/ubuntu"
+              target_platform: "windows-mono"
+              editor_version: "2021.3.2f1"
+              resource_class: "medium"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: "StandaloneWindows64"
+          filters: *filters
+          context: orb-testing-unity
+      - build-mono:
+          name: "build-osx-mono"
+          step-name: "Build StandaloneOSX"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          executor:
+              name: "unity/ubuntu"
+              target-platform: "mac-mono"
+              editor_version: "2021.3.2f1"
+              resource-class: "medium"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: "StandaloneOSX"
+          requires:
+            - test
+          filters: *filters
+          context: orb-testing-unity
+      - build:
+          name: "build-webgl"
+          step-name: "Build WebGL"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          executor:
+              name: "unity/ubuntu"
+              target_platform: "webgl"
+              editor_version: "2021.3.1f1"
+              resource_class: "large"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: "WebGL"
+          compress: false
+          requires:
+            - test
+          filters: *filters
+          context: orb-testing-unity
+      - build:
+          name: "build-android"
+          step-name: "Build Android"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          executor:
+            name: "unity/ubuntu"
+            target-platform: "android"
+            editor_version: "2021.3.2f1"
+            resource-class: "large"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: "Android"
+          filters: *filters
+          context: orb-testing-unity
+      - build:
+          name: "build-ios"
+          step-name: "Build iOS"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          executor:
+            name: "unity/ubuntu"
+            target-platform: "ios"
+            editor_version: "2021.3.2f1"
+            resource-class: "large"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: "iOS"
+          filters: *filters
+          context: orb-testing-unity
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:

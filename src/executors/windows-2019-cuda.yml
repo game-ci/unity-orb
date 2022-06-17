@@ -17,7 +17,7 @@ parameters:
       Available options can be found at https://game.ci/docs/docker/versions.
     type: string
   size:
-    default: large
+    default: medium
     description: 'The size of Windows resource to use.'
     enum:
       - small
