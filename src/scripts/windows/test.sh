@@ -2,6 +2,18 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2154
 
+trap_exit() {
+  local exit_status="$?"
+
+  if [ "$exit_status" -ne 0 ]; then
+    printf '%s\n' 'The script did not complete successfully.'
+
+    printf '%s\n' "Removing the container \"$CONTAINER_NAME\"."
+    docker rm -f "$CONTAINER_NAME" &> /dev/null || true
+  fi
+}
+trap trap_exit EXIT
+
 # Add the build target and build name in the environment variables.
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('TEST_PLATFORM','$PARAM_TEST_PLATFORM', [System.EnvironmentVariableTarget]::Machine)"
 
@@ -28,5 +40,5 @@ docker exec "$CONTAINER_NAME" powershell '((Get-Content C:/playmode-junit-result
 # Copy test results to the host.
 docker cp "$CONTAINER_NAME":"$PARAM_TEST_PLATFORM"-junit-results-lf.xml "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-junit-results.xml
 
-# Clean up the container.
-docker rm -rf "$CONTAINER_NAME"
+# Remove the container.
+docker rm -f "$CONTAINER_NAME"

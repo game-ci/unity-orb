@@ -2,6 +2,18 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2154
 
+trap_exit() {
+  local exit_status="$?"
+
+  if [ "$exit_status" -ne 0 ]; then
+    printf '%s\n' 'The script did not complete successfully.'
+
+    printf '%s\n' "Removing the container \"$CONTAINER_NAME\"."
+    docker rm -f "$CONTAINER_NAME" &> /dev/null || true
+  fi
+}
+trap trap_exit EXIT
+
 # Create the build folder
 docker exec "$CONTAINER_NAME" powershell mkdir C:/build
 
@@ -24,5 +36,5 @@ docker cp "$CONTAINER_NAME":library.tar.gz "$base_dir"/library.tar.gz
 # rm -rf "$unity_project_full_path"/Library
 tar -xzf "$base_dir"/library.tar.gz -C "$unity_project_full_path"
 
-# Clean up the container.
-docker rm -rf "$CONTAINER_NAME"
+# Remove the container.
+docker rm -f "$CONTAINER_NAME"
