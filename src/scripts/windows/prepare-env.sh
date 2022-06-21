@@ -9,16 +9,17 @@ choco upgrade windows-sdk-10.1 visualstudio2022-workload-vctools --no-progress -
 mkdir -p "$base_dir/regkeys"
 powershell "reg export HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\\"Microsoft SDKs\"\\Windows\\v10.0 $base_dir/regkeys/winsdk.reg /y"
 
-readonly container_name="unity_container"
+readonly container_name="${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BUILD_NUM}"
+printf '%s\n' "export CONTAINER_NAME=$container_name" >> $BASH_ENV
 
-# delete any existing containers
+# Delete any existing containers.
 if docker ps -a | grep -wq "$container_name"; then
   docker rm -f "$container_name"
 fi
 
 set -x
 
-# run the container and prevent it from exiting
+# Run the container and prevent it from exiting.
 # shellcheck disable=SC2140
 docker run -dit \
   --name "$container_name" \
