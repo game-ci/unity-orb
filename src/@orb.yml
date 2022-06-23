@@ -5,5 +5,5 @@ description: >
     Supports Linux x86_64.
 
 display:
-  home_url: "https://game.ci/docs"
+  home_url: "https://game.ci/docs/"
   source_url: "https://github.com/game-ci/unity-orb"

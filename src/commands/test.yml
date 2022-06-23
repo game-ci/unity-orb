@@ -32,15 +32,13 @@ parameters:
           If true, this cache bucket will only apply to jobs within the same branch.
 
 steps:
-  - restore_cache:
-      keys:
-        - unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}
-        - unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}<</parameters.include-branch-in-cache-key>>
   - run:
       name: << parameters.step-name >>
       environment:
         PARAM_PROJECT_PATH: << parameters.project-path >>
         PARAM_TEST_PLATFORM: << parameters.test-platform >>
+        SCRIPT_TEST_LINUX: << include(scripts/linux/test.sh) >>
+        SCRIPT_TEST_WINDOWS: << include(scripts/windows/test.sh) >>
       command: << include(scripts/test.sh) >>
   - save_cache:
       key: unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}

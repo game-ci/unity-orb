@@ -7,26 +7,36 @@ parameters:
     default: "UNITY_USERNAME"
     description: |
       Enter the name of the environment variable containing your Unity username.
-      This is only necessary if you have a Plus or Pro license.
+      Required if you have a Plus or Pro license or are using the Windows or Windows Runner executor.
   unity-password-var-name:
     type: env_var_name
     default: "UNITY_PASSWORD"
     description: |
       Enter the name of the environment variable containing your Unity password.
-      This is only necessary if you have a Plus or Pro license.
+      Required if you have a Plus or Pro license or are using the Windows or Windows Runner executor.
   unity-serial-var-name:
     type: env_var_name
     default: "UNITY_SERIAL"
     description: |
       Enter the name of the environment variable containing your Unity serial number.
-      This is only necessary if you have a Plus or Pro license.
+      Required if you have a Plus or Pro license.
   unity-license-var-name:
     type: env_var_name
     default: "UNITY_ENCODED_LICENSE"
     description: |
       Enter the name of the environment variable containing your Unity license file encoded in base64.
       A different license must be provided for every Unity major version.
-      This is only necessary if you have a Personal license.
+      Required if you have a Personal license.
+  cache-version:
+    type: string
+    default: "v1"
+    description: |
+      Change the default cache version if you need to clear the cache for any reason.
+  include-branch-in-cache-key:
+      type: boolean
+      default: true
+      description: >
+          If true, this cache bucket will only apply to jobs within the same branch.
   project-path:
     type: string
     default: "."
@@ -36,6 +46,13 @@ parameters:
 
 steps:
   - run:
+      name: "Detect OS"
+      command: << include(scripts/detect-os.sh) >>
+  - restore_cache:
+      keys:
+        - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}-<</ parameters.include-branch-in-cache-key >>{{ checksum "<< parameters.project-path >>/Packages/packages-lock.json" }}
+        - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}<</ parameters.include-branch-in-cache-key >>
+  - run:
       name: Prepare the environment
       environment:
         PARAM_UNITY_USERNAME_VAR_NAME: << parameters.unity-username-var-name >>
@@ -43,4 +60,6 @@ steps:
         PARAM_UNITY_SERIAL_VAR_NAME: << parameters.unity-serial-var-name >>
         PARAM_UNITY_LICENSE_VAR_NAME: << parameters.unity-license-var-name >>
         PARAM_PROJECT_PATH: << parameters.project-path >>
+        SCRIPT_PREPARE_ENV_LINUX: << include(scripts/linux/prepare-env.sh) >>
+        SCRIPT_PREPARE_ENV_WINDOWS: << include(scripts/windows/prepare-env.sh) >>
       command: << include(scripts/prepare-env.sh) >>

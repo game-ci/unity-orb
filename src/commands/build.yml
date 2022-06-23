@@ -42,10 +42,6 @@ parameters:
       If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
 
 steps:
-  - restore_cache:
-      keys:
-        - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}-<</ parameters.include-branch-in-cache-key >>{{ checksum "<< parameters.project-path >>/Packages/packages-lock.json" }}
-        - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}<</ parameters.include-branch-in-cache-key >>
   - run:
       name: << parameters.step-name >>
       environment:
@@ -53,6 +49,8 @@ steps:
         PARAM_BUILD_TARGET: << parameters.build-target >>
         PARAM_PROJECT_PATH: << parameters.project-path >>
         PARAM_COMPRESS: << parameters.compress >>
+        SCRIPT_BUILD_WINDOWS: << include(scripts/windows/build.sh) >>
+        SCRIPT_BUILD_LINUX: << include(scripts/linux/build.sh) >>
       command: << include(scripts/build.sh) >>
   - save_cache:
       key: unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}-<</ parameters.include-branch-in-cache-key >>{{ checksum "<< parameters.project-path >>/Packages/packages-lock.json" }}
