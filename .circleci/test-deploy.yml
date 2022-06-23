@@ -533,42 +533,6 @@ workflows:
             - test-windows
           filters: *filters
           context: orb-testing-unity
-      - build:
-          name: "build-xbox-one"
-          step-name: "Build Xbox One"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
-          unity-password-var-name: "UNITY_PASSWORD"
-          executor:
-            name: "unity/windows-2019"
-            size: "large"
-            editor_version: "2021.3.2f1"
-            target_platform: "universal-windows-platform"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: XboxOne
-          compress: true
-          requires:
-            - test-windows
-          filters: *filters
-          context: orb-testing-unity
-      - build:
-          name: "build-wsa-player"
-          step-name: "Build Windows Store Apps player"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
-          unity-password-var-name: "UNITY_PASSWORD"
-          executor:
-            name: "unity/windows-2019"
-            size: "large"
-            editor_version: "2021.3.2f1"
-            target_platform: "universal-windows-platform"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: WSAPlayer
-          compress: true
-          requires:
-            - test-windows
-          filters: *filters
-          context: orb-testing-unity
 
       - orb-tools/pack:
           filters: *filters
@@ -589,6 +553,7 @@ workflows:
             - build-webgl
             - build-android
             - build-ios
+            - build-tvOS
           context: orb-publishing
           filters:
             branches:
