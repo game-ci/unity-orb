@@ -10,6 +10,8 @@ trap_exit() {
 
     printf '%s\n' "Removing the container \"$container_name\"."
     docker rm -f "$container_name" &> /dev/null || true
+
+    exit "$exit_status"
   fi
 }
 trap trap_exit EXIT
