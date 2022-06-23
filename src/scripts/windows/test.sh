@@ -24,7 +24,7 @@ docker exec "$CONTAINER_NAME" powershell '& "C:\Program Files\Unity\Hub\Editor\*
 docker exec "$CONTAINER_NAME" powershell 'choco upgrade jdk8 --no-progress -y'
 
 # Download and extract Saxon-B.
-docker exec "$CONTAINER_NAME" powershell 'Invoke-WebRequest -Uri "https://cfhcable.dl.sourceforge.net/project/saxon/Saxon-B/9.1.0.8/saxonb9-1-0-8j.zip" -Method "GET" -OutFile "C:/saxonb.zip"'
+docker exec "$CONTAINER_NAME" powershell 'Invoke-WebRequest -Uri "https://versaweb.dl.sourceforge.net/project/saxon/Saxon-B/9.1.0.8/saxonb9-1-0-8j.zip" -Method "GET" -OutFile "C:/saxonb.zip"'
 docker exec "$CONTAINER_NAME" powershell "Expand-Archive -Force C:/saxonb.zip C:/saxonb"
 
 # Copy the Saxon-B template to the container.
