@@ -384,24 +384,6 @@ workflows:
           filters: *filters
           context: orb-testing-unity
       - build-il2cpp:
-          name: "build-Windows64-il2cpp-cuda"
-          step-name: "Build StandaloneWindows64 il2cpp"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
-          unity-password-var-name: "UNITY_PASSWORD"
-          executor:
-            name: "unity/windows-2019-cuda"
-            size: "medium"
-            editor_version: "2021.3.2f1"
-            target_platform: "windows-il2cpp"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: StandaloneWindows64
-          compress: true
-          requires:
-            - test-windows
-          filters: *filters
-          context: orb-testing-unity
-      - build-il2cpp:
           name: "build-Windows64-il2cpp"
           step-name: "Build StandaloneWindows64 il2cpp"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -545,7 +527,6 @@ workflows:
             - test-linux
             - test-windows
             - build-linux64-il2cpp
-            - build-Windows64-il2cpp-cuda
             - build-Windows64-il2cpp
             - build-linux64-mono
             - build-Windows64-mono
