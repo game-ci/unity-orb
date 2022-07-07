@@ -15,6 +15,7 @@ if [ "$PLATFORM" = "linux" ]; then
 
 elif [ "$PLATFORM" = "macos" ]; then
   printf '%s\n' "Detected OS: macOS."
+  printf '%s\n' "$SCRIPT_PREPARE_ENV_MACOS" > "$base_dir/prepare-env.sh"
 
 elif [ "$PLATFORM" = "windows" ]; then
   printf '%s\n' "$SCRIPT_PREPARE_ENV_WINDOWS" > "$base_dir/prepare-env.sh"
