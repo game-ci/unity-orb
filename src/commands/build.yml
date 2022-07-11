@@ -51,6 +51,7 @@ steps:
         PARAM_COMPRESS: << parameters.compress >>
         SCRIPT_BUILD_WINDOWS: << include(scripts/windows/build.sh) >>
         SCRIPT_BUILD_LINUX: << include(scripts/linux/build.sh) >>
+        SCRIPT_BUILD_MACOS: << include(scripts/macos/build.sh) >>
       command: << include(scripts/build.sh) >>
   - save_cache:
       key: unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}-<</ parameters.include-branch-in-cache-key >>{{ checksum "<< parameters.project-path >>/Packages/packages-lock.json" }}
