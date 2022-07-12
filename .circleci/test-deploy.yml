@@ -379,8 +379,6 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
           compress: true
-          requires:
-            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build-il2cpp:
@@ -397,8 +395,6 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneWindows64
           compress: true
-          requires:
-            - test-windows
           filters: *filters
           context: orb-testing-unity
       - build-il2cpp:
@@ -430,8 +426,6 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
           compress: true
-          requires:
-            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build-mono:
@@ -445,8 +439,6 @@ workflows:
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "StandaloneWindows64"
-          requires:
-            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build-mono:
@@ -460,8 +452,6 @@ workflows:
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "StandaloneOSX"
-          requires:
-            - test-linux
           filters: *filters
           context: orb-testing-unity
       
@@ -478,8 +468,6 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "WebGL"
           compress: false
-          requires:
-            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build:
@@ -493,8 +481,6 @@ workflows:
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "Android"
-          requires:
-            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build:
@@ -508,8 +494,6 @@ workflows:
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "iOS"
-          requires:
-            - test-linux
           filters: *filters
           context: orb-testing-unity
       - build:
@@ -526,8 +510,6 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: tvOS
           compress: true
-          requires:
-            - test-windows
           filters: *filters
           context: orb-testing-unity
 
@@ -543,6 +525,7 @@ workflows:
             - test-windows
             - build-linux64-il2cpp
             - build-Windows64-il2cpp
+            - build-osx-il2cpp
             - build-linux64-mono
             - build-Windows64-mono
             - build-osx-mono
