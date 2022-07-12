@@ -1,0 +1,30 @@
+description: |
+    Drop-in executor to build project in macOS.
+
+parameters:
+  editor_version:
+    description: |
+      Pick the Unity Editor version.
+      Make sure to pick the same major version as the Unity version you generated the license for.
+      Available options can be found at https://unity3d.com/get-unity/download/archive.
+    type: string
+  resource_class:
+    description: |
+      Resource class used for the executor.
+      If you are receiving a "CircleCI received exit code 137" from the build job, you may need to increase the resource class.
+      For details on resource class availability, see https://circleci.com/docs/using-macos#available-resource-classes.
+    type: enum
+    default: medium
+    enum: [ medium, macos.x86.medium.gen2, large, macos.x86.metal.gen1 ]
+  xcode_version:
+    description: |
+      Pick the Xcode version.
+      Available options can be found at https://circleci.com/docs/using-macos#supported-xcode-versions.
+    type: string
+    default: 13.4.1
+
+macos:
+  xcode: << parameters.xcode_version >>
+  resource_class: << parameters.resource_class >>
+environment:
+  - UNITY_EDITOR_VERSION=<< parameters.editor_version >>

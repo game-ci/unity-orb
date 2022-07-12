@@ -62,4 +62,5 @@ steps:
         PARAM_PROJECT_PATH: << parameters.project-path >>
         SCRIPT_PREPARE_ENV_LINUX: << include(scripts/linux/prepare-env.sh) >>
         SCRIPT_PREPARE_ENV_WINDOWS: << include(scripts/windows/prepare-env.sh) >>
+        SCRIPT_PREPARE_ENV_MACOS: << include(scripts/macos/prepare-env.sh) >>
       command: << include(scripts/prepare-env.sh) >>
