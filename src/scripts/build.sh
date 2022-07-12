@@ -37,7 +37,7 @@ if [ "$PLATFORM" = "linux" ]; then
   printf '%s\n' "$SCRIPT_BUILD_LINUX" > "$base_dir/build.sh"
 
 elif [ "$PLATFORM" = "macos" ]; then
-  printf '%s\n' "Detected OS: macOS."
+  printf '%s\n' "$SCRIPT_BUILD_MACOS" > "$base_dir/build.sh"
 
 elif [ "$PLATFORM" = "windows" ]; then
   printf '%s\n' "$SCRIPT_BUILD_WINDOWS" > "$base_dir/build.sh"
