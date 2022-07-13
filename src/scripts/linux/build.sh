@@ -3,7 +3,7 @@
 # shellcheck disable=SC2154
 
 trap_build_script_exit() {
-  local -r exit_status="$?"
+  exit_status="$?"
 
   # The build script has a "set -x" on it. This will disable it for the rest of the run.
   set +x
@@ -11,8 +11,6 @@ trap_build_script_exit() {
   if [ "$exit_status" -ne 0 ]; then
     printf '%s\n' 'The script did not complete successfully.'
     printf '%s\n' "The exit code was $exit_status"
-
-    rm -rf "$gameci_sample_project_dir"
     exit "$exit_status"
   fi
 
@@ -22,17 +20,16 @@ trap_build_script_exit() {
     # Compress artifacts to store them in the artifacts bucket.
     tar -czf "$base_dir/$PARAM_BUILD_NAME-$PARAM_BUILD_TARGET.tar.gz" -C "$unity_project_full_path/Builds/$PARAM_BUILD_TARGET" .
   fi
-
-  # Clean up.
-  rm -rf "$gameci_sample_project_dir"
 }
 
-# Copy GameCI's build script to the base directory.
-cp "$gameci_sample_project_dir/ci/build.sh" "$base_dir/build.sh"
-chmod +x "$base_dir/build.sh"
+# Download build script.
+curl --silent --location \
+  --request GET \
+  --url "https://gitlab.com/game-ci/unity3d-gitlab-ci-example/-/raw/main/ci/build.sh" \
+  --header 'Accept: application/vnd.github.v3+json' \
+  --output "$base_dir/build.sh"
 
-# Clean up.
-rm -rf "$gameci_sample_project_dir"
+chmod +x "$base_dir/build.sh"
 
 # Name variables as required by the "build.sh" script.
 readonly BUILD_NAME="$PARAM_BUILD_NAME"
