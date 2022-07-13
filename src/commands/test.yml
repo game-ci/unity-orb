@@ -39,6 +39,8 @@ steps:
         PARAM_TEST_PLATFORM: << parameters.test-platform >>
         SCRIPT_TEST_LINUX: << include(scripts/linux/test.sh) >>
         SCRIPT_TEST_WINDOWS: << include(scripts/windows/test.sh) >>
+        SCRIPT_TEST_MACOS: << include(scripts/macos/test.sh) >>
+        DEPENDENCY_NUNIT_TRANSFORM: << include(dependencies/nunit-transforms/nunit3-junit.xslt) >>
       command: << include(scripts/test.sh) >>
   - save_cache:
       key: unity-deps-{{ arch }}-<<parameters.cache-version>>-<<#parameters.include-branch-in-cache-key>>{{ .Branch }}-<</parameters.include-branch-in-cache-key>>{{ checksum "<<parameters.project-path>>/Packages/packages-lock.json" }}

@@ -26,7 +26,7 @@ if [ "$PLATFORM" = "linux" ]; then
   printf '%s\n' "$SCRIPT_TEST_LINUX" > "$base_dir/test.sh"
 
 elif [ "$PLATFORM" = "macos" ]; then
-  printf '%s\n' "Detected OS: macOS."
+  printf '%s\n' "$SCRIPT_TEST_MACOS" > "$base_dir/test.sh"
 
 elif [ "$PLATFORM" = "windows" ]; then
   printf '%s\n' "$SCRIPT_TEST_WINDOWS" > "$base_dir/test.sh"
