@@ -13,7 +13,7 @@ download_sample_project() {
 
 copy_builder_to_project() {
   mkdir -p "$unity_project_full_path/Assets/Editor/"
-  cp -r "$gameci_sample_project_dir/Assets/Scripts/Editor/." "$unity_project_full_path/Assets/Editor/"
+  printf '%s\n' "$DEPENDENCY_EXECUTE_METHOD" > "$unity_project_full_path/Assets/Editor/BuildCommand.cs"
 }
 
 if ! download_sample_project; then
