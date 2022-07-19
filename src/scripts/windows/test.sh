@@ -41,6 +41,3 @@ docker exec "$CONTAINER_NAME" powershell '((Get-Content C:/playmode-junit-result
 
 # Copy test results to the host.
 docker cp "$CONTAINER_NAME":"$PARAM_TEST_PLATFORM"-junit-results-lf.xml "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-junit-results.xml
-
-# Remove the container.
-docker rm -f "$CONTAINER_NAME"

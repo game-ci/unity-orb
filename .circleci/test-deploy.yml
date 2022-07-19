@@ -95,6 +95,9 @@ jobs:
           project-path: <<parameters.project-path>>
           compress: <<parameters.compress>>
           cache-version: v2
+      - unity/return-license:
+          unity-username-var-name: << parameters.unity-username-var-name >>
+          unity-password-var-name: << parameters.unity-password-var-name >>
   
   build-mono:
     description: >
@@ -178,6 +181,9 @@ jobs:
           build-target: <<parameters.build-target>>
           project-path: <<parameters.project-path>>
           compress: <<parameters.compress>>
+      - unity/return-license:
+          unity-username-var-name: << parameters.unity-username-var-name >>
+          unity-password-var-name: << parameters.unity-password-var-name >>
 
   build:
     description: >
@@ -261,6 +267,9 @@ jobs:
           build-target: <<parameters.build-target>>
           project-path: <<parameters.project-path>>
           compress: <<parameters.compress>>
+      - unity/return-license:
+          unity-username-var-name: << parameters.unity-username-var-name >>
+          unity-password-var-name: << parameters.unity-password-var-name >>
 
   test:
     description: >
@@ -332,6 +341,9 @@ jobs:
           step-name: << parameters.step-name >>
           test-platform: << parameters.test-platform >>
           project-path: << parameters.project-path >>
+      - unity/return-license:
+          unity-username-var-name: << parameters.unity-username-var-name >>
+          unity-password-var-name: << parameters.unity-password-var-name >>
 
 workflows:
   test-build:

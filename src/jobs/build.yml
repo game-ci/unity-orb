@@ -76,3 +76,6 @@ steps:
       build-target: <<parameters.build-target>>
       project-path: <<parameters.project-path>>
       compress: <<parameters.compress>>
+  - return-license:
+      unity-username-var-name: << parameters.unity-username-var-name >>
+      unity-password-var-name: << parameters.unity-password-var-name >>

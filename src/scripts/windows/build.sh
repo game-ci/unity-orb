@@ -33,6 +33,3 @@ docker exec "$CONTAINER_NAME" powershell 'tar -czf "C:/$Env:BUILD_NAME-$Env:BUIL
 
 # Copy the build directory to the host.
 docker cp "$CONTAINER_NAME":"$PARAM_BUILD_NAME"-"$PARAM_BUILD_TARGET".tar.gz "$base_dir"/"$PARAM_BUILD_NAME"-"$PARAM_BUILD_TARGET".tar.gz
-
-# Remove the container.
-docker rm -f "$CONTAINER_NAME"
