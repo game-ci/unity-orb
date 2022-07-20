@@ -11,7 +11,7 @@ download_before_script() {
 }
 
 create_manual_activation_file() {
-  xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor \
+  unity-editor \
     -batchmode \
     -nographics \
     -createManualActivationFile \
@@ -22,12 +22,12 @@ create_manual_activation_file() {
   if ls Unity_v* &> /dev/null; then return 0; else return 1; fi
 }
 
-check_license_and_editor_version() {
+print_versions() {
   local unity_project_version
   local unity_license_version
   local unity_editor_version
   
-  unity_project_version="$(cat "$unity_project_full_path"/ProjectSettings/ProjectVersion.txt) | perl -nle 'print $& while m{(?<=m_EditorVersion: )[^\n]*}g'"
+  unity_project_version="$(cat "$unity_project_full_path"/ProjectSettings/ProjectVersion.txt | perl -nle 'print $& while m{(?<=m_EditorVersion: )[^\n]*}g')"
   unity_license_version="$(perl -nle 'print $& while m{<ClientProvidedVersion Value\="\K.*?(?="/>)}g' <<< "$unity_license")"
   unity_editor_version="$(cat $UNITY_PATH/version)"
 
@@ -43,7 +43,7 @@ resolve_unity_license() {
 
   elif [ -n "$unity_username" ] && [ -n "$unity_password" ] && [ -n "$unity_serial" ]; then
     # Generate Plus or Pro Unity License File.
-    xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor \
+    unity-editor \
       -logFile /dev/stdout \
       -batchmode \
       -nographics \
@@ -77,7 +77,7 @@ resolve_unity_license() {
 unity_license=""
 
 resolve_unity_license
-check_license_and_editor_version
+print_versions
 
 # Download before_script.sh from GameCI.
 if ! download_before_script; then
