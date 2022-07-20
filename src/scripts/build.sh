@@ -15,5 +15,5 @@ printf '%s\n' "$DEPENDENCY_UNITY_BUILDER" > "$unity_project_full_path/Assets/Edi
 
 if [ "$PLATFORM" = "linux" ]; then eval "$SCRIPT_BUILD_LINUX";
 elif [ "$PLATFORM" = "macos" ]; then eval "$SCRIPT_BUILD_MACOS";
-else [ "$PLATFORM" = "windows" ]; then eval "$SCRIPT_BUILD_WINDOWS";
+elif [ "$PLATFORM" = "windows" ]; then eval "$SCRIPT_BUILD_WINDOWS";
 fi

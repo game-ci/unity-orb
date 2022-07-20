@@ -18,5 +18,5 @@ readonly unity_encoded_license="${!PARAM_UNITY_LICENSE_VAR_NAME}"
 
 if [ "$PLATFORM" = "linux" ]; then eval "$SCRIPT_PREPARE_ENV_LINUX";
 elif [ "$PLATFORM" = "macos" ]; then eval "$SCRIPT_PREPARE_ENV_MACOS";
-else [ "$PLATFORM" = "windows" ]; then eval "$SCRIPT_PREPARE_ENV_WINDOWS";
+elif [ "$PLATFORM" = "windows" ]; then eval "$SCRIPT_PREPARE_ENV_WINDOWS";
 fi

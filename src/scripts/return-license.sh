@@ -15,5 +15,5 @@ readonly unity_password="${!PARAM_UNITY_PASSWORD_VAR_NAME}"
 
 if [ "$PLATFORM" = "linux" ]; then eval "$SCRIPT_RETURN_LICENSE_LINUX";
 elif [ "$PLATFORM" = "macos" ]; then eval "$SCRIPT_RETURN_LICENSE_MACOS";
-else [ "$PLATFORM" = "windows" ]; then eval "$SCRIPT_RETURN_LICENSE_WINDOWS";
+elif [ "$PLATFORM" = "windows" ]; then eval "$SCRIPT_RETURN_LICENSE_WINDOWS";
 fi

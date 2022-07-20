@@ -17,7 +17,8 @@ trap_test_script_exit() {
   apt-get update && apt-get install -y default-jre libsaxonb-java
 
   # Parse Unity's results xml to JUnit format.
-  saxonb-xslt -s $UNITY_DIR/$TEST_PLATFORM-results.xml -xsl $CI_PROJECT_DIR/ci/nunit-transforms/nunit3-junit.xslt > $UNITY_DIR/$TEST_PLATFORM-junit-results.xml
+  printf '%s\n' "$DEPENDENCY_NUNIT_TRANSFORM" > "$base_dir/nunit3-junit.xslt"
+  saxonb-xslt -s $UNITY_DIR/$TEST_PLATFORM-results.xml -xsl "$base_dir/nunit3-junit.xslt" > $UNITY_DIR/$TEST_PLATFORM-junit-results.xml
   
   cat $UNITY_DIR/$TEST_PLATFORM-junit-results.xml
 
@@ -25,8 +26,13 @@ trap_test_script_exit() {
   rm -rf "$gameci_sample_project_dir"
 }
 
-# Copy GameCI's test script to the base directory.
-cp "$gameci_sample_project_dir/ci/test.sh" "$base_dir/test.sh"
+# Download test script.
+curl --silent --location \
+  --request GET \
+  --url "https://gitlab.com/game-ci/unity3d-gitlab-ci-example/-/raw/main/ci/test.sh" \
+  --header 'Accept: application/vnd.github.v3+json' \
+  --output "$base_dir/test.sh"
+
 chmod +x "$base_dir/test.sh"
 
 # Name variables as required by the "test.sh" script.
