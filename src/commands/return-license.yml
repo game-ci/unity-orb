@@ -22,4 +22,5 @@ steps:
         SCRIPT_RETURN_LICENSE_LINUX: << include(scripts/linux/return-license.sh) >>
         SCRIPT_RETURN_LICENSE_WINDOWS: << include(scripts/windows/return-license.sh) >>
         SCRIPT_RETURN_LICENSE_MACOS: << include(scripts/macos/return-license.sh) >>
+        SCRIPT_UTILS: << include(scripts/utils.sh) >>
       command: << include(scripts/return-license.sh) >>

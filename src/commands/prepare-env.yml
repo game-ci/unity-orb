@@ -42,9 +42,6 @@ parameters:
       This should be the directory that has an "Assets" folder inside it.
 
 steps:
-  - run:
-      name: "Detect OS"
-      command: << include(scripts/detect-os.sh) >>
   - restore_cache:
       keys:
         - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}-<</ parameters.include-branch-in-cache-key >>{{ checksum "<< parameters.project-path >>/Packages/packages-lock.json" }}
@@ -60,4 +57,5 @@ steps:
         SCRIPT_PREPARE_ENV_LINUX: << include(scripts/linux/prepare-env.sh) >>
         SCRIPT_PREPARE_ENV_WINDOWS: << include(scripts/windows/prepare-env.sh) >>
         SCRIPT_PREPARE_ENV_MACOS: << include(scripts/macos/prepare-env.sh) >>
+        SCRIPT_UTILS: << include(scripts/utils.sh) >>
       command: << include(scripts/prepare-env.sh) >>

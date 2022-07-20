@@ -6,6 +6,12 @@ readonly unity_project_full_path="$base_dir/$PARAM_PROJECT_PATH"
 readonly gameci_sample_project_dir=$(mktemp -d)
 readonly sample_project_compressed_file="sample_project.tar.gz"
 
+# Import "utils.sh".
+eval "$SCRIPT_UTILS"
+
+# Detect host OS.
+detect-os
+
 download_sample_project() {
   curl --silent \
     --location "https://gitlab.com/game-ci/unity3d-gitlab-ci-example/-/archive/main/unity3d-gitlab-ci-example-main.tar.gz" \

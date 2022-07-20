@@ -4,6 +4,12 @@
 readonly base_dir="${CIRCLE_WORKING_DIRECTORY/\~/$HOME}"
 readonly unity_project_full_path="$base_dir/$PARAM_PROJECT_PATH"
 
+# Import "utils.sh".
+eval "$SCRIPT_UTILS"
+
+# Detect host OS.
+detect-os
+
 # Expand environment name variable parameters.
 readonly unity_username="${!PARAM_UNITY_USERNAME_VAR_NAME}"
 readonly unity_password="${!PARAM_UNITY_PASSWORD_VAR_NAME}"
