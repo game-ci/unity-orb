@@ -3,7 +3,7 @@
 # shellcheck disable=SC2154
 
 create_manual_activation_file() {
-  unity-editor \
+  xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor \
     -batchmode \
     -nographics \
     -createManualActivationFile \
@@ -79,7 +79,7 @@ fi
 
 # Activate the Unity Editor.
 set -x
-unity-editor \
+xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor \
   -batchmode \
   -quit \
   -nographics \
