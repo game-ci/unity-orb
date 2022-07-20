@@ -28,22 +28,7 @@ fi
 # Extract sample project.
 tar -xzf "$gameci_sample_project_dir/$sample_project_compressed_file" -C "$gameci_sample_project_dir" --strip-components 1
 
-if [ "$PLATFORM" = "linux" ]; then
-  printf '%s\n' "$SCRIPT_TEST_LINUX" > "$base_dir/test.sh"
-
-elif [ "$PLATFORM" = "macos" ]; then
-  printf '%s\n' "$SCRIPT_TEST_MACOS" > "$base_dir/test.sh"
-
-elif [ "$PLATFORM" = "windows" ]; then
-  printf '%s\n' "$SCRIPT_TEST_WINDOWS" > "$base_dir/test.sh"
-
-else
-  printf '%s\n' "Failed to detect OS."
-  printf '%s\n' "Please try again or open an issue."
-  exit 1
+if [ "$PLATFORM" = "linux" ]; then eval "$SCRIPT_TEST_LINUX";
+elif [ "$PLATFORM" = "macos" ]; then eval "$SCRIPT_TEST_MACOS";
+else [ "$PLATFORM" = "windows" ]; then eval "$SCRIPT_TEST_WINDOWS";
 fi
-
-chmod +x "$base_dir/test.sh"
-
-# shellcheck source=/dev/null
-source "$base_dir/test.sh"
