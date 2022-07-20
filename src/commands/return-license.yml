@@ -1,0 +1,27 @@
+description: >
+  This command returns the license used to build or test the project.
+
+parameters:
+  unity-username-var-name:
+    type: env_var_name
+    default: "UNITY_USERNAME"
+    description: |
+      Enter the name of the environment variable containing your Unity username.
+      Required if you have a Plus or Pro license or are using the Windows or Windows Runner executor.
+  unity-password-var-name:
+    type: env_var_name
+    default: "UNITY_PASSWORD"
+    description: |
+      Enter the name of the environment variable containing your Unity password.
+      Required if you have a Plus or Pro license or are using the Windows or Windows Runner executor.
+
+steps:
+  - run:
+      name: Return the Unity license
+      environment:
+        PARAM_UNITY_USERNAME_VAR_NAME: << parameters.unity-username-var-name >>
+        PARAM_UNITY_PASSWORD_VAR_NAME: << parameters.unity-password-var-name >>
+        SCRIPT_RETURN_LICENSE_LINUX: << include(scripts/linux/return-license.sh) >>
+        SCRIPT_RETURN_LICENSE_WINDOWS: << include(scripts/windows/return-license.sh) >>
+        SCRIPT_RETURN_LICENSE_MACOS: << include(scripts/macos/return-license.sh) >>
+      command: << include(scripts/return-license.sh) >>

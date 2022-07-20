@@ -64,3 +64,6 @@ steps:
       step-name: << parameters.step-name >>
       test-platform: << parameters.test-platform >>
       project-path: << parameters.project-path >>
+  - return-license:
+      unity-username-var-name: << parameters.unity-username-var-name >>
+      unity-password-var-name: << parameters.unity-password-var-name >>
