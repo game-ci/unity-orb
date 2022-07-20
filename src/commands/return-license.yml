@@ -7,13 +7,11 @@ parameters:
     default: "UNITY_USERNAME"
     description: |
       Enter the name of the environment variable containing your Unity username.
-      Required if you have a Plus or Pro license or are using the Windows or Windows Runner executor.
   unity-password-var-name:
     type: env_var_name
     default: "UNITY_PASSWORD"
     description: |
       Enter the name of the environment variable containing your Unity password.
-      Required if you have a Plus or Pro license or are using the Windows or Windows Runner executor.
 
 steps:
   - run:
