@@ -23,34 +23,17 @@ create_manual_activation_file() {
 }
 
 check_license_and_editor_version() {
-  local -r unity_project_version="$(grep -oP '(?<=m_EditorVersion: )[^\n]*' $unity_project_full_path/ProjectSettings/ProjectVersion.txt)"
-  local -r unity_license_version="$(grep -oP '<ClientProvidedVersion Value\="\K.*?(?="/>)' <<< "$unity_license")"
-  local -r unity_editor_version="$(cat $UNITY_PATH/version)"
+  local unity_project_version
+  local unity_license_version
+  local unity_editor_version
+  
+  unity_project_version="$(cat "$unity_project_full_path"/ProjectSettings/ProjectVersion.txt) | perl -nle 'print $& while m{(?<=m_EditorVersion: )[^\n]*}g'"
+  unity_license_version="$(perl -nle 'print $& while m{<ClientProvidedVersion Value\="\K.*?(?="/>)}g' <<< "$unity_license")"
+  unity_editor_version="$(cat $UNITY_PATH/version)"
 
   printf '%s\n' "Editor Version: $unity_editor_version"
   printf '%s\n' "Project Version: $unity_project_version"
   printf '%s\n\n' "License Version: $unity_license_version"
-
-  local -r unity_project_major_version="$(printf '%s\n' "$unity_project_version" | cut -d. -f 1)"
-  local -r unity_license_major_version="$(printf '%s\n' "$unity_license_version" | cut -d. -f 1)"
-  local -r unity_editor_major_version="$(printf '%s\n' "$unity_editor_version" | cut -d. -f 1)"
-
-  if [ "$unity_license_major_version" -ne "$unity_editor_major_version" ]; then
-    printf '%s\n' "The major version of your license ($unity_license_major_version) and Editor ($unity_editor_major_version) mismatch."
-    printf '%s\n' "Make sure they are the same by changing your Editor version or generating a new license."
-
-    if create_manual_activation_file; then
-      printf '%s\n' "Should you require a new activation license file, rerun the job with SSH and you will find it at \"${base_dir}/$(ls Unity_v*)\""
-    fi
-
-    exit 1
-  fi
-
-  if [ "$unity_project_major_version" -ne "$unity_editor_major_version" ]; then
-    printf '%s\n' "The major version of your project ($unity_project_major_version) and Editor ($unity_editor_major_version) mismatch."
-    printf '%s\n' "This might cause unexpected behavior. Consider changing the Editor tag to match your project."
-    printf '%s\n' "Available tags can be found at https://hub.docker.com/r/unityci/editor/tags and https://game.ci/docs/docker/versions."
-  fi
 }
 
 resolve_unity_license() {
