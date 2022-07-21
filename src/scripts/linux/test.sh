@@ -18,9 +18,9 @@ trap_test_script_exit() {
 
   # Parse Unity's results xml to JUnit format.
   printf '%s\n' "$DEPENDENCY_NUNIT_TRANSFORM" > "$base_dir/nunit3-junit.xslt"
-  saxonb-xslt -s $UNITY_DIR/$TEST_PLATFORM-results.xml -xsl "$base_dir/nunit3-junit.xslt" > $UNITY_DIR/$TEST_PLATFORM-junit-results.xml
+  saxonb-xslt -s "$UNITY_DIR/$TEST_PLATFORM-results.xml" -xsl "$base_dir/nunit3-junit.xslt" > "$UNITY_DIR/$TEST_PLATFORM-junit-results.xml"
   
-  cat $UNITY_DIR/$TEST_PLATFORM-junit-results.xml
+  cat "$UNITY_DIR/$TEST_PLATFORM-junit-results.xml"
 
   # Clean up.
   rm -rf "$gameci_sample_project_dir"

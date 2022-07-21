@@ -4,7 +4,7 @@
 
 set -x
 # Return license
-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor \
+unity-editor \
   -quit \
   -batchmode \
   -nographics \
