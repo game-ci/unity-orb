@@ -52,6 +52,7 @@ steps:
         SCRIPT_BUILD_WINDOWS: << include(scripts/windows/build.sh) >>
         SCRIPT_BUILD_LINUX: << include(scripts/linux/build.sh) >>
         SCRIPT_BUILD_MACOS: << include(scripts/macos/build.sh) >>
+        SCRIPT_UTILS: << include(scripts/utils.sh) >>
         DEPENDENCY_UNITY_BUILDER: << include(dependencies/unity-builder/BuildCommand.cs) >>
       command: << include(scripts/build.sh) >>
   - save_cache:

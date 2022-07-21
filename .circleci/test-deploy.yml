@@ -353,6 +353,8 @@ workflows:
           name: "test-linux"
           step-name: "Check if the tests run and results are uploaded"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/ubuntu"
             target_platform: "linux-il2cpp"
@@ -397,6 +399,8 @@ workflows:
           name: "build-linux64-il2cpp"
           step-name: "Build StandaloneLinux64"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/ubuntu"
             target_platform: "linux-il2cpp"
@@ -444,6 +448,8 @@ workflows:
           name: "build-linux64-mono"
           step-name: "Build StandaloneLinux64"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/ubuntu"
             target_platform: "base"
@@ -458,6 +464,8 @@ workflows:
           name: "build-Windows64-mono"
           step-name: "Build StandaloneWindows64"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/ubuntu"
             target_platform: "windows-mono"
@@ -471,6 +479,8 @@ workflows:
           name: "build-osx-mono"
           step-name: "Build StandaloneOSX"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/ubuntu"
             target_platform: "mac-mono"
@@ -486,6 +496,8 @@ workflows:
           name: "build-webgl"
           step-name: "Build WebGL"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/ubuntu"
             target_platform: "webgl"
@@ -500,6 +512,8 @@ workflows:
           name: "build-android"
           step-name: "Build Android"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/ubuntu"
             target_platform: "android"
@@ -513,6 +527,8 @@ workflows:
           name: "build-ios"
           step-name: "Build iOS"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/ubuntu"
             target_platform: "ios"

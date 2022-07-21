@@ -7,13 +7,11 @@ parameters:
     default: "UNITY_USERNAME"
     description: |
       Enter the name of the environment variable containing your Unity username.
-      Required if you have a Plus or Pro license or are using the Windows or Windows Runner executor.
   unity-password-var-name:
     type: env_var_name
     default: "UNITY_PASSWORD"
     description: |
       Enter the name of the environment variable containing your Unity password.
-      Required if you have a Plus or Pro license or are using the Windows or Windows Runner executor.
   unity-serial-var-name:
     type: env_var_name
     default: "UNITY_SERIAL"
@@ -25,7 +23,6 @@ parameters:
     default: "UNITY_ENCODED_LICENSE"
     description: |
       Enter the name of the environment variable containing your Unity license file encoded in base64.
-      A different license must be provided for every Unity major version.
       Required if you have a Personal license.
   cache-version:
     type: string
@@ -45,9 +42,6 @@ parameters:
       This should be the directory that has an "Assets" folder inside it.
 
 steps:
-  - run:
-      name: "Detect OS"
-      command: << include(scripts/detect-os.sh) >>
   - restore_cache:
       keys:
         - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}-<</ parameters.include-branch-in-cache-key >>{{ checksum "<< parameters.project-path >>/Packages/packages-lock.json" }}
@@ -63,4 +57,5 @@ steps:
         SCRIPT_PREPARE_ENV_LINUX: << include(scripts/linux/prepare-env.sh) >>
         SCRIPT_PREPARE_ENV_WINDOWS: << include(scripts/windows/prepare-env.sh) >>
         SCRIPT_PREPARE_ENV_MACOS: << include(scripts/macos/prepare-env.sh) >>
+        SCRIPT_UTILS: << include(scripts/utils.sh) >>
       command: << include(scripts/prepare-env.sh) >>

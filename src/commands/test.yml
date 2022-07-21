@@ -40,6 +40,7 @@ steps:
         SCRIPT_TEST_LINUX: << include(scripts/linux/test.sh) >>
         SCRIPT_TEST_WINDOWS: << include(scripts/windows/test.sh) >>
         SCRIPT_TEST_MACOS: << include(scripts/macos/test.sh) >>
+        SCRIPT_UTILS: << include(scripts/utils.sh) >>
         DEPENDENCY_NUNIT_TRANSFORM: << include(dependencies/nunit-transforms/nunit3-junit.xslt) >>
       command: << include(scripts/test.sh) >>
   - save_cache:
