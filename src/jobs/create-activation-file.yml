@@ -1,11 +1,10 @@
 description: >
-  Simple drop-in job to build your Unity game.
+  Simple drop-in job to create a Unity activation file.
 
 parameters:
   editor_version:
     description: |
       Pick the editor version for the GameCI image.
-      Make sure to pick the same major version as the Unity version you generated the license for.
       Available options can be found at https://game.ci/docs/docker/versions.
     type: string
     default: "2021.3.7f1"
