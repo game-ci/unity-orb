@@ -348,6 +348,13 @@ jobs:
 workflows:
   test-build:
     jobs:
+      # Activation file
+      - unity/create-activation-file:
+          name: "create-activation-file"
+      - unity/create-activation-file:
+          name: "create-activation-file-with-parameter"
+          editor_version: 2022.1.11f1
+
       # Tests
       - test:
           name: "test-linux"
