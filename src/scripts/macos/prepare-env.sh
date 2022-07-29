@@ -5,7 +5,6 @@
 readonly unity_hub_path="/Applications/Unity Hub.app/Contents/MacOS/Unity Hub"
 readonly unity_editor_path="/Applications/Unity/Hub/Editor/$UNITY_EDITOR_VERSION/Unity.app/Contents/MacOS/Unity"
 
-
 printf '%s\n' "export UNITY_HUB_PATH=\"$unity_hub_path\"" >> "$BASH_ENV"
 printf '%s\n' "export UNITY_EDITOR_PATH=$unity_editor_path" >> "$BASH_ENV"
 
