@@ -2,18 +2,10 @@ description: |
     Drop-in executor to build projects in a macOS runner.
 
 parameters:
-  target_platform:
-    description: |
-      Pick the target platform for the GameCI image.
-      Available options can be found at https://game.ci/docs/docker/versions.
-      The 2018 release doesn't support the "linux-il2cpp" target platform.
-    type: enum
-    enum: [ "appletv", "base", "universal-windows-platform", "windows-il2cpp" ]
   editor_version:
     description: |
-      Pick the editor version for the GameCI image.
-      Make sure to pick the same major version as the Unity version you generated the license for.
-      Available options can be found at https://game.ci/docs/docker/versions.
+      Pick the Unity Editor version.
+      Available options can be found at https://unity3d.com/get-unity/download/archive.
     type: string
   resource_class:
     description: |
@@ -31,4 +23,3 @@ resource_class: << parameters.resource_class >>
 working_directory: << parameters.working_directory >>
 environment:
   - UNITY_EDITOR_VERSION=<< parameters.editor_version >>
-  - UNITY_TARGET_PLATFORM=<< parameters.target_platform >>
