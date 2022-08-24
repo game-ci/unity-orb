@@ -20,9 +20,10 @@ parameters:
       Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2021.2/Documentation/ScriptReference/BuildTarget.html
   build-name:
     type: string
-    default: "UnityBuild"
+    default: ""
     description: |
       Enter the name for this build.
+      If left blank, the build will be named after the target platform.
   cache-version:
     type: string
     default: "v1"
