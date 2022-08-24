@@ -30,7 +30,8 @@ docker exec "$CONTAINER_NAME" powershell 'Invoke-WebRequest -Uri "https://versaw
 docker exec "$CONTAINER_NAME" powershell "Expand-Archive -Force C:/saxonb.zip C:/saxonb"
 
 # Copy the Saxon-B template to the container.
-docker cp "$gameci_sample_project_dir"/ci/nunit-transforms/nunit3-junit.xslt "$CONTAINER_NAME":C:/nunit3-junit.xslt
+printf '%s\n' "$DEPENDENCY_NUNIT_TRANSFORM" > "$base_dir/nunit3-junit.xslt"
+docker cp "$base_dir"/nunit3-junit.xslt "$CONTAINER_NAME":C:/nunit3-junit.xslt
 
 # Parse Unity's results xml to JUnit format.
 docker exec "$CONTAINER_NAME" powershell 'java -jar C:/saxonb/saxon9.jar -s C:/results.xml -xsl C:/nunit3-junit.xslt > C:/$Env:TEST_PLATFORM-junit-results.xml'
