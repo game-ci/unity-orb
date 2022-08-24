@@ -36,6 +36,7 @@ resolve_unity_license() {
       printf '%s\n' "Failed to generate Unity license file."
       printf '%s\n' "Make sure you have entered the correct username, password and serial and try again."
       printf '%s\n' "If you are still having problems, please open an issue."
+      printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation#professional-license"
 
       return 1
     fi
@@ -43,6 +44,7 @@ resolve_unity_license() {
   else
     printf '%s\n' "If you own a Personal Unity License File (.ulf), please provide it as a base64 encoded string."  
     printf '%s\n' "If you own a Plus or Pro Unity license, please provide your username, password and serial."
+    printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation"
 
     if create_manual_activation_file; then
       printf '%s\n' "Should you require a new Personal Activation License File (.alf), rerun the job with SSH and you will find it at \"${base_dir}/$(ls Unity_v*)\""
