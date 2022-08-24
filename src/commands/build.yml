@@ -64,7 +64,7 @@ steps:
       condition: << parameters.compress >>
       steps:
         - store_artifacts:
-            path: << parameters.build-name >>-<< parameters.build-target >>.tar.gz
+            path: << parameters.build-target >>.tar.gz
   - unless:
       condition: << parameters.compress >>
       steps:
