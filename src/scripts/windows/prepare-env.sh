@@ -32,6 +32,8 @@ resolve_unity_serial() {
       if ! extract_serial_from_license; then
         printf '%s\n' "Failed to parse the serial from the Unity license."
         printf '%s\n' "Please try again or open an issue."
+        printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation#personal-license"
+
         exit_code=1
       
       else
@@ -42,6 +44,8 @@ resolve_unity_serial() {
     else
       printf '%s\n' "No serial or encoded license found."
       printf '%s\n' "Please run the script again with a serial or encoded license file."
+      printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation"
+
       exit_code=1
     fi
   fi

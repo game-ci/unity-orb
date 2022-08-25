@@ -18,7 +18,7 @@ trap_build_script_exit() {
     printf '%s\n' 'Compressing build artifacts...'
 
     # Compress artifacts to store them in the artifacts bucket.
-    tar -czf "$base_dir/$PARAM_BUILD_NAME-$PARAM_BUILD_TARGET.tar.gz" -C "$unity_project_full_path/Builds/$PARAM_BUILD_TARGET" .
+    tar -czf "$base_dir/$PARAM_BUILD_TARGET.tar.gz" -C "$unity_project_full_path/Builds/$PARAM_BUILD_TARGET" .
   fi
 }
 
