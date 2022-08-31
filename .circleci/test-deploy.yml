@@ -7,361 +7,32 @@ filters: &filters
   tags:
     only: /.*/
 
-jobs:
-  build-il2cpp:
-    description: >
-      Simple drop-in job to build your Unity game.
+pre-steps:
+  mono: &mono
+    - run:
+        name: "Clone the demo project"
+        command: |
+          # Clone the "mono" demo project
+          git clone --branch master --single-branch https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git ../Unity2D-Demo-Game-CI-CD
+          
+          # Clone the Unity orb
+          git clone https://github.com/game-ci/unity-orb.git .
 
-    parameters:
-      step-name:
-        type: string
-        default: Build the project
-        description: |
-          Specify a custom step name for the build command, if desired.
-      executor:
-        type: executor
-        description: |
-          Pick an Executor to run the build job with.
-      unity-username-var-name:
-        type: env_var_name
-        default: "UNITY_USERNAME"
-        description: |
-          Enter the name of the environment variable containing your Unity username.
-          This is only necessary if you have a Plus or Pro license.
-      unity-password-var-name:
-        type: env_var_name
-        default: "UNITY_PASSWORD"
-        description: |
-          Enter the name of the environment variable containing your Unity password.
-          This is only necessary if you have a Plus or Pro license.
-      unity-serial-var-name:
-        type: env_var_name
-        default: "UNITY_SERIAL"
-        description: |
-          Enter the name of the environment variable containing your Unity serial number.
-          This is only necessary if you have a Plus or Pro license.
-      unity-license-var-name:
-        type: env_var_name
-        default: "UNITY_ENCODED_LICENSE"
-        description: |
-          Enter the name of the environment variable containing your Unity license file encoded in base64.
-          A different license must be provided for every Unity major version.
-          This is only necessary if you have a Personal license.
-      project-path:
-        type: string
-        default: "."
-        description: |
-          Enter the path of your Unity project.
-          This should be the directory that has an "Assets" folder inside it.
-      build-target:
-        type: string
-        description: |
-          The target platform of your build.
-          Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2022.2/Documentation/ScriptReference/BuildTarget.html
-      build-name:
-        type: string
-        default: "UnityBuild"
-        description: |
-          Enter the name for this build.
-      store-artifacts:
-        type: boolean
-        default: true
-        description: |
-          Whether to store the build output.
-          If left to "false" you won't be able to download the build from the job's artifacts.
-      compress:
-        type: boolean
-        default: true
-        description: |
-          Whether to compress the build output to a ".tar.gz" archive.
-          This is recommended if you want to download the built artifacts from the CircleCI web app.
-          If left to "false" for decompressed WebGL builds, you can run the project directly from the CircleCI web app.
+          # Move the demo project to the project folder
+          mv ../Unity2D-Demo-Game-CI-CD ./Unity2D-Demo-Game-CI-CD    
+  il2cpp: &il2cpp
+    - run:
+        name: "Clone the demo project"
+        command: |
+          # Clone the "il2cpp" demo project
+          mkdir /tmp/unity
+          git clone --branch windows-il2cpp --single-branch https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git ../Unity2D-Demo-Game-CI-CD
 
-    executor: << parameters.executor >> 
+          # Clone the Unity orb
+          git clone https://github.com/game-ci/unity-orb.git .
 
-    steps:
-      - run:
-          name: "Clone CircleCI demo repository"
-          command: |
-            git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
-            cd Unity2D-Demo-Game-CI-CD
-            git fetch --all
-            git checkout windows-il2cpp
-      - unity/prepare-env:
-          unity-username-var-name: << parameters.unity-username-var-name >>
-          unity-password-var-name: << parameters.unity-password-var-name >>
-          unity-serial-var-name: << parameters.unity-serial-var-name >>
-          unity-license-var-name: << parameters.unity-license-var-name >>
-          project-path: <<parameters.project-path>>
-          cache-version: v2
-      - unity/build:
-          step-name: << parameters.step-name >>
-          build-name: <<parameters.build-name>>
-          build-target: <<parameters.build-target>>
-          project-path: <<parameters.project-path>>
-          compress: <<parameters.compress>>
-          cache-version: v2
-      - unity/return-license:
-          unity-username-var-name: << parameters.unity-username-var-name >>
-          unity-password-var-name: << parameters.unity-password-var-name >>
-  
-  build-mono:
-    description: >
-      Simple drop-in job to build your Unity game.
-
-    parameters:
-      step-name:
-        type: string
-        default: Build the project
-        description: |
-          Specify a custom step name for the build command, if desired.
-      executor:
-        type: executor
-        description: |
-          Pick an Executor to run the build job with.
-      unity-username-var-name:
-        type: env_var_name
-        default: "UNITY_USERNAME"
-        description: |
-          Enter the name of the environment variable containing your Unity username.
-          This is only necessary if you have a Plus or Pro license.
-      unity-password-var-name:
-        type: env_var_name
-        default: "UNITY_PASSWORD"
-        description: |
-          Enter the name of the environment variable containing your Unity password.
-          This is only necessary if you have a Plus or Pro license.
-      unity-serial-var-name:
-        type: env_var_name
-        default: "UNITY_SERIAL"
-        description: |
-          Enter the name of the environment variable containing your Unity serial number.
-          This is only necessary if you have a Plus or Pro license.
-      unity-license-var-name:
-        type: env_var_name
-        default: "UNITY_ENCODED_LICENSE"
-        description: |
-          Enter the name of the environment variable containing your Unity license file encoded in base64.
-          A different license must be provided for every Unity major version.
-          This is only necessary if you have a Personal license.
-      project-path:
-        type: string
-        default: "."
-        description: |
-          Enter the path of your Unity project.
-          This should be the directory that has an "Assets" folder inside it.
-      build-target:
-        type: string
-        description: |
-          The target platform of your build.
-          Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2022.2/Documentation/ScriptReference/BuildTarget.html
-      build-name:
-        type: string
-        default: "UnityBuild"
-        description: |
-          Enter the name for this build.
-      store-artifacts:
-        type: boolean
-        default: true
-        description: |
-          Whether to store the build output.
-          If left to "false" you won't be able to download the build from the job's artifacts.
-      compress:
-        type: boolean
-        default: true
-        description: |
-          Whether to compress the build output to a ".tar.gz" archive.
-          This is recommended if you want to download the built artifacts from the CircleCI web app.
-          If left to "false" for decompressed WebGL builds, you can run the project directly from the CircleCI web app.
-
-    executor: << parameters.executor >> 
-
-    steps:
-      - run:
-          name: "Clone CircleCI demo repository"
-          command: |
-            git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
-      - unity/prepare-env:
-          unity-username-var-name: << parameters.unity-username-var-name >>
-          unity-password-var-name: << parameters.unity-password-var-name >>
-          unity-serial-var-name: << parameters.unity-serial-var-name >>
-          unity-license-var-name: << parameters.unity-license-var-name >>
-          project-path: <<parameters.project-path>>
-      - unity/build:
-          step-name: << parameters.step-name >>
-          build-name: <<parameters.build-name>>
-          build-target: <<parameters.build-target>>
-          project-path: <<parameters.project-path>>
-          compress: <<parameters.compress>>
-      - unity/return-license:
-          unity-username-var-name: << parameters.unity-username-var-name >>
-          unity-password-var-name: << parameters.unity-password-var-name >>
-
-  build:
-    description: >
-      Simple drop-in job to build your Unity game.
-
-    parameters:
-      step-name:
-        type: string
-        default: Build the project
-        description: |
-          Specify a custom step name for the build command, if desired.
-      executor:
-        type: executor
-        description: |
-          Pick an Executor to run the build job with.
-      unity-username-var-name:
-        type: env_var_name
-        default: "UNITY_USERNAME"
-        description: |
-          Enter the name of the environment variable containing your Unity username.
-          This is only necessary if you have a Plus or Pro license.
-      unity-password-var-name:
-        type: env_var_name
-        default: "UNITY_PASSWORD"
-        description: |
-          Enter the name of the environment variable containing your Unity password.
-          This is only necessary if you have a Plus or Pro license.
-      unity-serial-var-name:
-        type: env_var_name
-        default: "UNITY_SERIAL"
-        description: |
-          Enter the name of the environment variable containing your Unity serial number.
-          This is only necessary if you have a Plus or Pro license.
-      unity-license-var-name:
-        type: env_var_name
-        default: "UNITY_ENCODED_LICENSE"
-        description: |
-          Enter the name of the environment variable containing your Unity license file encoded in base64.
-          A different license must be provided for every Unity major version.
-          This is only necessary if you have a Personal license.
-      project-path:
-        type: string
-        default: "."
-        description: |
-          Enter the path of your Unity project.
-          This should be the directory that has an "Assets" folder inside it.
-      build-target:
-        type: string
-        description: |
-          The target platform of your build.
-          Accepted arguments vary with Unity's version and can be found in the docs: https://docs.unity3d.com/2022.2/Documentation/ScriptReference/BuildTarget.html
-      build-name:
-        type: string
-        default: "UnityBuild"
-        description: |
-          Enter the name for this build.
-      store-artifacts:
-        type: boolean
-        default: true
-        description: |
-          Whether to store the build output.
-          If left to "false" you won't be able to download the build from the job's artifacts.
-      compress:
-        type: boolean
-        default: true
-        description: |
-          Whether to compress the build output to a ".tar.gz" archive.
-          This is recommended if you want to download the built artifacts from the CircleCI web app.
-          If left to "false" for decompressed WebGL builds, you can run the project directly from the CircleCI web app.
-
-    executor: << parameters.executor >> 
-
-    steps:
-      - run:
-          name: "Clone CircleCI demo repository"
-          command: |
-            git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
-      - unity/prepare-env:
-          unity-username-var-name: << parameters.unity-username-var-name >>
-          unity-password-var-name: << parameters.unity-password-var-name >>
-          unity-serial-var-name: << parameters.unity-serial-var-name >>
-          unity-license-var-name: << parameters.unity-license-var-name >>
-          project-path: <<parameters.project-path>>
-      - unity/build:
-          step-name: << parameters.step-name >>
-          build-name: <<parameters.build-name>>
-          build-target: <<parameters.build-target>>
-          project-path: <<parameters.project-path>>
-          compress: <<parameters.compress>>
-      - unity/return-license:
-          unity-username-var-name: << parameters.unity-username-var-name >>
-          unity-password-var-name: << parameters.unity-password-var-name >>
-
-  test:
-    description: >
-      Simple drop-in job to build your Unity game.
-
-    parameters:
-      step-name:
-        type: string
-        default: Run tests
-        description: |
-          Specify a custom step name for the test command, if desired.
-      executor:
-        type: executor
-        description: |
-          Pick an Executor to run the build job with.
-      unity-username-var-name:
-        type: env_var_name
-        default: "UNITY_USERNAME"
-        description: |
-          Enter the name of the environment variable containing your Unity username.
-          This is only necessary if you have a Plus or Pro license.
-      unity-password-var-name:
-        type: env_var_name
-        default: "UNITY_PASSWORD"
-        description: |
-          Enter the name of the environment variable containing your Unity password.
-          This is only necessary if you have a Plus or Pro license.
-      unity-serial-var-name:
-        type: env_var_name
-        default: "UNITY_SERIAL"
-        description: |
-          Enter the name of the environment variable containing your Unity serial number.
-          This is only necessary if you have a Plus or Pro license.
-      unity-license-var-name:
-        type: env_var_name
-        default: "UNITY_ENCODED_LICENSE"
-        description: |
-          Enter the name of the environment variable containing your Unity license file encoded in base64.
-          A different license must be provided for every Unity major version.
-          This is only necessary if you have a Personal license.
-      project-path:
-        type: string
-        default: "."
-        description: |
-          Enter the path of your Unity project.
-          This should be the directory that has an "Assets" folder inside it.
-      test-platform:
-        type: string
-        default: "editmode"
-        description: |
-          Specify the test platform to run tests on.
-          Valid values are "editmode", "playmode" and Unity's target builds.
-          More information can be found on: https://docs.unity3d.com/Packages/com.unity.test-framework@2.0/manual/reference-command-line.html
-
-    executor: << parameters.executor >>
-
-    steps:
-      - run:
-          name: "Clone CircleCI demo repository"
-          command: |
-            git clone https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git
-      - unity/prepare-env:
-          unity-username-var-name: << parameters.unity-username-var-name >>
-          unity-password-var-name: << parameters.unity-password-var-name >>
-          unity-serial-var-name: << parameters.unity-serial-var-name >>
-          unity-license-var-name: << parameters.unity-license-var-name >>
-          project-path: <<parameters.project-path>>
-      - unity/test:
-          step-name: << parameters.step-name >>
-          test-platform: << parameters.test-platform >>
-          project-path: << parameters.project-path >>
-      - unity/return-license:
-          unity-username-var-name: << parameters.unity-username-var-name >>
-          unity-password-var-name: << parameters.unity-password-var-name >>
+          # Move the demo project to the project folder
+          mv ../Unity2D-Demo-Game-CI-CD ./Unity2D-Demo-Game-CI-CD    
 
 workflows:
   test-build:
@@ -374,7 +45,7 @@ workflows:
           editor_version: 2022.1.11f1
 
       # Tests
-      - test:
+      - unity/test:
           name: "test-linux"
           step-name: "Check if the tests run and results are uploaded"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -389,7 +60,8 @@ workflows:
           test-platform: "playmode"
           filters: *filters
           context: orb-testing-unity
-      - test:
+          pre-steps: *mono
+      - unity/test:
           name: "test-windows"
           step-name: "Check if the tests run and results are uploaded"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -404,7 +76,8 @@ workflows:
           test-platform: "playmode"
           filters: *filters
           context: orb-testing-unity
-      - test:
+          pre-steps: *mono
+      - unity/test:
           name: "test-osx"
           step-name: "Check if the tests run and results are uploaded"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -418,9 +91,10 @@ workflows:
           test-platform: "playmode"
           filters: *filters
           context: orb-testing-unity
+          pre-steps: *mono
      
       # IL2CPP Builds
-      - build-il2cpp:
+      - unity/build:
           name: "build-linux64-il2cpp"
           step-name: "Build StandaloneLinux64"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -436,7 +110,8 @@ workflows:
           compress: true
           filters: *filters
           context: orb-testing-unity
-      - build-il2cpp:
+          pre-steps: *il2cpp
+      - unity/build:
           name: "build-Windows64-il2cpp"
           step-name: "Build StandaloneWindows64 il2cpp"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -452,7 +127,8 @@ workflows:
           compress: true
           filters: *filters
           context: orb-testing-unity
-      - build-il2cpp:
+          pre-steps: *il2cpp
+      - unity/build:
           name: "build-osx-il2cpp"
           step-name: "Build macOS IL2CPP"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -467,9 +143,10 @@ workflows:
           compress: true
           filters: *filters
           context: orb-testing-unity
+          pre-steps: *il2cpp
 
        # Mono Builds   
-      - build-mono:
+      - unity/build:
           name: "build-linux64-mono"
           step-name: "Build StandaloneLinux64"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -485,7 +162,8 @@ workflows:
           compress: true
           filters: *filters
           context: orb-testing-unity
-      - build-mono:
+          pre-steps: *mono
+      - unity/build:
           name: "build-Windows64-mono"
           step-name: "Build StandaloneWindows64"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -500,7 +178,8 @@ workflows:
           build-target: "StandaloneWindows64"
           filters: *filters
           context: orb-testing-unity
-      - build-mono:
+          pre-steps: *mono
+      - unity/build:
           name: "build-osx-mono"
           step-name: "Build StandaloneOSX"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -515,9 +194,10 @@ workflows:
           build-target: "StandaloneOSX"
           filters: *filters
           context: orb-testing-unity
+          pre-steps: *mono
       
       # Other Builds
-      - build:
+      - unity/build:
           name: "build-webgl"
           step-name: "Build WebGL"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -533,7 +213,8 @@ workflows:
           compress: false
           filters: *filters
           context: orb-testing-unity
-      - build:
+          pre-steps: *mono
+      - unity/build:
           name: "build-android"
           step-name: "Build Android"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -548,7 +229,8 @@ workflows:
           build-target: "Android"
           filters: *filters
           context: orb-testing-unity
-      - build:
+          pre-steps: *mono
+      - unity/build:
           name: "build-ios"
           step-name: "Build iOS"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -563,7 +245,8 @@ workflows:
           build-target: "iOS"
           filters: *filters
           context: orb-testing-unity
-      - build:
+          pre-steps: *mono
+      - unity/build:
           name: "build-tvOS"
           step-name: "Build Apple's tvOS"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -579,9 +262,10 @@ workflows:
           compress: true
           filters: *filters
           context: orb-testing-unity
+          pre-steps: *mono
 
       # Other Tests
-      - build-mono:
+      - unity/build:
           name: "build-without-artifacts"
           step-name: "Build StandaloneLinux64 with no artifacts"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -597,6 +281,7 @@ workflows:
           store-artifacts: false
           filters: *filters
           context: orb-testing-unity
+          pre-steps: *mono
 
       - orb-tools/pack:
           filters: *filters
