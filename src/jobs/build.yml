@@ -50,13 +50,19 @@ parameters:
     description: |
       Enter the name for this build.
       If left blank, the build will be named after the target platform.
+  store-artifacts:
+    type: boolean
+    default: true
+    description: |
+      Whether to store the build output.
+      If left to "false" you won't be able to download the build from the job's artifacts.
   compress:
     type: boolean
     default: true
     description: |
       Whether to compress the build output to a ".tar.gz" archive.
-      This is recommended if you want to download the build artifacts from the GameCI dashboard.
-      If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
+      This is recommended if you want to download the built artifacts from the CircleCI web app.
+      If left to "false" for decompressed WebGL builds, you can run the project directly from the CircleCI web app.
 
 executor: << parameters.executor >>
 
@@ -73,6 +79,7 @@ steps:
       build-name: <<parameters.build-name>>
       build-target: <<parameters.build-target>>
       project-path: <<parameters.project-path>>
+      store-artifacts: <<parameters.store-artifacts>>
       compress: <<parameters.compress>>
   - return-license:
       unity-username-var-name: << parameters.unity-username-var-name >>

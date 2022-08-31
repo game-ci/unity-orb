@@ -63,13 +63,19 @@ jobs:
         default: "UnityBuild"
         description: |
           Enter the name for this build.
+      store-artifacts:
+        type: boolean
+        default: true
+        description: |
+          Whether to store the build output.
+          If left to "false" you won't be able to download the build from the job's artifacts.
       compress:
         type: boolean
         default: true
         description: |
           Whether to compress the build output to a ".tar.gz" archive.
-          This is recommended if you want to download the build artifacts from the GameCI dashboard.
-          If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
+          This is recommended if you want to download the built artifacts from the CircleCI web app.
+          If left to "false" for decompressed WebGL builds, you can run the project directly from the CircleCI web app.
 
     executor: << parameters.executor >> 
 
@@ -154,13 +160,19 @@ jobs:
         default: "UnityBuild"
         description: |
           Enter the name for this build.
+      store-artifacts:
+        type: boolean
+        default: true
+        description: |
+          Whether to store the build output.
+          If left to "false" you won't be able to download the build from the job's artifacts.
       compress:
         type: boolean
         default: true
         description: |
           Whether to compress the build output to a ".tar.gz" archive.
-          This is recommended if you want to download the build artifacts from the GameCI dashboard.
-          If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
+          This is recommended if you want to download the built artifacts from the CircleCI web app.
+          If left to "false" for decompressed WebGL builds, you can run the project directly from the CircleCI web app.
 
     executor: << parameters.executor >> 
 
@@ -240,13 +252,19 @@ jobs:
         default: "UnityBuild"
         description: |
           Enter the name for this build.
+      store-artifacts:
+        type: boolean
+        default: true
+        description: |
+          Whether to store the build output.
+          If left to "false" you won't be able to download the build from the job's artifacts.
       compress:
         type: boolean
         default: true
         description: |
           Whether to compress the build output to a ".tar.gz" archive.
-          This is recommended if you want to download the build artifacts from the GameCI dashboard.
-          If left to "false" for decompressed WebGL builds, the built project can be run directly from the GameCI dashboard.
+          This is recommended if you want to download the built artifacts from the CircleCI web app.
+          If left to "false" for decompressed WebGL builds, you can run the project directly from the CircleCI web app.
 
     executor: << parameters.executor >> 
 
@@ -562,6 +580,24 @@ workflows:
           filters: *filters
           context: orb-testing-unity
 
+      # Other Tests
+      - build-mono:
+          name: "build-without-artifacts"
+          step-name: "Build StandaloneLinux64 with no artifacts"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
+          executor:
+            name: "unity/ubuntu"
+            target_platform: "base"
+            editor_version: "2021.3.1f1"
+            resource_class: "large"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: StandaloneLinux64
+          store-artifacts: false
+          filters: *filters
+          context: orb-testing-unity
+
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
@@ -583,6 +619,7 @@ workflows:
             - build-android
             - build-ios
             - build-tvOS
+            - build-without-artifacts
           context: orb-publishing
           filters:
             branches:
