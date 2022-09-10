@@ -87,7 +87,9 @@ steps:
       project-path: <<parameters.project-path>>
       store-artifacts: <<parameters.store-artifacts>>
       compress: <<parameters.compress>>
-  - return-license:
-      unity-username-var-name: << parameters.unity-username-var-name >>
-      unity-password-var-name: << parameters.unity-password-var-name >>
-      when: <<parameters.return-license>>
+  - when:
+      condition: <<parameters.return-license>>
+      steps:
+        - return-license:
+            unity-username-var-name: << parameters.unity-username-var-name >>
+            unity-password-var-name: << parameters.unity-password-var-name >>
