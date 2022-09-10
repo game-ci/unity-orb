@@ -68,6 +68,7 @@ parameters:
     default: true
     description: |
       Whether to return the license used to build or test the project.
+      Unity only allows returning professional licenses.
 
 executor: << parameters.executor >>
 
