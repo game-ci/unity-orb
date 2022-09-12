@@ -65,9 +65,9 @@ parameters:
       If left to "false" for decompressed WebGL builds, you can run the project directly from the CircleCI web app.
   return-license:
     type: boolean
-    default: true
+    default: false
     description: |
-      Whether to return the license used to build or test the project.
+      Whether to return the license used to build the project.
       Unity only allows returning professional licenses.
 
 executor: << parameters.executor >>
