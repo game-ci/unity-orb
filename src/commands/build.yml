@@ -47,10 +47,15 @@ parameters:
       Whether to compress the build output to a ".tar.gz" archive.
       This is recommended if you want to download the built artifacts from the CircleCI web app.
       If left to "false" for decompressed WebGL builds, you can run the project directly from the CircleCI web app.
+  no_output_timeout:
+    type: string
+    default: "10m"
+    description: Elapsed time the command can run without output.
 
 steps:
   - run:
       name: << parameters.step-name >>
+      no_output_timeout: << parameters.no_output_timeout >>
       environment:
         PARAM_BUILD_NAME: << parameters.build-name >>
         PARAM_BUILD_TARGET: << parameters.build-target >>

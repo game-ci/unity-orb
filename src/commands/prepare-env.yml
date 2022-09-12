@@ -40,6 +40,10 @@ parameters:
     description: |
       Enter the path of your Unity project.
       This should be the directory that has an "Assets" folder inside it.
+  no_output_timeout:
+    type: string
+    default: "10m"
+    description: Elapsed time the command can run without output.
 
 steps:
   - restore_cache:
@@ -48,6 +52,7 @@ steps:
         - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}<</ parameters.include-branch-in-cache-key >>
   - run:
       name: Prepare the environment
+      no_output_timeout: << parameters.no_output_timeout >>
       environment:
         PARAM_UNITY_USERNAME_VAR_NAME: << parameters.unity-username-var-name >>
         PARAM_UNITY_PASSWORD_VAR_NAME: << parameters.unity-password-var-name >>
