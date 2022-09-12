@@ -111,7 +111,8 @@ extract_serial_from_license() {
   developer_data="$(perl -nle 'print $& while m{<DeveloperData Value\="\K.*?(?="/>)}g' <<< "$unity_license")"
   encoded_serial="$(cut -c 5- <<< "$developer_data")"
   
-  readonly decoded_unity_serial="$(base64 --decode <<< "$encoded_serial")"
+  decoded_unity_serial="$(base64 --decode <<< "$encoded_serial")"
+  readonly decoded_unity_serial
 
   if [ -n "$decoded_unity_serial" ]; then return 0; else return 1; fi
 }

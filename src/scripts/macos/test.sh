@@ -9,7 +9,7 @@ check_and_install_saxonb() {
     
     if brew install saxon-b; then
       printf '%s\n' "Saxon-B installed successfully."
-      readonly saxonb_jar="$(brew --prefix saxon-b | xargs -I saxon_path find saxon_path/ -name saxon9.jar)"
+      saxonb_jar="$(brew --prefix saxon-b | xargs -I saxon_path find saxon_path/ -name saxon9.jar)"
       return 0
 
     else
