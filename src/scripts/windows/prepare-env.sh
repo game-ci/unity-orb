@@ -64,7 +64,8 @@ extract_serial_from_license() {
   developer_data="$(grep -oP '<DeveloperData Value\="\K.*?(?="/>)' <<< "$unity_license")"
   encoded_serial="$(cut -c 5- <<< "$developer_data")"
   
-  readonly decoded_unity_serial="$(base64 --decode <<< "$encoded_serial")"
+  decoded_unity_serial="$(base64 --decode <<< "$encoded_serial")"
+  readonly decoded_unity_serial
 
   if [ -n "$decoded_unity_serial" ]; then return 0; else return 1; fi
 }
@@ -77,7 +78,7 @@ mkdir -p "$base_dir/regkeys"
 powershell "reg export HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\\"Microsoft SDKs\"\\Windows\\v10.0 $base_dir/regkeys/winsdk.reg /y"
 
 readonly container_name="${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BUILD_NUM}"
-printf '%s\n' "export CONTAINER_NAME=$container_name" >> $BASH_ENV
+printf '%s\n' "export CONTAINER_NAME=$container_name" >> "$BASH_ENV"
 
 # Delete any existing containers.
 if docker ps -a | grep -wq "$container_name"; then

@@ -25,7 +25,6 @@ pre-steps:
         name: "Clone the demo project"
         command: |
           # Clone the "il2cpp" demo project
-          mkdir /tmp/unity
           git clone --branch windows-il2cpp --single-branch https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git ../Unity2D-Demo-Game-CI-CD
 
           # Clone the Unity orb
