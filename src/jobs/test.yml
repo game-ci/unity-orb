@@ -52,6 +52,10 @@ parameters:
     description: |
       Whether to return the license used to test the project.
       Unity only allows returning professional licenses.
+  no_output_timeout:
+    type: string
+    default: "20m"
+    description: Elapsed time the command can run without output.
 
 executor: << parameters.executor >>
 
@@ -63,10 +67,12 @@ steps:
       unity-serial-var-name: << parameters.unity-serial-var-name >>
       unity-license-var-name: << parameters.unity-license-var-name >>
       project-path: <<parameters.project-path>>
+      no_output_timeout: << parameters.no_output_timeout>>
   - test:
       step-name: << parameters.step-name >>
       test-platform: << parameters.test-platform >>
       project-path: << parameters.project-path >>
+      no_output_timeout: << parameters.no_output_timeout>>
   - when:
       condition: <<parameters.return-license>>
       steps:

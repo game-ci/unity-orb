@@ -69,6 +69,10 @@ parameters:
     description: |
       Whether to return the license used to build the project.
       Unity only allows returning professional licenses.
+  no_output_timeout:
+    type: string
+    default: "20m"
+    description: Elapsed time the command can run without output.
 
 executor: << parameters.executor >>
 
@@ -80,6 +84,7 @@ steps:
       unity-serial-var-name: << parameters.unity-serial-var-name >>
       unity-license-var-name: << parameters.unity-license-var-name >>
       project-path: <<parameters.project-path>>
+      no_output_timeout: << parameters.no_output_timeout>>
   - build:
       step-name: << parameters.step-name >>
       build-name: <<parameters.build-name>>
@@ -87,6 +92,7 @@ steps:
       project-path: <<parameters.project-path>>
       store-artifacts: <<parameters.store-artifacts>>
       compress: <<parameters.compress>>
+      no_output_timeout: << parameters.no_output_timeout>>
   - when:
       condition: <<parameters.return-license>>
       steps:
