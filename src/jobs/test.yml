@@ -46,6 +46,12 @@ parameters:
       Specify the test platform to run tests on.
       Valid values are "editmode", "playmode" and Unity's target builds.
       More information can be found on: https://docs.unity3d.com/Packages/com.unity.test-framework@2.0/manual/reference-command-line.html
+  return-license:
+    type: boolean
+    default: false
+    description: |
+      Whether to return the license used to test the project.
+      Unity only allows returning professional licenses.
 
 executor: << parameters.executor >>
 
@@ -61,6 +67,9 @@ steps:
       step-name: << parameters.step-name >>
       test-platform: << parameters.test-platform >>
       project-path: << parameters.project-path >>
-  - return-license:
-      unity-username-var-name: << parameters.unity-username-var-name >>
-      unity-password-var-name: << parameters.unity-password-var-name >>
+  - when:
+      condition: <<parameters.return-license>>
+      steps:
+        - return-license:
+            unity-username-var-name: << parameters.unity-username-var-name >>
+            unity-password-var-name: << parameters.unity-password-var-name >>

@@ -63,6 +63,12 @@ parameters:
       Whether to compress the build output to a ".tar.gz" archive.
       This is recommended if you want to download the built artifacts from the CircleCI web app.
       If left to "false" for decompressed WebGL builds, you can run the project directly from the CircleCI web app.
+  return-license:
+    type: boolean
+    default: false
+    description: |
+      Whether to return the license used to build the project.
+      Unity only allows returning professional licenses.
 
 executor: << parameters.executor >>
 
@@ -81,6 +87,9 @@ steps:
       project-path: <<parameters.project-path>>
       store-artifacts: <<parameters.store-artifacts>>
       compress: <<parameters.compress>>
-  - return-license:
-      unity-username-var-name: << parameters.unity-username-var-name >>
-      unity-password-var-name: << parameters.unity-password-var-name >>
+  - when:
+      condition: <<parameters.return-license>>
+      steps:
+        - return-license:
+            unity-username-var-name: << parameters.unity-username-var-name >>
+            unity-password-var-name: << parameters.unity-password-var-name >>
