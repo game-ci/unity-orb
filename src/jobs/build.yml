@@ -86,7 +86,8 @@ parameters:
     description: |
       Additional arguments for the Unity CLI.
       Use it to pass arguments defined on your custom "build-method" or Unity's build options.
-      The parameters must be separated by a space and must be in the format "-key value" or "-key" for booleans.
+      The parameters must be separated by a comma and must be in the format "-key value" or "-key" for booleans.
+      Example: "-customArg1 WebGL, -EnableHeadlessMode, -customArg2 build/webgl".
 
 executor: << parameters.executor >>
 
