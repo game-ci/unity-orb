@@ -16,6 +16,20 @@ if [ -z "$PARAM_BUILD_METHOD" ]; then
   printf '%s\n' "$DEPENDENCY_UNITY_BUILDER" > "$unity_project_full_path/Assets/Editor/BuildCommand.cs"
 fi
 
+# Expand parameters and save them in an array.
+custom_parameters=()
+if [ -n "$PARAM_CUSTOM_PARAMETERS" ]; then
+  old_IFS=$IFS
+  IFS=','
+
+  while read params; do
+    param="$(eval echo $params)"
+    custom_parameters+=("$param")
+  done <<< "$PARAM_CUSTOM_PARAMETERS"
+
+  IFS=$old_IFS
+fi
+
 # If "build_name" is blank, use the build target.
 if [ -z "$PARAM_BUILD_NAME" ]; then PARAM_BUILD_NAME="$PARAM_BUILD_TARGET"; fi
 
