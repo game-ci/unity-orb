@@ -51,6 +51,20 @@ parameters:
     type: string
     default: "10m"
     description: Elapsed time the command can run without output.
+  build-method:
+    type: string
+    default: ""
+    description: |
+      The method used as argument for the Unity CLI "executeMethod" parameter.
+      It must be a valid path to a static method and the class exist in the Assets/Editor directory.
+      If left empty, the default build method will be used.
+  custom-parameters:
+    type: string
+    default: ""
+    description: |
+      Additional arguments for the Unity CLI.
+      Use it to pass arguments defined on your custom "build-method" or Unity's build options.
+      The parameters must be separated by a space and must be in the format "-key value" or "-key" for booleans.
 
 steps:
   - run:
@@ -61,6 +75,8 @@ steps:
         PARAM_BUILD_TARGET: << parameters.build-target >>
         PARAM_PROJECT_PATH: << parameters.project-path >>
         PARAM_COMPRESS: << parameters.compress >>
+        PARAM_BUILD_METHOD: << parameters.build-method >>
+        PARAM_CUSTOM_PARAMETERS: << parameters.custom-parameters >>
         SCRIPT_BUILD_WINDOWS: << include(scripts/windows/build.sh) >>
         SCRIPT_BUILD_LINUX: << include(scripts/linux/build.sh) >>
         SCRIPT_BUILD_MACOS: << include(scripts/macos/build.sh) >>
