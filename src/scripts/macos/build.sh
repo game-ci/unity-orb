@@ -16,9 +16,10 @@ set -x
   -buildTarget "$PARAM_BUILD_TARGET" \
   -customBuildTarget "$PARAM_BUILD_TARGET" \
   -customBuildPath "$build_path/$PARAM_BUILD_NAME" \
-  -executeMethod "BuildCommand.PerformBuild" \
+  -executeMethod "$build_method" \
   -buildVersion "1.0.0" \
-  -logfile /dev/stdout
+  -logfile /dev/stdout \
+  "${custom_parameters[@]}"
 set +x
 
 if [ "$PARAM_COMPRESS" -eq 1 ]; then

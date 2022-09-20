@@ -14,6 +14,9 @@ if [ -z "$PARAM_BUILD_METHOD" ]; then
   printf '%s\n' "The \"build-method\" parameter is empty. Falling back to the default build script."
   mkdir -p "$unity_project_full_path/Assets/Editor/"
   printf '%s\n' "$DEPENDENCY_UNITY_BUILDER" > "$unity_project_full_path/Assets/Editor/BuildCommand.cs"
+  build_method="BuildCommand.PerformBuild"
+else
+  build_method="$PARAM_BUILD_METHOD"
 fi
 
 # Expand parameters and save them in an array.
