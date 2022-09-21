@@ -18,7 +18,7 @@ set -x
   -executeMethod "$build_method" \
   -buildVersion "1.0.0" \
   -logfile /dev/stdout \
-  $PARAM_CUSTOM_PARAMETERS # Needs to be unquoted. Otherwise it will be treated as a single parameter.
+  $custom_parameters # Needs to be unquoted. Otherwise it will be treated as a single parameter.
 set +x
 
 if [ "$PARAM_COMPRESS" -eq 1 ]; then

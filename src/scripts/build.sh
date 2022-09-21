@@ -19,6 +19,9 @@ if [ -z "$PARAM_BUILD_METHOD" ]; then
   build_method="BuildCommand.PerformBuild"
 fi
 
+# Expand custom parameters, if any.
+custom_parameters="$(eval echo "$PARAM_CUSTOM_PARAMETERS")"
+
 # If "build_name" is blank, use the build target.
 if [ -z "$PARAM_BUILD_NAME" ]; then PARAM_BUILD_NAME="$PARAM_BUILD_TARGET"; fi
 
