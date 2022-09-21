@@ -19,14 +19,11 @@ trap trap_exit EXIT
 # Create the build folder
 docker exec "$CONTAINER_NAME" powershell mkdir C:/build
 
-# Parse array to string
-custom_params="${custom_parameters[*]}"
-
 # Add the build target and build name in the environment variables.
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('BUILD_NAME','$PARAM_BUILD_NAME', [System.EnvironmentVariableTarget]::Machine)"
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('BUILD_TARGET','$PARAM_BUILD_TARGET', [System.EnvironmentVariableTarget]::Machine)"
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('BUILD_METHOD','$build_method', [System.EnvironmentVariableTarget]::Machine)"
-docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('CUSTOM_PARAMS','$custom_params', [System.EnvironmentVariableTarget]::Machine)"
+docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('CUSTOM_PARAMS','$PARAM_CUSTOM_PARAMETERS', [System.EnvironmentVariableTarget]::Machine)"
 
 # Build the project
 # Versioning of the project needs work. This is how it's done in the GHA:
