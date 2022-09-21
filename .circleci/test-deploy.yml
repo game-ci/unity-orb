@@ -294,7 +294,7 @@ workflows:
             target_platform: "windows-il2cpp"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneWindows64
-          custom-parameters: "-customParam1 potato -customParam2 tomato -customParam3 cucumber -DetailedBuildReport"
+          custom-parameters: "-customParam1 potato, -customParam2 tomato, -customParam3 cucumber, -DetailedBuildReport"
           filters: *filters
           context: orb-testing-unity
           pre-steps: *mono
@@ -310,7 +310,7 @@ workflows:
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneOSX
-          custom-parameters: "-customParam1 potato -customParam2 tomato -customParam3 cucumber -DetailedBuildReport"
+          custom-parameters: "-customParam1 potato, -customParam2 tomato, -customParam3 cucumber, -DetailedBuildReport"
           filters: *filters
           context: orb-testing-unity
           pre-steps: *il2cpp
