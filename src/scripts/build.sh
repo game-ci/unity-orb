@@ -19,14 +19,8 @@ if [ -z "$PARAM_BUILD_METHOD" ]; then
   build_method="BuildCommand.PerformBuild"
 fi
 
-# Expand parameters and save them in an array.
-custom_parameters=()
-if [ -n "$PARAM_CUSTOM_PARAMETERS" ]; then
-  while read -r -d ',' param; do
-    expanded_param="$(eval echo "$param")"
-    custom_parameters+=("$expanded_param")
-  done <<< "$PARAM_CUSTOM_PARAMETERS"
-fi
+# Expand custom parameters, if any.
+custom_parameters="$(eval echo "$PARAM_CUSTOM_PARAMETERS")"
 
 # If "build_name" is blank, use the build target.
 if [ -z "$PARAM_BUILD_NAME" ]; then PARAM_BUILD_NAME="$PARAM_BUILD_TARGET"; fi
