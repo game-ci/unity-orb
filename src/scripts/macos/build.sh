@@ -1,9 +1,8 @@
 #!/bin/false
 # shellcheck shell=bash
-# shellcheck disable=SC2154
+# shellcheck disable=SC2048,SC2154,SC2086
 
 readonly build_path="$unity_project_full_path/Builds/$PARAM_BUILD_TARGET"
-
 mkdir -p "$build_path"
 
 set -x
@@ -19,7 +18,7 @@ set -x
   -executeMethod "$build_method" \
   -buildVersion "1.0.0" \
   -logfile /dev/stdout \
-  "${custom_parameters[*]}"
+  ${custom_parameters[*]}
 set +x
 
 if [ "$PARAM_COMPRESS" -eq 1 ]; then

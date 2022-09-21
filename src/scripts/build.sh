@@ -11,27 +11,21 @@ eval "$SCRIPT_UTILS"
 detect-os
 
 # Copy builder to project directory if a custom isn't specified.
+build_method="$PARAM_BUILD_METHOD"
 if [ -z "$PARAM_BUILD_METHOD" ]; then
   printf '%s\n' "The \"build-method\" parameter is empty. Falling back to the default build script."
   mkdir -p "$unity_project_full_path/Assets/Editor/"
   printf '%s\n' "$DEPENDENCY_UNITY_BUILDER" > "$unity_project_full_path/Assets/Editor/BuildCommand.cs"
   build_method="BuildCommand.PerformBuild"
-else
-  build_method="$PARAM_BUILD_METHOD"
 fi
 
 # Expand parameters and save them in an array.
 custom_parameters=()
 if [ -n "$PARAM_CUSTOM_PARAMETERS" ]; then
-  old_IFS=$IFS
-  IFS=','
-
-  while read -r param; do
+  while read -r -d ',' param; do
     expanded_param="$(eval echo "$param")"
     custom_parameters+=("$expanded_param")
   done <<< "$PARAM_CUSTOM_PARAMETERS"
-
-  IFS=$old_IFS
 fi
 
 # If "build_name" is blank, use the build target.

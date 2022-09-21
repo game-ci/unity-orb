@@ -307,7 +307,7 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneWindows64
           build-method: "MyCustomBuildCommand.MyCustomBuildMethod"
-          custom-parameters: "-customParam1 potato, -customParam2 tomato, -customParam3 cucumber, -DetailedBuildReport"
+          custom-parameters: "-customParam1 potato, -customParam2 tomato, -customParam3 $CIRCLE_WORKFLOW_ID, -DetailedBuildReport"
           filters: *filters
           context: orb-testing-unity
           pre-steps: *custom-build-method
@@ -324,7 +324,7 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneOSX
           build-method: "MyCustomBuildCommand.MyCustomBuildMethod"
-          custom-parameters: "-customParam1 potato, -customParam2 tomato, -customParam3 cucumber, -DetailedBuildReport"
+          custom-parameters: "-customParam1 potato, -customParam2 tomato, -customParam3 $CIRCLE_WORKFLOW_ID, -DetailedBuildReport"
           filters: *filters
           context: orb-testing-unity
           pre-steps: *custom-build-method
@@ -351,8 +351,8 @@ workflows:
             - build-ios
             - build-tvOS
             - build-without-artifacts
-            - build-with-custom-params-windows
-            - build-with-custom-params-osx
+            - build-with-custom-method-windows
+            - build-with-custom-method-osx
           context: orb-publishing
           filters:
             branches:
