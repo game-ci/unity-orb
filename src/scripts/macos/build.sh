@@ -19,7 +19,7 @@ set -x
   -executeMethod "$build_method" \
   -buildVersion "1.0.0" \
   -logfile /dev/stdout \
-  "${custom_parameters[@]}"
+  "${custom_parameters[*]}"
 set +x
 
 if [ "$PARAM_COMPRESS" -eq 1 ]; then

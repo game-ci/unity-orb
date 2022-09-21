@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034
 
 readonly base_dir="${CIRCLE_WORKING_DIRECTORY/\~/$HOME}"
 readonly unity_project_full_path="$base_dir/$PARAM_PROJECT_PATH"
@@ -25,9 +26,9 @@ if [ -n "$PARAM_CUSTOM_PARAMETERS" ]; then
   old_IFS=$IFS
   IFS=','
 
-  while read params; do
-    param="$(eval echo $params)"
-    custom_parameters+=("$param")
+  while read -r param; do
+    expanded_param="$(eval echo "$param")"
+    custom_parameters+=("$expanded_param")
   done <<< "$PARAM_CUSTOM_PARAMETERS"
 
   IFS=$old_IFS

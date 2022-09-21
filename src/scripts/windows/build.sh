@@ -23,7 +23,7 @@ docker exec "$CONTAINER_NAME" powershell mkdir C:/build
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('BUILD_NAME','$PARAM_BUILD_NAME', [System.EnvironmentVariableTarget]::Machine)"
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('BUILD_TARGET','$PARAM_BUILD_TARGET', [System.EnvironmentVariableTarget]::Machine)"
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('BUILD_METHOD','$build_method', [System.EnvironmentVariableTarget]::Machine)"
-docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('CUSTOM_PARAMS','${custom_parameters[@]}', [System.EnvironmentVariableTarget]::Machine)"
+docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('CUSTOM_PARAMS','${custom_parameters[*]}', [System.EnvironmentVariableTarget]::Machine)"
 
 # Build the project
 # Versioning of the project needs work. This is how it's done in the GHA:
