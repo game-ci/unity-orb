@@ -73,6 +73,21 @@ parameters:
     type: string
     default: "20m"
     description: Elapsed time the command can run without output.
+  build-method:
+    type: string
+    default: ""
+    description: |
+      The method used as argument for the Unity CLI "executeMethod" parameter.
+      It must be a valid path to a static method and the class exist in the Assets/Editor directory.
+      If left empty, the default build method will be used.
+  custom-parameters:
+    type: string
+    default: ""
+    description: |
+      Additional arguments for the Unity CLI.
+      Use it to pass arguments defined on your custom "build-method" or Unity's build options. Environment variables are supported.
+      The parameters must be separated by space and must be in the format "-key value" or "-key" for booleans.
+      Example: "-customArg1 WebGL -EnableHeadlessMode -customArg2 $CIRCLE_WORKFLOW_ID".
 
 executor: << parameters.executor >>
 
@@ -93,6 +108,8 @@ steps:
       store-artifacts: <<parameters.store-artifacts>>
       compress: <<parameters.compress>>
       no_output_timeout: << parameters.no_output_timeout>>
+      build-method: <<parameters.build-method>>
+      custom-parameters: <<parameters.custom-parameters>>
   - when:
       condition: <<parameters.return-license>>
       steps:
