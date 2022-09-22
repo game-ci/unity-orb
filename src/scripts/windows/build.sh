@@ -30,12 +30,10 @@ docker exec "$CONTAINER_NAME" powershell mkdir C:/build
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('BUILD_NAME','$PARAM_BUILD_NAME', [System.EnvironmentVariableTarget]::Machine)"
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('BUILD_TARGET','$PARAM_BUILD_TARGET', [System.EnvironmentVariableTarget]::Machine)"
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('BUILD_METHOD','$build_method', [System.EnvironmentVariableTarget]::Machine)"
+docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('CUSTOM_PARAMS','$PARAM_CUSTOM_PARAMETERS', [System.EnvironmentVariableTarget]::Machine)"
 
-# shellcheck disable=SC2086
-cmd=$(join_by ' ' "[System.Environment]::SetEnvironmentVariable('CUSTOM_PARAMS','" $PARAM_CUSTOM_PARAMETERS "', [System.EnvironmentVariableTarget]::Machine)")
-
-# shellcheck disable=SC2086
-docker exec "$CONTAINER_NAME" powershell $cmd
+# Print the environment variables
+docker exec "$CONTAINER_NAME" powershell "Get-ChildItem env:"
 
 # Build the project
 # Versioning of the project needs work. This is how it's done in the GHA:
