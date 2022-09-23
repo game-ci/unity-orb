@@ -2,7 +2,7 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2048,SC2154,SC2086
 
-readonly build_path="$unity_project_full_path/Builds/$PARAM_BUILD_TARGET"
+readonly build_path="$unity_project_full_path/Builds/$PARAM_BUILD_TARGET/"
 mkdir -p "$build_path"
 
 set -x
