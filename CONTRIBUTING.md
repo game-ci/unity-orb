@@ -21,6 +21,7 @@ Steps to be performed to submit a pull request:
 1. Fork the repository and create your branch from `main`.
 2. If you've fixed a bug or added code that should be tested, add tests!
 3. Fill out the description, link any related issues and submit your pull request.
+4. If you are including new parameters in a job or executor, make sure to update the [documentation](https://github.com/game-ci/documentation/tree/main/docs/11-circleci).
 
 #### License
 
