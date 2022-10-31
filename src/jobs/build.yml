@@ -69,6 +69,11 @@ parameters:
     description: |
       Whether to return the license used to build the project.
       Unity only allows returning professional licenses.
+  fetch-submodules:
+    type: boolean
+    default: false
+    description: |
+      Whether to fetch git submodules
   no_output_timeout:
     type: string
     default: "20m"
@@ -93,6 +98,12 @@ executor: << parameters.executor >>
 
 steps:
   - checkout
+  - run:
+      name: Fetch submodules
+      command: |
+        git submodule sync
+        git submodule update --init
+      condition: << parameters.fetch-submodules >>
   - prepare-env:
       unity-username-var-name: << parameters.unity-username-var-name >>
       unity-password-var-name: << parameters.unity-password-var-name >>
