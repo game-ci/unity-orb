@@ -27,7 +27,7 @@ parameters:
     description: |
       Enter the working directory of your runner agent.
     type: string
-    default: "C:\\Users\\circleci\\AppData\\Local\\Temp\\Workdir"
+    default: "C:\\ProgramFiles\\CircleCI\\Workdir"
 
 machine: true
 resource_class: << parameters.resource_class >>
