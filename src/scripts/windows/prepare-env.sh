@@ -28,14 +28,14 @@ resolve_unity_serial() {
     # License provided.
     elif [ -n "$unity_encoded_license" ]; then
       printf '%s\n' "No serial detected. Extracting it from the encoded license."
-      
+
       if ! extract_serial_from_license; then
         printf '%s\n' "Failed to parse the serial from the Unity license."
         printf '%s\n' "Please try again or open an issue."
         printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation#personal-license"
 
         exit_code=1
-      
+
       else
         readonly resolved_unity_serial="$decoded_unity_serial"
       fi
@@ -63,7 +63,7 @@ extract_serial_from_license() {
   unity_license="$(base64 --decode <<< "$unity_encoded_license")"
   developer_data="$(grep -oP '<DeveloperData Value\="\K.*?(?="/>)' <<< "$unity_license")"
   encoded_serial="$(cut -c 5- <<< "$developer_data")"
-  
+
   decoded_unity_serial="$(base64 --decode <<< "$encoded_serial")"
   readonly decoded_unity_serial
 
@@ -115,7 +115,7 @@ set +x
 
 # Register the Windows SDK and VCC Tools.
 docker exec "$container_name" powershell 'reg import C:\regkeys\winsdk.reg'
-docker exec "$container_name" powershell 'regsvr32 C:\ProgramData\Microsoft\VisualStudio\Setup\x64\Microsoft.VisualStudio.Setup.Configuration.Native.dll'
+docker exec "$container_name" powershell 'regsvr32 /s C:\ProgramData\Microsoft\VisualStudio\Setup\x64\Microsoft.VisualStudio.Setup.Configuration.Native.dll'
 
 # Activate Unity
 docker exec "$container_name" powershell '& "C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe" -batchmode -quit -nographics -username $Env:UNITY_USERNAME -password $Env:UNITY_PASSWORD -serial $Env:UNITY_SERIAL -logfile | Out-Host'
