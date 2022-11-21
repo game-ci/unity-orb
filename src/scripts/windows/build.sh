@@ -16,9 +16,6 @@ trap_exit() {
 }
 trap trap_exit EXIT
 
-# Create the build folder
-docker exec "$CONTAINER_NAME" powershell mkdir C:/build
-
 # Add the build target and build name in the environment variables.
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('BUILD_NAME','$PARAM_BUILD_NAME', [System.EnvironmentVariableTarget]::Machine)"
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('BUILD_TARGET','$PARAM_BUILD_TARGET', [System.EnvironmentVariableTarget]::Machine)"
@@ -53,8 +50,12 @@ if [ "$exit_code" -ne 0 ]; then
   exit "$exit_code"
 fi
 
-# Compress the build folder.
-docker exec "$CONTAINER_NAME" powershell 'tar -czf "C:/$Env:BUILD_NAME-$Env:BUILD_TARGET.tar.gz" -C "C:/build" .'
+printf '%s\n' "Build completed successfully. Here is your build's content:"
+ls -la "$base_dir/build"
 
-# Copy the build directory to the host.
-docker cp "$CONTAINER_NAME":"$PARAM_BUILD_NAME"-"$PARAM_BUILD_TARGET".tar.gz "$base_dir"/"$PARAM_BUILD_TARGET".tar.gz
+if [ "$PARAM_COMPRESS" -eq 1 ]; then
+  printf '%s\n' "Compressing artifacts..."
+  tar -vczf "$base_dir/${PARAM_BUILD_TARGET}.tar.gz" -C "$base_dir/build" .
+  printf '%s\n' "Done."
+  ls -la "$base_dir"
+fi
