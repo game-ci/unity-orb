@@ -94,7 +94,7 @@ if ! resolve_unity_serial; then
 fi
 
 # Create folder to store the build artifacts.
-mkdir -p "$base_dir/build"
+mkdir -p "$base_dir/build" || { echo "Unable to create the build directory"; exit 1; }
 
 set -x
 
