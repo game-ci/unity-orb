@@ -93,6 +93,9 @@ if ! resolve_unity_serial; then
   exit 1
 fi
 
+# Create folder to store the build artifacts.
+mkdir -p "$base_dir/build" || { echo "Unable to create the build directory"; exit 1; }
+
 set -x
 
 # Run the container and prevent it from exiting.
@@ -105,6 +108,7 @@ docker run -dit \
   --env UNITY_SERIAL="$resolved_unity_serial" \
   --volume "$unity_project_full_path":C:/unity_project \
   --volume "$base_dir"/regkeys:"C:/regkeys" \
+  --volume "$base_dir"/build:"C:/build" \
   --volume "C:/Program Files (x86)/Microsoft Visual Studio":"C:/Program Files (x86)/Microsoft Visual Studio" \
   --volume "C:/Program Files (x86)/Windows Kits":"C:/Program Files (x86)/Windows Kits" \
   --volume "C:/ProgramData/Microsoft/VisualStudio":"C:/ProgramData/Microsoft/VisualStudio" \
