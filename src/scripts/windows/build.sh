@@ -50,12 +50,12 @@ if [ "$exit_code" -ne 0 ]; then
   exit "$exit_code"
 fi
 
-printf '%s\n' "Build completed successfully. Here is your build's content:"
+printf '%s\n' "Build completed successfully:"
 ls -la "$base_dir/build"
 
 if [ "$PARAM_COMPRESS" -eq 1 ]; then
   printf '%s\n' "Compressing artifacts..."
-  tar -vczf "$base_dir/${PARAM_BUILD_TARGET}.tar.gz" -C "$base_dir/build" .
+  tar -czf "$base_dir/${PARAM_BUILD_TARGET}.tar.gz" -C "$base_dir/build" .
   printf '%s\n' "Done."
   ls -la "$base_dir"
 fi
