@@ -1,7 +1,7 @@
 description: |
     Select the Editor version and Target Platform for the GameCI image.
     Available target platforms can be found at: https://game.ci/docs/docker/versions.
-    For information on how to setup a Runner agent, see: https://circleci.com/docs/2.0/runner-overview/.
+    For information on how to setup a Runner agent, see: https://circleci.com/docs/container-runner-installation/.
 
 parameters:
   target_platform:
@@ -20,7 +20,7 @@ parameters:
   resource_class:
     description: |
       Enter your Runner resource class.
-      For information on how to setup a Runner agent, see: https://circleci.com/docs/2.0/runner-overview/.
+      For information on how to setup a Runner agent, see: https://circleci.com/docs/container-runner-installation/.
     type: string
 
 docker:
