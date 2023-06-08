@@ -1,11 +1,17 @@
 version: 2.1
 orbs:
-  unity: game-ci/unity@dev:<<pipeline.git.revision>>
-  orb-tools: circleci/orb-tools@11.1
+  orb-tools: circleci/orb-tools@12.0
+  unity: {}
 
 filters: &filters
   tags:
     only: /.*/
+
+release-filters: &release-filters
+  branches:
+    ignore: /.*/
+  tags:
+    only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 
 pre-steps:
   mono: &mono
@@ -14,12 +20,12 @@ pre-steps:
         command: |
           # Clone the "mono" demo project
           git clone --branch master --single-branch https://github.com/EricRibeiro/Unity2D-Demo-Game-CI-CD.git ../Unity2D-Demo-Game-CI-CD
-          
+
           # Clone the Unity orb
           git clone https://github.com/game-ci/unity-orb.git .
 
           # Move the demo project to the project folder
-          mv ../Unity2D-Demo-Game-CI-CD ./Unity2D-Demo-Game-CI-CD    
+          mv ../Unity2D-Demo-Game-CI-CD ./Unity2D-Demo-Game-CI-CD
   il2cpp: &il2cpp
     - run:
         name: "Clone the demo project"
@@ -31,7 +37,7 @@ pre-steps:
           git clone https://github.com/game-ci/unity-orb.git .
 
           # Move the demo project to the project folder
-          mv ../Unity2D-Demo-Game-CI-CD ./Unity2D-Demo-Game-CI-CD    
+          mv ../Unity2D-Demo-Game-CI-CD ./Unity2D-Demo-Game-CI-CD
   custom-build-method: &custom-build-method
     - run:
         name: "Clone the demo project"
@@ -103,7 +109,7 @@ workflows:
           filters: *filters
           context: orb-testing-unity
           pre-steps: *mono
-     
+
       # IL2CPP Builds
       - unity/build:
           name: "build-linux64-il2cpp"
@@ -156,7 +162,7 @@ workflows:
           context: orb-testing-unity
           pre-steps: *il2cpp
 
-       # Mono Builds   
+       # Mono Builds
       - unity/build:
           name: "build-linux64-mono"
           step-name: "Build StandaloneLinux64"
@@ -206,7 +212,7 @@ workflows:
           filters: *filters
           context: orb-testing-unity
           pre-steps: *mono
-      
+
       # Other Builds
       - unity/build:
           name: "build-webgl"
@@ -349,11 +355,11 @@ workflows:
           pre-steps: *custom-build-method
 
       - orb-tools/pack:
-          filters: *filters
+          filters: *release-filters
       - orb-tools/publish:
-          orb-name: game-ci/unity
-          vcs-type: << pipeline.project.type >>
-          pub-type: production
+          orb_name: game-ci/unity
+          vcs_type: << pipeline.project.type >>
+          pub_type: production
           requires:
             - orb-tools/pack
             - test-linux
@@ -374,8 +380,4 @@ workflows:
             - build-with-custom-method-osx
             - build-with-custom-method-linux
           context: orb-publishing
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+          filters: *release-filters
