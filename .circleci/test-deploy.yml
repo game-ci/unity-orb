@@ -353,22 +353,6 @@ workflows:
           filters: *filters
           context: orb-testing-unity
           pre-steps: *custom-build-method
-      - unity/build:
-          name: "build-with-container-runner"
-          step-name: "Build StandaloneLinux64 with container-runner"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
-          unity-password-var-name: "UNITY_PASSWORD"
-          executor:
-            name: "unity/ubuntu-container-runner"
-            target_platform: "base"
-            editor_version: "2021.3.1f1"
-            resource_class: "tadashi0713/gameci-container-runner"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: StandaloneLinux64
-          filters: *filters
-          context: orb-testing-unity
-          pre-steps: *mono
 
       - orb-tools/pack:
           filters: *release-filters
