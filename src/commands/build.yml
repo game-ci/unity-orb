@@ -114,20 +114,20 @@ steps:
       condition:
         and:
           - << parameters.attach-workspace >>
+          - << parameters.compress >>
+      steps:
+        - persist_to_workspace:
+            root: .
+            paths:
+              - << parameters.build-target >>.tar.gz
+
+  - when:
+      condition:
+        and:
+          - << parameters.attach-workspace >>
           - not: << parameters.compress >>
       steps:
         - persist_to_workspace:
             root: << parameters.project-path >>
             paths:
               - Builds/<< parameters.build-target >>
-
-  - when:
-      condition:
-        and:
-          - << parameters.attach-workspace >>
-          - << parameters.compress >>
-      steps:
-        - persist_to_workspace:
-            root: << parameters.project-path >>
-            paths:
-              - << parameters.build-target >>.tar.gz
