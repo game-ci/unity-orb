@@ -117,9 +117,8 @@ steps:
           - << parameters.compress >>
       steps:
         - persist_to_workspace:
-            root: << parameters.project-path >>
             paths:
-              - << parameters.build-target >>.tar.gz
+              - << parameters.project-path >>/<< parameters.build-target >>.tar.gz
 
   - when:
       condition:

@@ -72,7 +72,7 @@ jobs:
           at: .
       - run:
           name: Check attached file exists
-          command: ls Builds/StandaloneLinux64/UnityPlayer.so
+          command: ls StandaloneLinux64.tar.gz
 
 workflows:
   test-build:
