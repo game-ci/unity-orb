@@ -51,6 +51,15 @@ pre-steps:
           # Move the demo project to the project folder
           mv ../Unity2D-Demo-Game-CI-CD ./Unity2D-Demo-Game-CI-CD
 
+jobs:
+  test-attach-workspace:
+    docker:
+      - image: cimg/base
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+
 workflows:
   test-build:
     jobs:
@@ -353,6 +362,27 @@ workflows:
           filters: *filters
           context: orb-testing-unity
           pre-steps: *custom-build-method
+      - unity/build:
+          name: "build-with-workspace"
+          step-name: "Build StandaloneLinux64 with workspace"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
+          executor:
+            name: "unity/ubuntu"
+            target_platform: "base"
+            editor_version: "2021.3.1f1"
+            resource_class: "large"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          build-target: StandaloneLinux64
+          compress: false
+          attach-workspace: true
+          filters: *filters
+          context: orb-testing-unity
+          pre-steps: *mono
+      - test-attach-workspace:
+          requires:
+            - build-with-workspace
 
       - orb-tools/pack:
           filters: *release-filters

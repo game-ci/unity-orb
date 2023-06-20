@@ -47,6 +47,10 @@ parameters:
       Whether to compress the build output to a ".tar.gz" archive.
       This is recommended if you want to download the built artifacts from the CircleCI web app.
       If left to "false" for decompressed WebGL builds, you can run the project directly from the CircleCI web app.
+  attach-workspace:
+    type: boolean
+    default: false
+    description: Whether to attach the build output to workspace.
   no_output_timeout:
     type: string
     default: "10m"
@@ -105,3 +109,25 @@ steps:
       steps:
         - store_artifacts:
             path: << parameters.project-path >>/Builds/<< parameters.build-target >>
+
+  - when:
+      condition:
+        and:
+          - << parameters.attach-workspace >>
+          - << parameters.compress >>
+      steps:
+        - persist_to_workspace:
+            root: << parameters.project-path >>
+            paths:
+              - << parameters.build-target >>.tar.gz
+
+  - when:
+      condition:
+        and:
+          - << parameters.attach-workspace >>
+          - not: << parameters.compress >>
+      steps:
+        - persist_to_workspace:
+            root: << parameters.project-path >>
+            paths:
+              - Builds/<< parameters.build-target >>
