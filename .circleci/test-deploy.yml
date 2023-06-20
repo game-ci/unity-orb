@@ -54,7 +54,7 @@ pre-steps:
 jobs:
   test-attach-workspace:
     docker:
-      - image: cimg/base
+      - image: cimg/base:2023.06
     steps:
       - checkout
       - attach_workspace:
