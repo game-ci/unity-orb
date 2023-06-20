@@ -59,6 +59,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
+      - run:
+          name: Check attached file exists
+          command: ls Builds/StandaloneLinux64/UnityPlayer.so
 
 workflows:
   test-build:
