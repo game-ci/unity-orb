@@ -122,7 +122,7 @@ steps:
       project-path: <<parameters.project-path>>
       store-artifacts: <<parameters.store-artifacts>>
       compress: <<parameters.compress>>
-      attach-workspace: <<parameters.attach-workspace>>
+      persist-to-workspace: <<parameters.persist-to-workspace>>
       no_output_timeout: << parameters.no_output_timeout>>
       build-method: <<parameters.build-method>>
       custom-parameters: <<parameters.custom-parameters>>

@@ -52,7 +52,7 @@ pre-steps:
           mv ../Unity2D-Demo-Game-CI-CD ./Unity2D-Demo-Game-CI-CD
 
 jobs:
-  test-attach-workspace:
+  test-persist-to-workspace:
     docker:
       - image: cimg/base:2023.06
     steps:
@@ -63,7 +63,7 @@ jobs:
           name: Check attached file exists
           command: ls Builds/StandaloneLinux64/UnityPlayer.so
 
-  test-compress-attach-workspace:
+  test-compress-persist-to-workspace:
     docker:
       - image: cimg/base:2023.06
     steps:
@@ -390,11 +390,11 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
           compress: false
-          attach-workspace: true
+          persist-to-workspace: true
           filters: *filters
           context: orb-testing-unity
           pre-steps: *mono
-      - test-attach-workspace:
+      - test-persist-to-workspace:
           requires:
             - build-with-workspace
       - unity/build:
@@ -411,11 +411,11 @@ workflows:
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
           compress: true
-          attach-workspace: true
+          persist-to-workspace: true
           filters: *filters
           context: orb-testing-unity
           pre-steps: *mono
-      - test-compress-attach-workspace:
+      - test-compress-persist-to-workspace:
           requires:
             - compress-build-with-workspace
 
