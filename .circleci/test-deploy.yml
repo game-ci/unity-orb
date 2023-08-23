@@ -129,7 +129,7 @@ workflows:
             editor_version: "2021.3.2f1"
             target_platform: "windows-il2cpp"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
-          custom-parameters: "-testFilter EnemyMovesLeft"
+          custom-parameters: "-testFilter EnemyMovesLeft -customParam1 potato -customParam2 $CIRCLE_WORKFLOW_ID"
           test-platform: "playmode"
           filters: *filters
           context: orb-testing-unity
@@ -160,7 +160,7 @@ workflows:
             editor_version: "2021.3.1f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
-          custom-parameters: "-testFilter EnemyMovesLeft"
+          custom-parameters: "-testFilter EnemyMovesLeft -customParam1 potato -customParam2 $CIRCLE_WORKFLOW_ID"
           test-platform: "playmode"
           filters: *filters
           context: orb-testing-unity
