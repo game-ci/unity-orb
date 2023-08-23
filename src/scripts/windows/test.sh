@@ -26,7 +26,7 @@ test_args=(
   '-projectPath $Env:PROJECT_PATH'
   '-runTests'
   '-testPlatform $Env:TEST_PLATFORM'
-  '-testResults "C:/test/results.xml'
+  '-testResults "C:/test/results.xml"'
 )
 
 [ -n "$custom_parameters" ] && test_args+=( '$Env:CUSTOM_PARAMS.split()' )
