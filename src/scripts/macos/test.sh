@@ -78,7 +78,8 @@ set -x
   -runTests \
   -testPlatform "$PARAM_TEST_PLATFORM" \
   -testResults "$base_dir/results.xml" \
-  -logfile /dev/stdout
+  -logfile /dev/stdout \
+  $custom_parameters # Needs to be unquoted. Otherwise it will be treated as a single parameter.
 
 unity_exit_code=$?
 set +x

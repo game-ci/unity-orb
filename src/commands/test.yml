@@ -34,6 +34,14 @@ parameters:
     type: string
     default: "10m"
     description: Elapsed time the command can run without output.
+  custom-parameters:
+    type: string
+    default: ""
+    description: |
+      Additional arguments for the Unity CLI.
+      Use it to pass arguments to Unity's test options. Environment variables are supported.
+      The parameters must be separated by space and must be in the format "-key value" or "-key" for booleans.
+      Example: '-testFilter "MyNamespace.Something.MyTest" -assemblyNames "MyUnitTestAssembly" -testCategory "Unit;Integration"'.
 
 steps:
   - run:
@@ -42,6 +50,7 @@ steps:
       environment:
         PARAM_PROJECT_PATH: << parameters.project-path >>
         PARAM_TEST_PLATFORM: << parameters.test-platform >>
+        PARAM_CUSTOM_PARAMETERS: << parameters.custom-parameters >>
         SCRIPT_TEST_LINUX: << include(scripts/linux/test.sh) >>
         SCRIPT_TEST_WINDOWS: << include(scripts/windows/test.sh) >>
         SCRIPT_TEST_MACOS: << include(scripts/macos/test.sh) >>

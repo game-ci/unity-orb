@@ -56,6 +56,14 @@ parameters:
     type: string
     default: "20m"
     description: Elapsed time the command can run without output.
+  custom-parameters:
+    type: string
+    default: ""
+    description: |
+      Additional arguments for the Unity CLI.
+      Use it to pass arguments to Unity's test options. Environment variables are supported.
+      The parameters must be separated by space and must be in the format "-key value" or "-key" for booleans.
+      Example: '-testFilter "MyNamespace.Something.MyTest" -assemblyNames "MyUnitTestAssembly" -testCategory "Unit;Integration"'.
 
 executor: << parameters.executor >>
 
@@ -73,6 +81,7 @@ steps:
       test-platform: << parameters.test-platform >>
       project-path: << parameters.project-path >>
       no_output_timeout: << parameters.no_output_timeout>>
+      custom-parameters: << parameters.custom-parameters >>
   - when:
       condition: <<parameters.return-license>>
       steps:
