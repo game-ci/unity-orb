@@ -118,7 +118,7 @@ workflows:
           context: orb-testing-unity
           pre-steps: *mono
       - unity/test:
-          name: "test-windows"
+          name: "test-windows-with-custom-parameters"
           step-name: "Check if test filter in custom parameter works"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
           unity-username-var-name: "UNITY_USERNAME"
@@ -150,7 +150,7 @@ workflows:
           context: orb-testing-unity
           pre-steps: *mono
       - unity/test:
-          name: "test-osx"
+          name: "test-osx-with-custom-parameters"
           step-name: "Check if test filter in custom parameter works"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
           unity-username-var-name: "UNITY_USERNAME"
@@ -462,7 +462,9 @@ workflows:
             - orb-tools/pack
             - test-linux
             - test-windows
+            - test-windows-with-custom-parameters
             - test-osx
+            - test-osx-with-custom-parameters
             - build-linux64-il2cpp
             - build-Windows64-il2cpp
             - build-osx-il2cpp
