@@ -1,6 +1,6 @@
 #!/bin/false
 # shellcheck shell=bash
-# shellcheck disable=SC2154
+# shellcheck disable=SC2154,SC2016
 
 trap_exit() {
   local exit_status="$?"
