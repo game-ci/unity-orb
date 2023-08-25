@@ -2,55 +2,54 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2154
 
-trap_test_script_exit() {
-  local -r exit_status="$?"
-
-  if [ "$exit_status" -ne 0 ]; then
-    printf '%s\n' 'The script did not complete successfully.'
-    printf '%s\n' "The exit code was $exit_status"
-
-    rm -rf "$gameci_sample_project_dir"
-    exit "$exit_status"
-  fi
-
+parse_results_to_junit() {
   # Intall dependencies for the JUnit parser.
   apt-get update && apt-get install -y default-jre libsaxonb-java
 
   # Parse Unity's results xml to JUnit format.
-  printf '%s\n' "$DEPENDENCY_NUNIT_TRANSFORM" > "$base_dir/nunit3-junit.xslt"
-  saxonb-xslt -s "$UNITY_DIR/$TEST_PLATFORM-results.xml" -xsl "$base_dir/nunit3-junit.xslt" > "$UNITY_DIR/$TEST_PLATFORM-junit-results.xml"
-  
-  cat "$UNITY_DIR/$TEST_PLATFORM-junit-results.xml"
-
-  # Clean up.
-  rm -rf "$gameci_sample_project_dir"
+  printf '%s\n' "$DEPENDENCY_NUNIT_TRANSFORM" >"$base_dir/nunit3-junit.xslt"
+  saxonb-xslt -s "$UNITY_DIR/$TEST_PLATFORM-results.xml" -xsl "$base_dir/nunit3-junit.xslt" >"$UNITY_DIR/$TEST_PLATFORM-junit-results.xml"
 }
 
-# Download test script.
-curl --silent --location \
-  --request GET \
-  --url "https://gitlab.com/game-ci/unity3d-gitlab-ci-example/-/raw/main/ci/test.sh" \
-  --header 'Accept: application/vnd.github.v3+json' \
-  --output "$base_dir/test.sh"
+set -x
+# shellcheck disable=SC2086 # $custom_parameters needs to be unquoted. Otherwise it will be treated as a single parameter.
+${UNITY_EXECUTABLE:-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor} \
+  -projectPath "$unity_project_full_path" \
+  -runTests \
+  -testPlatform "$PARAM_TEST_PLATFORM" \
+  -testResults "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-results.xml \
+  -logFile /dev/stdout \
+  -batchmode \
+  -nographics \
+  -enableCodeCoverage \
+  -coverageResultsPath "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage \
+  -coverageOptions "generateAdditionalMetrics;generateHtmlReport;generateHtmlReportHistory;generateBadgeReport;" \
+  -debugCodeOptimization \
+  $custom_parameters
+unity_exit_code=$?
+set +x
 
-chmod +x "$base_dir/test.sh"
+if [ "$unity_exit_code" -eq 0 ] || [ "$unity_exit_code" -eq 2 ]; then
+  printf '%s\n' "Run succeeded. Exit code $unity_exit_code"
+  parse_results_to_junit
+  # Print the results to the console.
+  cat "$unity_project_full_path/$PARAM_TEST_PLATFORM-junit-results.xml"
+else
+  printf '%s\n' "Run failed. Exit code $unity_exit_code"
+fi
 
-# Name variables as required by the "test.sh" script.
-readonly TEST_PLATFORM="$PARAM_TEST_PLATFORM"
-readonly TESTING_TYPE="JUNIT"
-readonly UNITY_DIR="$unity_project_full_path"
-readonly CI_PROJECT_DIR="$gameci_sample_project_dir"
-readonly CI_PROJECT_NAME="$CIRCLE_PROJECT_REPONAME"
+code_coverage_package="com.unity.testtools.codecoverage"
+package_manifest_path="$unity_project_full_path/Packages/manifest.json"
 
-export TEST_PLATFORM
-export TESTING_TYPE
-export UNITY_DIR
-export CI_PROJECT_DIR
-export CI_PROJECT_NAME
+# Check if the Code Coverage package is installed and move the coverage results to the root of the project.
+if grep -q "$code_coverage_package" "$package_manifest_path"; then
+  cat "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/Report/Summary.xml | grep Linecoverage
+  mv "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/"$CIRCLE_PROJECT_REPONAME"-opencov/*Mode/TestCoverageResults_*.xml "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/coverage.xml
+  rm -r "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/"$CIRCLE_PROJECT_REPONAME"-opencov/
+else
+  {
+    echo -e "\033[33mCode Coverage package not found in $package_manifest_path. Please install the package \"Code Coverage\" through Unity's Package Manager to enable coverage reports.\033[0m"
+  } 2>/dev/null
+fi
 
-# Trap "test.sh" exit otherwise it won't be possible to parse the results to JUnit format.
-trap trap_test_script_exit EXIT
-
-# Run the test script.
-# shellcheck source=/dev/null
-source "$base_dir/test.sh"
+exit "$unity_exit_code"
