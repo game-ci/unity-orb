@@ -8,7 +8,7 @@ parse_results_to_junit() {
 
   # Parse Unity's results xml to JUnit format.
   printf '%s\n' "$DEPENDENCY_NUNIT_TRANSFORM" >"$base_dir/nunit3-junit.xslt"
-  saxonb-xslt -s "$UNITY_DIR/$TEST_PLATFORM-results.xml" -xsl "$base_dir/nunit3-junit.xslt" >"$UNITY_DIR/$TEST_PLATFORM-junit-results.xml"
+  saxonb-xslt -s "$unity_project_full_path/$PARAM_TEST_PLATFORM-results.xml" -xsl "$base_dir/nunit3-junit.xslt" >"$unity_project_full_path/$PARAM_TEST_PLATFORM-junit-results.xml"
 }
 
 set -x
