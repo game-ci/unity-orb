@@ -102,6 +102,23 @@ workflows:
           context: orb-testing-unity
           pre-steps: *mono
       - unity/test:
+          name: "test-linux-with-custom-parameters"
+          step-name: "Check if test filter in custom parameter works"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          unity-username-var-name: "UNITY_USERNAME"
+          unity-password-var-name: "UNITY_PASSWORD"
+          executor:
+            name: "unity/ubuntu"
+            target_platform: "linux-il2cpp"
+            editor_version: "2021.3.1f1"
+            resource_class: "medium"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          custom-parameters: "-testFilter EnemyMovesLeft -customParam1 potato -customParam2 $CIRCLE_WORKFLOW_ID"
+          test-platform: "playmode"
+          filters: *filters
+          context: orb-testing-unity
+          pre-steps: *mono
+      - unity/test:
           name: "test-windows"
           step-name: "Check if the tests run and results are uploaded"
           unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
@@ -461,6 +478,7 @@ workflows:
           requires:
             - orb-tools/pack
             - test-linux
+            - test-linux-with-custom-parameters
             - test-windows
             - test-windows-with-custom-parameters
             - test-osx
