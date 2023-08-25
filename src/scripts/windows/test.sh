@@ -1,6 +1,6 @@
 #!/bin/false
 # shellcheck shell=bash
-# shellcheck disable=SC2154
+# shellcheck disable=SC2154,SC2016
 
 trap_exit() {
   local exit_status="$?"
@@ -16,11 +16,25 @@ trap_exit() {
 }
 trap trap_exit EXIT
 
-# Add the build target and build name in the environment variables.
+# Add necessary values in the environment variables.
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('TEST_PLATFORM','$PARAM_TEST_PLATFORM', [System.EnvironmentVariableTarget]::Machine)"
+docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('CUSTOM_PARAMS','$custom_parameters', [System.EnvironmentVariableTarget]::Machine)"
+
+test_args=(
+  '-batchmode'
+  '-nographics'
+  '-projectPath $Env:PROJECT_PATH'
+  '-runTests'
+  '-testPlatform $Env:TEST_PLATFORM'
+  '-testResults "C:/test/results.xml"'
+)
+
+[ -n "$custom_parameters" ] && test_args+=( '$Env:CUSTOM_PARAMS.split()' )
 
 # Run the tests.
-docker exec "$CONTAINER_NAME" powershell '& "C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe" -batchmode -nographics -projectPath $Env:PROJECT_PATH -runTests -testPlatform $Env:TEST_PLATFORM -testResults "C:/test/results.xml" -logfile | Out-Host'
+set -x
+docker exec "$CONTAINER_NAME" powershell "& 'C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe' ${test_args[*]} -logfile | Out-Host"
+set +x
 
 # Install JDK to run Saxon.
 docker exec "$CONTAINER_NAME" powershell 'choco upgrade jdk8 --no-progress -y'

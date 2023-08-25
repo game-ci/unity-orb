@@ -71,6 +71,7 @@ parse_xml_to_junit() {
 
 set -x
 # Run the tests.
+# shellcheck disable=SC2086 # $custom_parameters needs to be unquoted. Otherwise it will be treated as a single parameter.
 "$UNITY_EDITOR_PATH" \
   -batchmode \
   -nographics \
@@ -78,7 +79,8 @@ set -x
   -runTests \
   -testPlatform "$PARAM_TEST_PLATFORM" \
   -testResults "$base_dir/results.xml" \
-  -logfile /dev/stdout
+  -logfile /dev/stdout \
+  $custom_parameters
 
 unity_exit_code=$?
 set +x
