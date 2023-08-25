@@ -43,7 +43,7 @@ package_manifest_path="$unity_project_full_path/Packages/manifest.json"
 
 # Check if the Code Coverage package is installed and move the coverage results to the root of the project.
 if grep -q "$code_coverage_package" "$package_manifest_path"; then
-  cat "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/Report/Summary.xml | grep Linecoverage
+  grep "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/Report/Summary.xml Linecoverage
   mv "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/"$CIRCLE_PROJECT_REPONAME"-opencov/*Mode/TestCoverageResults_*.xml "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/coverage.xml
   rm -r "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/"$CIRCLE_PROJECT_REPONAME"-opencov/
 else
