@@ -26,7 +26,7 @@ parameters:
     enum: [ small, medium, medium+, large, xlarge, 2xlarge, 2xlarge+ ]
 
 docker:
-  - image: 'unityci/editor:ubuntu-<<parameters.editor_version>>-<<parameters.target_platform>>-1'
+  - image: 'unityci/editor:ubuntu-<<parameters.editor_version>>-<<parameters.target_platform>>-2'
     environment:
       - GAMECI_EDITOR_VERSION=<< parameters.editor_version >>
       - GAMECI_TARGET_PLATFORM=<< parameters.target_platform >>
