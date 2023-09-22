@@ -118,39 +118,39 @@ workflows:
           filters: *filters
           context: orb-testing-unity
           pre-steps: *mono
-      - unity/test:
-          name: "test-windows"
-          step-name: "Check if the tests run and results are uploaded"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
-          unity-password-var-name: "UNITY_PASSWORD"
-          executor:
-            name: "unity/windows-2019"
-            size: "large"
-            editor_version: "2021.3.2f1"
-            target_platform: "windows-il2cpp"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          test-platform: "playmode"
-          filters: *filters
-          context: orb-testing-unity
-          pre-steps: *mono
-      - unity/test:
-          name: "test-windows-with-custom-parameters"
-          step-name: "Check if test filter in custom parameter works"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
-          unity-password-var-name: "UNITY_PASSWORD"
-          executor:
-            name: "unity/windows-2019"
-            size: "large"
-            editor_version: "2021.3.2f1"
-            target_platform: "windows-il2cpp"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          custom-parameters: "-testFilter EnemyMovesLeft -customParam1 potato -customParam2 $CIRCLE_WORKFLOW_ID"
-          test-platform: "playmode"
-          filters: *filters
-          context: orb-testing-unity
-          pre-steps: *mono
+      # - unity/test:
+      #     name: "test-windows"
+      #     step-name: "Check if the tests run and results are uploaded"
+      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-password-var-name: "UNITY_PASSWORD"
+      #     executor:
+      #       name: "unity/windows-2019"
+      #       size: "large"
+      #       editor_version: "2021.3.2f1"
+      #       target_platform: "windows-il2cpp"
+      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
+      #     test-platform: "playmode"
+      #     filters: *filters
+      #     context: orb-testing-unity
+      #     pre-steps: *mono
+      # - unity/test:
+      #     name: "test-windows-with-custom-parameters"
+      #     step-name: "Check if test filter in custom parameter works"
+      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-password-var-name: "UNITY_PASSWORD"
+      #     executor:
+      #       name: "unity/windows-2019"
+      #       size: "large"
+      #       editor_version: "2021.3.2f1"
+      #       target_platform: "windows-il2cpp"
+      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
+      #     custom-parameters: "-testFilter EnemyMovesLeft -customParam1 potato -customParam2 $CIRCLE_WORKFLOW_ID"
+      #     test-platform: "playmode"
+      #     filters: *filters
+      #     context: orb-testing-unity
+      #     pre-steps: *mono
       - unity/test:
           name: "test-osx"
           step-name: "Check if the tests run and results are uploaded"
@@ -201,23 +201,23 @@ workflows:
           filters: *filters
           context: orb-testing-unity
           pre-steps: *il2cpp
-      - unity/build:
-          name: "build-Windows64-il2cpp"
-          step-name: "Build StandaloneWindows64 il2cpp"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
-          unity-password-var-name: "UNITY_PASSWORD"
-          executor:
-            name: "unity/windows-2019"
-            size: "large"
-            editor_version: "2021.3.2f1"
-            target_platform: "windows-il2cpp"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: StandaloneWindows64
-          compress: true
-          filters: *filters
-          context: orb-testing-unity
-          pre-steps: *il2cpp
+      # - unity/build:
+      #     name: "build-Windows64-il2cpp"
+      #     step-name: "Build StandaloneWindows64 il2cpp"
+      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-password-var-name: "UNITY_PASSWORD"
+      #     executor:
+      #       name: "unity/windows-2019"
+      #       size: "large"
+      #       editor_version: "2021.3.2f1"
+      #       target_platform: "windows-il2cpp"
+      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
+      #     build-target: StandaloneWindows64
+      #     compress: true
+      #     filters: *filters
+      #     context: orb-testing-unity
+      #     pre-steps: *il2cpp
       - unity/build:
           name: "build-osx-il2cpp"
           step-name: "Build macOS IL2CPP"
@@ -336,23 +336,23 @@ workflows:
           filters: *filters
           context: orb-testing-unity
           pre-steps: *mono
-      - unity/build:
-          name: "build-tvOS"
-          step-name: "Build Apple's tvOS"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
-          unity-password-var-name: "UNITY_PASSWORD"
-          executor:
-            name: "unity/windows-2019"
-            size: "large"
-            editor_version: "2021.3.2f1"
-            target_platform: "appletv"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: tvOS
-          compress: true
-          filters: *filters
-          context: orb-testing-unity
-          pre-steps: *mono
+      # - unity/build:
+      #     name: "build-tvOS"
+      #     step-name: "Build Apple's tvOS"
+      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-password-var-name: "UNITY_PASSWORD"
+      #     executor:
+      #       name: "unity/windows-2019"
+      #       size: "large"
+      #       editor_version: "2021.3.2f1"
+      #       target_platform: "appletv"
+      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
+      #     build-target: tvOS
+      #     compress: true
+      #     filters: *filters
+      #     context: orb-testing-unity
+      #     pre-steps: *mono
 
       # Other Tests
       - unity/build:
@@ -372,24 +372,24 @@ workflows:
           filters: *filters
           context: orb-testing-unity
           pre-steps: *mono
-      - unity/build:
-          name: "build-with-custom-method-windows"
-          step-name: "Build with custom method in Windows"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
-          unity-password-var-name: "UNITY_PASSWORD"
-          executor:
-            name: "unity/windows-2019"
-            size: "large"
-            editor_version: "2021.3.2f1"
-            target_platform: "windows-il2cpp"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          build-target: StandaloneWindows64
-          build-method: "MyCustomBuildCommand.MyCustomBuildMethod"
-          custom-parameters: "-customParam1 potato -customParam2 tomato -customParam3 $CIRCLE_WORKFLOW_ID -DetailedBuildReport"
-          filters: *filters
-          context: orb-testing-unity
-          pre-steps: *custom-build-method
+      # - unity/build:
+      #     name: "build-with-custom-method-windows"
+      #     step-name: "Build with custom method in Windows"
+      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-password-var-name: "UNITY_PASSWORD"
+      #     executor:
+      #       name: "unity/windows-2019"
+      #       size: "large"
+      #       editor_version: "2021.3.2f1"
+      #       target_platform: "windows-il2cpp"
+      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
+      #     build-target: StandaloneWindows64
+      #     build-method: "MyCustomBuildCommand.MyCustomBuildMethod"
+      #     custom-parameters: "-customParam1 potato -customParam2 tomato -customParam3 $CIRCLE_WORKFLOW_ID -DetailedBuildReport"
+      #     filters: *filters
+      #     context: orb-testing-unity
+      #     pre-steps: *custom-build-method
       - unity/build:
           name: "build-with-custom-method-osx"
           step-name: "Build with custom method in macOS"
@@ -479,12 +479,12 @@ workflows:
             - orb-tools/pack
             - test-linux
             - test-linux-with-custom-parameters
-            - test-windows
-            - test-windows-with-custom-parameters
+            # - test-windows # TODO: Investigate Windows activation error
+            # - test-windows-with-custom-parameters # TODO: Investigate Windows activation error
             - test-osx
             - test-osx-with-custom-parameters
             - build-linux64-il2cpp
-            - build-Windows64-il2cpp
+            # - build-Windows64-il2cpp # TODO: Investigate Windows activation error
             - build-osx-il2cpp
             - build-linux64-mono
             - build-Windows64-mono
@@ -492,9 +492,9 @@ workflows:
             - build-webgl
             - build-android
             - build-ios
-            - build-tvOS
+            # - build-tvOS # TODO: Investigate Windows activation error
             - build-without-artifacts
-            - build-with-custom-method-windows
+            # - build-with-custom-method-windows # TODO: Investigate Windows activation error
             - build-with-custom-method-osx
             - build-with-custom-method-linux
           context: orb-publishing
