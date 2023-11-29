@@ -77,6 +77,4 @@ steps:
         PARAM_PROJECT_PATH: << parameters.project-path >>
         SCRIPT_UTILS: << include(scripts/utils.sh) >>
       command: << include(scripts/set-gitcredential.sh) >>
-      - when:
-          condition: << params.git-private-token-var-name >>
 
