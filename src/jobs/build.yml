@@ -35,7 +35,7 @@ parameters:
       Required if you have a Personal license.
   git-private-token-var-name:
     type: env_var_name
-    default: ""
+    default: "GIT_PRIVATE_TOKEN"
     description: |
       Enter your Github PAT that you want to pass to the credential manager
   project-path:
