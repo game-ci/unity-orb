@@ -19,7 +19,7 @@ else
 fi
 
 echo "---------- git config --list -------------"
-git config --list
+git --no-pager config --list
 
 echo "---------- git config --list --show-origin -------------"
-git config --list --show-origin
+git --no-pager config --list --show-origin

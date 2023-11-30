@@ -12,7 +12,6 @@ detect-os
 
 # Expand environment name variable parameters.
 readonly git_private_token="${!PARAM_GIT_PRIVATE_TOKEN}"
-readonly CONTAINER_NAME="${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BUILD_NUM}"
 
 if [ "$PLATFORM" = "linux" ]; then eval "$SCRIPT_GIT_CREDENTIAL_LINUX";
 elif [ "$PLATFORM" = "macos" ]; then eval "$SCRIPT_GIT_CREDENTIAL_MACOS";

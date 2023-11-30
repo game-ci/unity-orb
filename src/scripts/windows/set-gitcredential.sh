@@ -47,7 +47,7 @@ else
 fi
 
 echo "---------- git config --list -------------"
-docker exec "$CONTAINER_NAME" "git config --list"
+docker exec "$CONTAINER_NAME" "git --no-pager config --list"
 
 echo "---------- git config --list --show-origin -------------"
-docker exec "$CONTAINER_NAME" "git config --list --show-origin"
+docker exec "$CONTAINER_NAME" "git --no-pager config --list --show-origin"
