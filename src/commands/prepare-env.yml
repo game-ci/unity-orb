@@ -24,6 +24,11 @@ parameters:
     description: |
       Enter the name of the environment variable containing your Unity license file encoded in base64.
       Required if you have a Personal license.
+  git-private-token-var-name:
+    type: env_var_name
+    default: "GIT_PRIVATE_TOKEN"
+    description: |
+      Enter your Github PAT that you want to pass to the credential manager
   cache-version:
     type: string
     default: "v1"
@@ -64,3 +69,15 @@ steps:
         SCRIPT_PREPARE_ENV_MACOS: << include(scripts/macos/prepare-env.sh) >>
         SCRIPT_UTILS: << include(scripts/utils.sh) >>
       command: << include(scripts/prepare-env.sh) >>
+  - run:
+      name: Set Git Credentials
+      no_output_timeout: << parameters.no_output_timeout >>
+      environment:
+        PARAM_GIT_PRIVATE_TOKEN: << parameters.git-private-token-var-name >>
+        PARAM_PROJECT_PATH: << parameters.project-path >>
+        SCRIPT_UTILS: << include(scripts/utils.sh) >>
+        SCRIPT_GIT_CREDENTIAL_LINUX: << include(scripts/linux/set-gitcredential.sh) >>
+        SCRIPT_GIT_CREDENTIAL_WINDOWS: << include(scripts/windows/set-gitcredential.sh) >>
+        SCRIPT_GIT_CREDENTIAL_MACOS: << include(scripts/macos/set-gitcredential.sh) >>
+      command: << include(scripts/set-gitcredential.sh) >>
+

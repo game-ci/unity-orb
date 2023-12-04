@@ -30,3 +30,12 @@ We welcome [issues](https://github.com/game-ci/unity-orb/issues) to and [pull re
 5. Now ensure the version tag selected is semantically accurate based on the changes included.
 6. Click _"Publish Release"_.
     - This will push a new tag and trigger your publishing pipeline on CircleCI.
+
+### Manual Deploy
+If you want a private orb for your build env. The following steps allow you to do so. These are adapted from the CircleCI
+[Manual Orb Authoring Process](https://circleci.com/docs/orb-author-validate-publish/#publish-your-orb)
+1. `circleci namespace create <name> --org-id <your-organization-id>`
+2. `circleci orb create <my-namespace>/<my-orb-name> --private`
+3. `circleci orb pack src > unity-orb.yml`
+4. `circleci orb publish unity-orb.yml <my-namespace>/<my-orb-name>@dev:first`
+5. `circleci orb publish promote <my-namespace>/<my-orb-name>@dev:first patch`

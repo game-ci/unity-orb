@@ -33,6 +33,11 @@ parameters:
     description: |
       Enter the name of the environment variable containing your Unity license file encoded in base64.
       Required if you have a Personal license.
+  git-private-token-var-name:
+    type: env_var_name
+    default: "GIT_PRIVATE_TOKEN"
+    description: |
+      Enter your Github PAT that you want to pass to the credential manager
   project-path:
     type: string
     default: "."
@@ -113,6 +118,7 @@ steps:
       unity-password-var-name: << parameters.unity-password-var-name >>
       unity-serial-var-name: << parameters.unity-serial-var-name >>
       unity-license-var-name: << parameters.unity-license-var-name >>
+      git-private-token-var-name: << parameters.git-private-token-var-name >>
       project-path: <<parameters.project-path>>
       no_output_timeout: << parameters.no_output_timeout>>
   - build:
