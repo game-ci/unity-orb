@@ -62,6 +62,10 @@ if ! resolve_unity_license; then
   exit 1
 fi
 
+# We need to set the build target for a keystore to be created
+readonly BUILD_TARGET="$build_target"
+export BUILD_TARGET
+
 # Download before_script.sh from GameCI.
 curl --silent --location \
   --request GET \
