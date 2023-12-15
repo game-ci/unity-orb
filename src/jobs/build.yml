@@ -113,6 +113,10 @@ steps:
         git submodule sync
         git submodule update --init
       condition: << parameters.fetch-submodules >>
+  - run:
+      command: |
+        echo "this is the build cmd"
+        echo "<<parameters.build-target>>"
   - prepare-env:
       unity-username-var-name: << parameters.unity-username-var-name >>
       unity-password-var-name: << parameters.unity-password-var-name >>

@@ -62,6 +62,10 @@ steps:
         - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}-<</ parameters.include-branch-in-cache-key >>{{ checksum "<< parameters.project-path >>/Packages/packages-lock.json" }}
         - unity-deps-{{ arch }}-<< parameters.cache-version >>-<<# parameters.include-branch-in-cache-key >>{{ .Branch }}<</ parameters.include-branch-in-cache-key >>
   - run:
+      command: |
+        echo "this is prepare-env"
+        echo << parameters.build-target >>
+  - run:
       name: Prepare the environment
       no_output_timeout: << parameters.no_output_timeout >>
       environment:

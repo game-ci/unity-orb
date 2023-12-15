@@ -63,23 +63,51 @@ if ! resolve_unity_license; then
 fi
 
 # We need to set the build target for a keystore to be created
-readonly BUILD_TARGET="$build_target"
-export BUILD_TARGET
-
-# Download before_script.sh from GameCI.
-curl --silent --location \
-  --request GET \
-  --url "https://gitlab.com/game-ci/unity3d-gitlab-ci-example/-/raw/main/ci/before_script.sh" \
-  --header 'Accept: application/vnd.github.v3+json' \
-  --output "$base_dir/before_script.sh"
-
-chmod +x "$base_dir/before_script.sh"
-
 # Nomenclature required by the script.
-readonly UNITY_LICENSE="$unity_license"
 
+echo "1846362 BUILD TARGET"
+readonly BUILD_TARGET="$PARAM_BUILD_TARGET"
+export BUILD_TARGET
+echo $BUILD_TARGET
+
+echo "9999 ANDROID_APP_BUNDLE is "
+echo $ANDROID_APP_BUNDLE
+
+readonly UNITY_LICENSE="$unity_license"
 export UNITY_LICENSE
 
-# Run the test script.
-# shellcheck source=/dev/null
-source "$base_dir/before_script.sh"
+set -e
+set -x
+mkdir -p /root/.cache/unity3d
+mkdir -p /root/.local/share/unity3d/Unity/
+set +x
+
+unity_license_destination=/root/.local/share/unity3d/Unity/Unity_lic.ulf
+android_keystore_destination=keystore.keystore
+
+echo "here 1"
+upper_case_build_target=${BUILD_TARGET^^};
+
+echo "here 2"
+
+if [ "$upper_case_build_target" = "ANDROID" ]
+    if [ -n "$ANDROID_KEYSTORE_BASE64" ]
+    then
+        echo "'\$ANDROID_KEYSTORE_BASE64' found, decoding content into ${android_keystore_destination}"
+        echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > ${android_keystore_destination}
+    else
+        echo '$ANDROID_KEYSTORE_BASE64'" env var not found, building with Unity's default debug keystore"
+    fi
+fi
+
+echo "here 3"
+
+if [ -n "$UNITY_LICENSE" ]
+then
+    echo "Writing '\$UNITY_LICENSE' to license file ${unity_license_destination}"
+    echo "${UNITY_LICENSE}" | tr -d '\r' > ${unity_license_destination}
+else
+    echo "'\$UNITY_LICENSE' env var not found"
+fi
+
+echo "done"
