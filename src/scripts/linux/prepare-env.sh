@@ -90,24 +90,22 @@ upper_case_build_target=${BUILD_TARGET^^};
 
 echo "here 2"
 
-if [ "$upper_case_build_target" = "ANDROID" ]
-    if [ -n "$ANDROID_KEYSTORE_BASE64" ]
-    then
-        echo "'\$ANDROID_KEYSTORE_BASE64' found, decoding content into ${android_keystore_destination}"
+if [ "$upper_case_build_target" = "ANDROID" ]; then
+    if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+        echo "ANDROID_KEYSTORE_BASE64 env found, decoding content into ${android_keystore_destination}"
         echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > ${android_keystore_destination}
     else
-        echo '$ANDROID_KEYSTORE_BASE64'" env var not found, building with Unity's default debug keystore"
+        echo "ANDROID_KEYSTORE_BASE64 env var not found, building with Unity's default debug keystore"
     fi
 fi
 
 echo "here 3"
 
-if [ -n "$UNITY_LICENSE" ]
-then
-    echo "Writing '\$UNITY_LICENSE' to license file ${unity_license_destination}"
+if [ -n "$UNITY_LICENSE" ]; then
+    echo "Writing 'UNITY_LICENSE' to license file ${unity_license_destination}"
     echo "${UNITY_LICENSE}" | tr -d '\r' > ${unity_license_destination}
 else
-    echo "'\$UNITY_LICENSE' env var not found"
+    echo "'UNITY_LICENSE' env var not found"
 fi
 
 echo "done"
