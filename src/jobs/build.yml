@@ -102,7 +102,14 @@ parameters:
       Use it to pass arguments defined on your custom "build-method" or Unity's build options. Environment variables are supported.
       The parameters must be separated by space and must be in the format "-key value" or "-key" for booleans.
       Example: "-customArg1 WebGL -EnableHeadlessMode -customArg2 $CIRCLE_WORKFLOW_ID".
-
+  before-steps:
+    type: steps
+    description: A set of steps that runs before the build
+    default: []
+  after-steps:
+    type: steps
+    description: A set of steps that runs after the build
+    default: []
 executor: << parameters.executor >>
 
 steps:
@@ -117,6 +124,7 @@ steps:
       command: |
         echo "this is the build cmd"
         echo "<<parameters.build-target>>"
+  - steps: << parameters.before-steps >>
   - prepare-env:
       unity-username-var-name: << parameters.unity-username-var-name >>
       unity-password-var-name: << parameters.unity-password-var-name >>
@@ -143,3 +151,4 @@ steps:
         - return-license:
             unity-username-var-name: << parameters.unity-username-var-name >>
             unity-password-var-name: << parameters.unity-password-var-name >>
+  - steps: << parameters.after-steps >>  
