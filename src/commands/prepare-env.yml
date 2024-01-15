@@ -91,4 +91,3 @@ steps:
         SCRIPT_GIT_CREDENTIAL_WINDOWS: << include(scripts/windows/set-gitcredential.sh) >>
         SCRIPT_GIT_CREDENTIAL_MACOS: << include(scripts/macos/set-gitcredential.sh) >>
       command: << include(scripts/set-gitcredential.sh) >>
-
