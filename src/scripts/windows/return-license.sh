@@ -4,13 +4,13 @@
 
 trap_exit() {
     local exit_status="$?"
-    
+
     if [ "$exit_status" -ne 0 ]; then
         printf '%s\n' 'The script did not complete successfully.'
-        
+
         printf '%s\n' "Removing the container \"$CONTAINER_NAME\"."
         docker rm -f "$CONTAINER_NAME" &> /dev/null || true
-        
+
         exit "$exit_status"
     fi
 }
@@ -28,8 +28,8 @@ if [ -z "$running_builds" ]; then
     --volume "C:/Program Files (x86)/Microsoft Visual Studio":"C:/Program Files (x86)/Microsoft Visual Studio" \
     --volume "C:/Program Files (x86)/Windows Kits":"C:/Program Files (x86)/Windows Kits" \
     --volume "C:/ProgramData/Microsoft/VisualStudio":"C:/ProgramData/Microsoft/VisualStudio" \
-    "unityci/editor:windows-${GAMECI_EDITOR_VERSION}-${GAMECI_TARGET_PLATFORM}-2" \
-    powershell 
+    "unityci/editor:windows-${GAMECI_EDITOR_VERSION}-${GAMECI_TARGET_PLATFORM}-1" \
+    powershell
 fi
 
 set -x
