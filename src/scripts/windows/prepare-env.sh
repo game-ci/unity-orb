@@ -119,6 +119,26 @@ docker run -dit \
 
 set +x
 
+echo "Get SharedSection registry"
+docker exec "$container_name" powershell "Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\SubSystems' -Name 'Windows'"
+
+# This fixes the "Failed to get ipc connection from UnityShaderCompiler.exe shader compiler" error
+echo "Increase the size of the desktop heap from 768 KB to 2048 KB"
+docker exec "$container_name" powershell -Command "& {
+    \$currentValue = (Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\SubSystems' -Name Windows).Windows;
+    \$parts = \$currentValue -split ' ';
+    \$sharedSectionIndex = [Array]::IndexOf(\$parts, (\$parts -match 'SharedSection=')[0]);
+    \$parts[\$sharedSectionIndex] = 'SharedSection=1024,20480,2048';
+    \$modifiedValue = \$parts -join ' ';
+    Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\SubSystems' -Name Windows -Value \$modifiedValue;
+}"
+
+echo "Restarting the Docker container to apply changes"
+docker restart "$container_name"
+
+echo "Get SharedSection registry after update"
+docker exec "$container_name" powershell "Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\SubSystems' -Name 'Windows'"
+
 # Register the Windows SDK and VCC Tools.
 docker exec "$container_name" powershell 'reg import C:\regkeys\winsdk.reg'
 docker exec "$container_name" powershell 'regsvr32 /s C:\ProgramData\Microsoft\VisualStudio\Setup\x64\Microsoft.VisualStudio.Setup.Configuration.Native.dll'
