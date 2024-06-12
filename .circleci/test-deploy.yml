@@ -160,7 +160,7 @@ workflows:
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
-            resource_class: "large"
+            resource_class: "macos.m1.medium.gen1"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           test-platform: "playmode"
           filters: *filters
@@ -175,7 +175,7 @@ workflows:
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
-            resource_class: "large"
+            resource_class: "macos.m1.medium.gen1"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           custom-parameters: "-testFilter EnemyMovesLeft -customParam1 potato -customParam2 $CIRCLE_WORKFLOW_ID"
           test-platform: "playmode"
@@ -227,7 +227,7 @@ workflows:
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
-            resource_class: "large"
+            resource_class: "macos.m1.medium.gen1"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneOSX
           compress: true
@@ -399,7 +399,7 @@ workflows:
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
-            resource_class: "large"
+            resource_class: "macos.m1.medium.gen1"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneOSX
           build-method: "MyCustomBuildCommand.MyCustomBuildMethod"
