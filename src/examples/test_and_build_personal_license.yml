@@ -87,7 +87,7 @@ usage:
             executor:
               name: 'unity/macos'
               editor_version: '2022.3.33f1'
-              resource_class: 'large'
+              resource_class: 'macos.m1.medium.gen1'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             test-platform: 'playmode'
             context: unity
@@ -99,7 +99,7 @@ usage:
             unity-password-var-name: 'UNITY_PASSWORD'
             executor:
               name: 'unity/macos'
-              resource_class: "large"
+              resource_class: "macos.m1.medium.gen1"
               editor_version: '2022.3.33f1'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             build-target: StandaloneOSX
