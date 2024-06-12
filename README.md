@@ -17,6 +17,7 @@ Easily build and test your Unity project.
 We welcome [issues](https://github.com/game-ci/unity-orb/issues) to and [pull requests](https://github.com/game-ci/unity-orb/pulls) against this repository!
 
 ### How to Publish An Update
+
 1. Merge pull requests with desired changes to the main branch.
     - For the best experience, squash-and-merge and use [Conventional Commit Messages](https://conventionalcommits.org/).
 2. Find the current version of the orb.
@@ -30,3 +31,16 @@ We welcome [issues](https://github.com/game-ci/unity-orb/issues) to and [pull re
 5. Now ensure the version tag selected is semantically accurate based on the changes included.
 6. Click _"Publish Release"_.
     - This will push a new tag and trigger your publishing pipeline on CircleCI.
+
+### Manual Deploy
+
+If you want a private orb for your build env. The following steps allow you to do so. These are adapted from the CircleCI
+[Manual Orb Authoring Process](https://circleci.com/docs/orb-author-validate-publish/#publish-your-orb)
+
+```bash
+circleci namespace create <name> --org-id <your-organization-id>
+circleci orb create <my-namespace>/<my-orb-name> --private
+circleci orb pack src > unity-orb.yml
+circleci orb publish unity-orb.yml <my-namespace>/<my-orb-name>@dev:first
+circleci orb publish promote <my-namespace>/<my-orb-name>@dev:first patch
+```
