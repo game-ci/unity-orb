@@ -21,7 +21,7 @@ parameters:
       Pick the Xcode version.
       Available options can be found at https://circleci.com/docs/using-macos#supported-xcode-versions.
     type: string
-    default: 13.4.1
+    default: 15.3.0
 
 macos:
   xcode: << parameters.xcode_version >>
