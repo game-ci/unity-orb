@@ -7,7 +7,7 @@ parameters:
       Pick the editor version for the GameCI image.
       Available options can be found at https://game.ci/docs/docker/versions.
     type: string
-    default: "2021.3.7f1"
+    default: "2022.3.33f1"
 
 docker:
   - image: 'unityci/editor:ubuntu-<<parameters.editor_version>>-base-3'

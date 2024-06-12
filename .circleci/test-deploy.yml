@@ -94,7 +94,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "linux-il2cpp"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           test-platform: "playmode"
@@ -110,7 +110,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "linux-il2cpp"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           custom-parameters: "-testFilter EnemyMovesLeft -customParam1 potato -customParam2 $CIRCLE_WORKFLOW_ID"
@@ -127,7 +127,7 @@ workflows:
       #     executor:
       #       name: "unity/windows-2019"
       #       size: "large"
-      #       editor_version: "2021.3.2f1"
+      #       editor_version: "2022.3.33f1"
       #       target_platform: "windows-il2cpp"
       #     project-path: "Unity2D-Demo-Game-CI-CD/src"
       #     test-platform: "playmode"
@@ -143,7 +143,7 @@ workflows:
       #     executor:
       #       name: "unity/windows-2019"
       #       size: "large"
-      #       editor_version: "2021.3.2f1"
+      #       editor_version: "2022.3.33f1"
       #       target_platform: "windows-il2cpp"
       #     project-path: "Unity2D-Demo-Game-CI-CD/src"
       #     custom-parameters: "-testFilter EnemyMovesLeft -customParam1 potato -customParam2 $CIRCLE_WORKFLOW_ID"
@@ -159,7 +159,7 @@ workflows:
           unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/macos"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           test-platform: "playmode"
@@ -174,7 +174,7 @@ workflows:
           unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/macos"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           custom-parameters: "-testFilter EnemyMovesLeft -customParam1 potato -customParam2 $CIRCLE_WORKFLOW_ID"
@@ -193,7 +193,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "linux-il2cpp"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
@@ -210,7 +210,7 @@ workflows:
       #     executor:
       #       name: "unity/windows-2019"
       #       size: "large"
-      #       editor_version: "2021.3.2f1"
+      #       editor_version: "2022.3.33f1"
       #       target_platform: "windows-il2cpp"
       #     project-path: "Unity2D-Demo-Game-CI-CD/src"
       #     build-target: StandaloneWindows64
@@ -226,7 +226,7 @@ workflows:
           unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/macos"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneOSX
@@ -245,7 +245,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "base"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
@@ -262,7 +262,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "windows-mono"
-            editor_version: "2021.3.2f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "StandaloneWindows64"
@@ -278,7 +278,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "mac-mono"
-            editor_version: "2021.3.2f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "StandaloneOSX"
@@ -296,7 +296,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "webgl"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "WebGL"
@@ -313,7 +313,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "android"
-            editor_version: "2021.3.2f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "Android"
@@ -329,7 +329,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "ios"
-            editor_version: "2021.3.2f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: "iOS"
@@ -345,7 +345,7 @@ workflows:
       #     executor:
       #       name: "unity/windows-2019"
       #       size: "large"
-      #       editor_version: "2021.3.2f1"
+      #       editor_version: "2022.3.33f1"
       #       target_platform: "appletv"
       #     project-path: "Unity2D-Demo-Game-CI-CD/src"
       #     build-target: tvOS
@@ -364,7 +364,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "base"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
@@ -381,7 +381,7 @@ workflows:
       #     executor:
       #       name: "unity/windows-2019"
       #       size: "large"
-      #       editor_version: "2021.3.2f1"
+      #       editor_version: "2022.3.33f1"
       #       target_platform: "windows-il2cpp"
       #     project-path: "Unity2D-Demo-Game-CI-CD/src"
       #     build-target: StandaloneWindows64
@@ -398,7 +398,7 @@ workflows:
           unity-password-var-name: "UNITY_PASSWORD"
           executor:
             name: "unity/macos"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneOSX
@@ -416,7 +416,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "linux-il2cpp"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
@@ -435,7 +435,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "base"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
@@ -456,7 +456,7 @@ workflows:
           executor:
             name: "unity/ubuntu"
             target_platform: "base"
-            editor_version: "2021.3.1f1"
+            editor_version: "2022.3.33f1"
             resource_class: "large"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneLinux64
