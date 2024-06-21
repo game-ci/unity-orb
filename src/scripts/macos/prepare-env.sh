@@ -44,7 +44,7 @@ check_and_install_unity_editor() {
       changeset="$(npx unity-changeset "$UNITY_EDITOR_VERSION")"
 
       set -x
-      "$unity_hub_path" -- --headless install --version "$UNITY_EDITOR_VERSION" --changeset "$changeset" --module mac-il2cpp --childModules
+      arch -x86_64 "$unity_hub_path" -- --headless install --version "$UNITY_EDITOR_VERSION" --changeset "$changeset" --module mac-il2cpp --childModules
       set +x
 
       if [ -f "$unity_editor_path" ]; then
@@ -139,7 +139,7 @@ sudo chmod -R 777 "$unity_license_file_path"
 
 # Activate the Unity Editor.
 set -x
-"$unity_editor_path" \
+arch -x86_64 "$unity_editor_path" \
   -batchmode \
   -quit \
   -nographics \
