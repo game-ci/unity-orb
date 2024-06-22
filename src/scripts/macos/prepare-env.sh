@@ -8,6 +8,21 @@ readonly unity_editor_path="/Applications/Unity/Hub/Editor/$UNITY_EDITOR_VERSION
 printf '%s\n' "export UNITY_HUB_PATH=\"$unity_hub_path\"" >> "$BASH_ENV"
 printf '%s\n' "export UNITY_EDITOR_PATH=$unity_editor_path" >> "$BASH_ENV"
 
+check_and_install_rosetta() {
+  if ! /usr/bin/pgrep oahd &> /dev/null; then
+    echo "Rosetta 2 is not installed. Installing it now..."
+    softwareupdate --install-rosetta --agree-to-license
+    if [ $? -eq 0 ]; then
+      echo "Rosetta 2 installed successfully."
+    else
+      echo "Failed to install Rosetta 2."
+      exit 1
+    fi
+  else
+    echo "Rosetta 2 is already installed."
+  fi
+}
+
 check_and_install_unity_hub() {
   if [ ! -f "$unity_hub_path" ]; then
     printf '%s\n' "Could not find Unity Hub at \"$unity_hub_path\"."
@@ -44,7 +59,7 @@ check_and_install_unity_editor() {
       changeset="$(npx unity-changeset "$UNITY_EDITOR_VERSION")"
 
       set -x
-      arch -x86_64 "$unity_hub_path" -- --headless install --version "$UNITY_EDITOR_VERSION" --changeset "$changeset" --module mac-il2cpp --childModules
+      arch -x86_64 "$unity_hub_path" -- --headless install --version "$UNITY_EDITOR_VERSION" --changeset "$changeset" --module mac-il2cpp --childModules  -a arm64
       set +x
 
       if [ -f "$unity_editor_path" ]; then
@@ -117,6 +132,9 @@ extract_serial_from_license() {
   if [ -n "$decoded_unity_serial" ]; then return 0; else return 1; fi
 }
 
+# Check and install Rosetta 2 if not already installed.
+check_and_install_rosetta
+
 # Install the Editor if not already installed.
 if ! check_and_install_unity_editor; then
   printf '%s\n' "Something went wrong."
@@ -139,7 +157,7 @@ sudo chmod -R 777 "$unity_license_file_path"
 
 # Activate the Unity Editor.
 set -x
-arch -x86_64 "$unity_editor_path" \
+"$unity_editor_path" \
   -batchmode \
   -quit \
   -nographics \
