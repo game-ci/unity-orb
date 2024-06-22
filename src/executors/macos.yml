@@ -15,7 +15,7 @@ parameters:
       For details on resource class availability, see https://circleci.com/docs/using-macos#available-resource-classes.
     type: enum
     default: macos.m1.medium.gen1
-    enum: [ medium, macos.m1.medium.gen1, large, macos.m1.large.gen1 ]
+    enum: [ macos.m1.medium.gen1, macos.m1.large.gen1 ]
   xcode_version:
     description: |
       Pick the Xcode version.
