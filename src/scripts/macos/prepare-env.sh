@@ -59,7 +59,7 @@ check_and_install_unity_editor() {
       changeset="$(npx unity-changeset "$UNITY_EDITOR_VERSION")"
 
       set -x
-      arch -x86_64 "$unity_hub_path" -- --headless install --version "$UNITY_EDITOR_VERSION" --changeset "$changeset" --module mac-il2cpp --childModules  -a arm64
+      arch -x86_64 "$unity_hub_path" -- --headless install --version "$UNITY_EDITOR_VERSION" --changeset "$changeset" --module mac-il2cpp --childModules -a arm64
       set +x
 
       if [ -f "$unity_editor_path" ]; then
