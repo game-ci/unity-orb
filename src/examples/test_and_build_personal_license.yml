@@ -7,7 +7,7 @@ usage:
   version: 2.1
 
   orbs:
-    unity: game-ci/unity@1.3.0
+    unity: game-ci/unity@1.8.0
 
   workflows:
     test-build-with-executors:
@@ -23,7 +23,7 @@ usage:
             executor:
               name: 'unity/ubuntu'
               target_platform: 'linux-il2cpp'
-              editor_version: '2021.3.1f1'
+              editor_version: '2022.3.33f1'
               resource_class: 'medium'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             test-platform: 'playmode'
@@ -37,7 +37,7 @@ usage:
             executor:
               name: 'unity/ubuntu'
               target_platform: 'linux-il2cpp'
-              editor_version: '2021.3.1f1'
+              editor_version: '2022.3.33f1'
               resource_class: 'large'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             build-target: StandaloneLinux64
@@ -55,7 +55,7 @@ usage:
             executor:
               name: 'unity/windows-2022'
               size: 'large'
-              editor_version: '2021.3.2f1'
+              editor_version: '2022.3.33f1'
               target_platform: 'windows-il2cpp'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             test-platform: 'playmode'
@@ -69,7 +69,7 @@ usage:
             executor:
               name: 'unity/windows-2019'
               size: 'large'
-              editor_version: '2021.3.2f1'
+              editor_version: '2022.3.33f1'
               target_platform: 'windows-il2cpp'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             build-target: StandaloneWindows64
@@ -86,8 +86,8 @@ usage:
             unity-password-var-name: 'UNITY_PASSWORD'
             executor:
               name: 'unity/macos'
-              editor_version: '2021.3.1f1'
-              resource_class: 'large'
+              editor_version: '2022.3.33f1'
+              resource_class: 'macos.m1.medium.gen1'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             test-platform: 'playmode'
             context: unity
@@ -99,8 +99,8 @@ usage:
             unity-password-var-name: 'UNITY_PASSWORD'
             executor:
               name: 'unity/macos'
-              resource_class: "large"
-              editor_version: '2021.3.2f1'
+              resource_class: "macos.m1.medium.gen1"
+              editor_version: '2022.3.33f1'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             build-target: StandaloneOSX
             compress: true
