@@ -2,9 +2,9 @@ description: >
   This command prepares the environment for testing or building an Unity project.
 
 parameters:
-  unity-username-var-name:
+  unity-email-var-name:
     type: env_var_name
-    default: "UNITY_USERNAME"
+    default: "UNITY_EMAIL"
     description: |
       Enter the name of the environment variable containing your Unity username.
   unity-password-var-name:
@@ -48,7 +48,7 @@ steps:
       name: Prepare the environment
       no_output_timeout: << parameters.no_output_timeout >>
       environment:
-        PARAM_UNITY_USERNAME_VAR_NAME: << parameters.unity-username-var-name >>
+        PARAM_UNITY_EMAIL_VAR_NAME: << parameters.unity-email-var-name >>
         PARAM_UNITY_PASSWORD_VAR_NAME: << parameters.unity-password-var-name >>
         PARAM_UNITY_SERIAL_VAR_NAME: << parameters.unity-serial-var-name >>
         PARAM_PROJECT_PATH: << parameters.project-path >>

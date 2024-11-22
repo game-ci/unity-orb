@@ -79,7 +79,7 @@ check_and_install_unity_editor() {
 }
 
 resolve_unity_serial() {
-  if [ -n "$unity_username" ] && [ -n "$unity_password" ] && [ -n "$unity_serial" ]; then
+  if [ -n "$unity_email" ] && [ -n "$unity_password" ] && [ -n "$unity_serial" ]; then
     printf '%s\n' "Detected Unity serial."
     resolved_unity_serial="$unity_serial"
 
@@ -157,7 +157,7 @@ set -x
   -batchmode \
   -quit \
   -nographics \
-  -username "$unity_username" \
+  -username "$unity_email" \
   -password "$unity_password" \
   -serial "$resolved_unity_serial" \
   -logfile /dev/stdout

@@ -81,7 +81,7 @@ workflows:
       - unity/test:
           name: "test-linux"
           step-name: "Check if the tests run and results are uploaded"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -97,7 +97,7 @@ workflows:
       - unity/test:
           name: "test-linux-with-custom-parameters"
           step-name: "Check if test filter in custom parameter works"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -114,7 +114,7 @@ workflows:
       # - unity/test:
       #     name: "test-windows"
       #     step-name: "Check if the tests run and results are uploaded"
-      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-email-var-name: "UNITY_EMAIL"
       #     unity-password-var-name: "UNITY_PASSWORD"
       #     unity-serial-var-name: "UNITY_SERIAL"
       #     serial-password-var-name: "UNITY_SERIAL"
@@ -131,7 +131,7 @@ workflows:
       # - unity/test:
       #     name: "test-windows-with-custom-parameters"
       #     step-name: "Check if test filter in custom parameter works"
-      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-email-var-name: "UNITY_EMAIL"
       #     unity-password-var-name: "UNITY_PASSWORD"
       #     unity-serial-var-name: "UNITY_SERIAL"
       #     executor:
@@ -148,7 +148,7 @@ workflows:
       - unity/test:
           name: "test-osx"
           step-name: "Check if the tests run and results are uploaded"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -163,7 +163,7 @@ workflows:
       - unity/test:
           name: "test-osx-with-custom-parameters"
           step-name: "Check if test filter in custom parameter works"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -181,7 +181,7 @@ workflows:
       - unity/build:
           name: "build-linux64-il2cpp"
           step-name: "Build StandaloneLinux64"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -198,7 +198,7 @@ workflows:
       # - unity/build:
       #     name: "build-Windows64-il2cpp"
       #     step-name: "Build StandaloneWindows64 il2cpp"
-      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-email-var-name: "UNITY_EMAIL"
       #     unity-password-var-name: "UNITY_PASSWORD"
       #     unity-serial-var-name: "UNITY_SERIAL"
       #     executor:
@@ -215,7 +215,7 @@ workflows:
       - unity/build:
           name: "build-osx-il2cpp"
           step-name: "Build macOS IL2CPP"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -233,7 +233,7 @@ workflows:
       - unity/build:
           name: "build-linux64-mono"
           step-name: "Build StandaloneLinux64"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -250,7 +250,7 @@ workflows:
       - unity/build:
           name: "build-Windows64-mono"
           step-name: "Build StandaloneWindows64"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -266,7 +266,7 @@ workflows:
       - unity/build:
           name: "build-osx-mono"
           step-name: "Build StandaloneOSX"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -284,7 +284,7 @@ workflows:
       - unity/build:
           name: "build-webgl"
           step-name: "Build WebGL"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -301,7 +301,7 @@ workflows:
       - unity/build:
           name: "build-android"
           step-name: "Build Android"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -317,7 +317,7 @@ workflows:
       - unity/build:
           name: "build-ios"
           step-name: "Build iOS"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -333,7 +333,7 @@ workflows:
       # - unity/build:
       #     name: "build-tvOS"
       #     step-name: "Build Apple's tvOS"
-      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-email-var-name: "UNITY_EMAIL"
       #     unity-password-var-name: "UNITY_PASSWORD"
       #     unity-serial-var-name: "UNITY_SERIAL"
       #     executor:
@@ -352,7 +352,7 @@ workflows:
       - unity/build:
           name: "build-without-artifacts"
           step-name: "Build StandaloneLinux64 with no artifacts"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -369,7 +369,7 @@ workflows:
       # - unity/build:
       #     name: "build-with-custom-method-windows"
       #     step-name: "Build with custom method in Windows"
-      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-email-var-name: "UNITY_EMAIL"
       #     unity-password-var-name: "UNITY_PASSWORD"
       #     unity-serial-var-name: "UNITY_SERIAL"
       #     executor:
@@ -387,7 +387,7 @@ workflows:
       - unity/build:
           name: "build-with-custom-method-osx"
           step-name: "Build with custom method in macOS"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -404,7 +404,7 @@ workflows:
       - unity/build:
           name: "build-with-custom-method-linux"
           step-name: "Build with custom method in Linux"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -423,7 +423,7 @@ workflows:
       - unity/build:
           name: "build-with-workspace"
           step-name: "Build StandaloneLinux64 with workspace"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:
@@ -444,7 +444,7 @@ workflows:
       - unity/build:
           name: "compress-build-with-workspace"
           step-name: "Compress build StandaloneLinux64 with workspace"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
           unity-serial-var-name: "UNITY_SERIAL"
           executor:

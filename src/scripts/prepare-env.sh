@@ -11,7 +11,7 @@ eval "$SCRIPT_UTILS"
 detect-os
 
 # Expand environment name variable parameters.
-readonly unity_username="${!PARAM_UNITY_USERNAME_VAR_NAME}"
+readonly unity_email="${!PARAM_UNITY_EMAIL_VAR_NAME}"
 readonly unity_password="${!PARAM_UNITY_PASSWORD_VAR_NAME}"
 readonly unity_serial="${!PARAM_UNITY_SERIAL_VAR_NAME}"
 

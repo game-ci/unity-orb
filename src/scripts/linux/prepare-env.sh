@@ -3,7 +3,7 @@
 # shellcheck disable=SC2154
 
 resolve_unity_license() {
-  if [ -n "$unity_username" ] && [ -n "$unity_password" ]; then
+  if [ -n "$unity_email" ] && [ -n "$unity_password" ]; then
     if [ -n "$unity_serial" ]; then
       # Combination: username + email + serial
       echo "Activating Unity with username, password, and serial."
@@ -12,7 +12,7 @@ resolve_unity_license() {
         -batchmode \
         -nographics \
         -quit \
-        -username "$unity_username" \
+        -username "$unity_email" \
         -password "$unity_password" \
         -serial "$unity_serial"
 
@@ -35,7 +35,7 @@ resolve_unity_license() {
         -batchmode \
         -nographics \
         -quit \
-        -username "$unity_username" \
+        -username "$unity_email" \
         -password "$unity_password" \
         -serial "$unity_serial"
 
