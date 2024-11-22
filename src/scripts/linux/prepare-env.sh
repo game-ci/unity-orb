@@ -60,6 +60,12 @@ download_and_prepare_before_script() {
   local file_path="$3"
   local output_path="$4"
 
+  # Validate input parameters
+  if [[ -z "$repo_url" || -z "$ref" || -z "$file_path" || -z "$output_path" ]]; then
+    printf 'Error: Missing required parameters\n' >&2
+    return 1
+  fi
+
   # Construct the full URL
   local full_url="$repo_url/-/raw/$ref/$file_path"
 
@@ -67,10 +73,19 @@ download_and_prepare_before_script() {
   curl --silent --location \
     --request GET \
     --url "$full_url" \
-    --output "$output_path"
+    --output "$output_path" \
+    --fail \
+    || { printf 'Error: Failed to download script from %s\n' "$full_url" >&2; return 1; }
+
+  # Verify downloaded file
+  if [[ ! -s "$output_path" ]]; then
+    printf 'Error: Downloaded file is empty or missing\n' >&2
+    return 1
+  fi
 
   # Make the script executable
   chmod +x "$output_path"
+  return 0
 }
 
 # Check if serial or encoded license was provided.
