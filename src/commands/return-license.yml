@@ -12,6 +12,15 @@ parameters:
     default: "UNITY_PASSWORD"
     description: |
       Enter the name of the environment variable containing your Unity password.
+  unity-serial-var-name:
+    type: env_var_name
+    default: "UNITY_SERIAL"
+    description: |
+      Enter the name of the environment variable containing your Unity serial number.
+      Required even for personal license.
+      TODO: Improve documentation on how to extract from personal license, it's something like this:
+        cat Unity_lic.ulf | grep DeveloperData | sed -E 's/.*Value="([^"]+)".*/\1/' | base64 --decode
+      For future versions, we could simply request the user to provide the ulf file and we could do the extraction.
 
 steps:
   - run:

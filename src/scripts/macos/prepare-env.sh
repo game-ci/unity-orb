@@ -162,6 +162,6 @@ set -x
   -nographics \
   -username "$unity_username" \
   -password "$unity_password" \
-  -serial "$resolved_unity_serial" \
+  -serial "$unity_serial" \
   -logfile /dev/stdout
 set +x

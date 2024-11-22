@@ -11,5 +11,6 @@ set -x
   -returnlicense \
   -username "$unity_username" \
   -password "$unity_password" \
+  -password "$unity_serial" \
   -logfile /dev/stdout
 set +x
