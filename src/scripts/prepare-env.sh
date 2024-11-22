@@ -14,7 +14,6 @@ detect-os
 readonly unity_username="${!PARAM_UNITY_USERNAME_VAR_NAME}"
 readonly unity_password="${!PARAM_UNITY_PASSWORD_VAR_NAME}"
 readonly unity_serial="${!PARAM_UNITY_SERIAL_VAR_NAME}"
-readonly unity_encoded_license="${!PARAM_UNITY_LICENSE_VAR_NAME}"
 
 if [ "$PLATFORM" = "linux" ]; then eval "$SCRIPT_PREPARE_ENV_LINUX";
 elif [ "$PLATFORM" = "macos" ]; then eval "$SCRIPT_PREPARE_ENV_MACOS";
