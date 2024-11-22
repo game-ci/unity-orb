@@ -42,7 +42,7 @@ resolve_unity_license() {
     fi
 
   else
-    printf '%s\n' "If you own a Personal Unity License File (.ulf), please provide it as a base64 encoded string."  
+    printf '%s\n' "If you own a Personal Unity License File (.ulf), please provide it as a base64 encoded string."
     printf '%s\n' "If you own a Plus or Pro Unity license, please provide your username, password and serial."
     printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation"
 
@@ -54,6 +54,25 @@ resolve_unity_license() {
   fi
 }
 
+download_and_prepare_before_script() {
+  local repo_url="$1"
+  local ref="$2"
+  local file_path="$3"
+  local output_path="$4"
+
+  # Construct the full URL
+  local full_url="$repo_url/-/raw/$ref/$file_path"
+
+  # Use curl to download the file
+  curl --silent --location \
+    --request GET \
+    --url "$full_url" \
+    --output "$output_path"
+
+  # Make the script executable
+  chmod +x "$output_path"
+}
+
 # Check if serial or encoded license was provided.
 # If the latter, extract the serial from the license.
 if ! resolve_unity_license; then
@@ -62,14 +81,14 @@ if ! resolve_unity_license; then
   exit 1
 fi
 
-# Download before_script.sh from GameCI.
-curl --silent --location \
-  --request GET \
-  --url "https://gitlab.com/game-ci/unity3d-gitlab-ci-example/-/raw/main/ci/before_script.sh" \
-  --header 'Accept: application/vnd.github.v3+json' \
-  --output "$base_dir/before_script.sh"
+# Define variables
+repo_url="https://gitlab.com/game-ci/unity3d-gitlab-ci-example"
+ref="e6ff757"  # Will update to a tag once latest version is merged
+file_path="ci/before_script.sh"
+before_script="$base_dir/before_script.sh"
 
-chmod +x "$base_dir/before_script.sh"
+# Download and prepare the before_script file
+download_and_prepare_before_script "$repo_url" "$ref" "$file_path" "$before_script"
 
 # Nomenclature required by the script.
 readonly UNITY_LICENSE="$unity_license"
@@ -78,4 +97,4 @@ export UNITY_LICENSE
 
 # Run the test script.
 # shellcheck source=/dev/null
-source "$base_dir/before_script.sh"
+source "$before_script"
