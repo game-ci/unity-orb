@@ -83,7 +83,7 @@ fi
 
 # Define variables
 repo_url="https://gitlab.com/game-ci/unity3d-gitlab-ci-example"
-ref="e6ff757"  # Will update to a tag once latest version is merged
+ref="7fc1c95"  # Will update to a tag once latest version is merged
 file_path="ci/before_script.sh"
 before_script="$base_dir/before_script.sh"
 
