@@ -14,7 +14,7 @@ Easily build and test your Unity project.
 
 ### How to Contribute
 
-We welcome [issues](https://github.com/game-ci/unity-orb/issues) to and [pull requests](https://github.com/game-ci/unity-orb/pulls) against this repository!
+We welcome [issues](https://github.com/game-ci/unity-orb/issues) and [pull requests](https://github.com/game-ci/unity-orb/pulls) against this repository! For detailed guidelines, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ### How to Publish An Update
 
@@ -44,3 +44,29 @@ circleci orb pack src > unity-orb.yml
 circleci orb publish unity-orb.yml <my-namespace>/<my-orb-name>@dev:first
 circleci orb publish promote <my-namespace>/<my-orb-name>@dev:first patch
 ```
+
+## Development
+
+If you'd like to contribute to this orb and test your changes:
+
+1. **Fork this repository.**
+2. **Make your changes** in a new branch.
+3. **Pack and publish your fork** to a personal namespace:
+
+   ```bash
+   circleci orb pack src > unity-orb.yml
+   circleci orb publish unity-orb.yml <your-namespace>/<your-orb-name>@dev:first
+   ```
+
+4. **Use your fork in your CircleCI workflow.**
+
+   Update your `.circleci/config.yml` to reference your development version:
+
+   ```yaml
+   orbs:
+     unity: <your-namespace>/<your-orb-name>@dev:first
+   ```
+
+## License
+
+[MIT](LICENSE)
