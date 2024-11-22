@@ -32,39 +32,41 @@ We welcome [issues](https://github.com/game-ci/unity-orb/issues) and [pull reque
 6. Click _"Publish Release"_.
     - This will push a new tag and trigger your publishing pipeline on CircleCI.
 
-### Manual Deploy
+## Development and Manual Deploy
 
-If you want a private orb for your build env. The following steps allow you to do so. These are adapted from the CircleCI
-[Manual Orb Authoring Process](https://circleci.com/docs/orb-author-validate-publish/#publish-your-orb)
+> **Note:** Development and private orbs should only be used for testing purposes. Always review and validate changes thoroughly before using in production.
 
-```bash
-circleci namespace create <name> --org-id <your-organization-id>
-circleci orb create <my-namespace>/<my-orb-name> --private
-circleci orb pack src > unity-orb.yml
-circleci orb publish unity-orb.yml <my-namespace>/<my-orb-name>@dev:first
-circleci orb publish promote <my-namespace>/<my-orb-name>@dev:first patch
-```
+If you want to contribute to this orb or deploy a private version for testing, follow these steps:
 
-## Development
+1. **Fork this repository (optional for private orbs).**
+2. **Set your namespace and orb name** to make the steps easier:
 
-If you'd like to contribute to this orb and test your changes:
+   ```bash
+   export NAMESPACE="<your-namespace>"
+   export ORB_NAME="<your-orb-name>"
+   export VERSION="dev:first"
+   ```
 
-1. **Fork this repository.**
-2. **Make your changes** in a new branch.
-3. **Pack and publish your fork** to a personal namespace:
+3. **Pack and publish your orb:**
 
    ```bash
    circleci orb pack src > unity-orb.yml
-   circleci orb publish unity-orb.yml <your-namespace>/<your-orb-name>@dev:first
+   circleci orb publish unity-orb.yml "$NAMESPACE/$ORB_NAME@$VERSION"
    ```
 
-4. **Use your fork in your CircleCI workflow.**
+4. **Use your orb in your CircleCI workflow:**
 
-   Update your `.circleci/config.yml` to reference your development version:
+   Update your `.circleci/config.yml` to reference your custom version:
 
    ```yaml
    orbs:
      unity: <your-namespace>/<your-orb-name>@dev:first
+   ```
+
+5. **Promote the version** to a higher semantic version if needed (optional):
+
+   ```bash
+   circleci orb publish promote "$NAMESPACE/$ORB_NAME@$VERSION" patch
    ```
 
 ## License
