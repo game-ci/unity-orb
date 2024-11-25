@@ -28,6 +28,7 @@ steps:
       environment:
         PARAM_UNITY_EMAIL_VAR_NAME: << parameters.unity-email-var-name >>
         PARAM_UNITY_PASSWORD_VAR_NAME: << parameters.unity-password-var-name >>
+        PARAM_UNITY_SERIAL_VAR_NAME: << parameters.unity-serial-var-name >>
         SCRIPT_RETURN_LICENSE_LINUX: << include(scripts/linux/return-license.sh) >>
         SCRIPT_RETURN_LICENSE_WINDOWS: << include(scripts/windows/return-license.sh) >>
         SCRIPT_RETURN_LICENSE_MACOS: << include(scripts/macos/return-license.sh) >>
