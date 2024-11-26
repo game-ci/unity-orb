@@ -26,19 +26,10 @@ parameters:
     default: "UNITY_SERIAL"
     description: |
       Enter the name of the environment variable containing your Unity serial number.
-      Required even for personal license. To extract the serial from your Unity personal license file:
-      
-      1. Locate your Unity license file (Unity_lic.ulf)
-      2. Run the following command to extract the serial:
-         ```
-         cat Unity_lic.ulf | grep DeveloperData | sed -E 's/.*Value="([^"]+)".*/\1/' | base64 --decode
-         ```
-      3. Store the extracted serial securely in your CI environment variables
-      
-      Note: Keep your Unity serial number confidential as it's tied to your Unity account.
-      
-      Future Enhancement: We plan to simplify this process by directly accepting the .ulf file
-      and handling the extraction automatically within the orb.
+      Required even for personal license.
+      TODO: Improve documentation on how to extract from personal license, it's something like this:
+        cat Unity_lic.ulf | grep DeveloperData | sed -E 's/.*Value="([^"]+)".*/\1/' | base64 --decode
+      For future versions, we could simply request the user to provide the ulf file and we could do the extraction.
   project-path:
     type: string
     default: "."
