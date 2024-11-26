@@ -79,7 +79,7 @@ workflows:
     jobs:
        - orb-tools/pack:
           filters: *release-filters
-      - orb-tools/publish:
+       - orb-tools/publish:
           orb_name: game-ci/unity
           vcs_type: << pipeline.project.type >>
           pub_type: production
