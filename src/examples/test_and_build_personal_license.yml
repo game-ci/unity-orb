@@ -17,9 +17,9 @@ usage:
         - unity/test:
             name: 'test-linux'
             step-name: 'Check if the tests run and results are uploaded'
-            unity-license-var-name: 'UNITY_ENCODED_LICENSE'
-            unity-username-var-name: 'UNITY_USERNAME'
+            unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
+            unity-serial-var-name: 'UNITY_SERIAL'
             executor:
               name: 'unity/ubuntu'
               target_platform: 'linux-il2cpp'
@@ -31,9 +31,9 @@ usage:
         - unity/build:
             name: 'build-linux64-il2cpp'
             step-name: 'Build StandaloneLinux64'
-            unity-license-var-name: 'UNITY_ENCODED_LICENSE'
-            unity-username-var-name: 'UNITY_USERNAME'
+            unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
+            unity-serial-var-name: 'UNITY_SERIAL'
             executor:
               name: 'unity/ubuntu'
               target_platform: 'linux-il2cpp'
@@ -49,9 +49,9 @@ usage:
         - unity/test:
             name: 'test-windows'
             step-name: 'Check if the tests run and results are uploaded'
-            unity-license-var-name: 'UNITY_ENCODED_LICENSE'
-            unity-username-var-name: 'UNITY_USERNAME'
+            unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
+            unity-serial-var-name: 'UNITY_SERIAL'
             executor:
               name: 'unity/windows-2022'
               size: 'large'
@@ -63,9 +63,9 @@ usage:
         - unity/build:
             name: 'build-Windows64-il2cpp'
             step-name: 'Build StandaloneWindows64 il2cpp'
-            unity-license-var-name: 'UNITY_ENCODED_LICENSE'
-            unity-username-var-name: 'UNITY_USERNAME'
+            unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
+            unity-serial-var-name: 'UNITY_SERIAL'
             executor:
               name: 'unity/windows-2019'
               size: 'large'
@@ -81,9 +81,9 @@ usage:
         - unity/test:
             name: 'test-osx'
             step-name: 'Check if the tests run and results are uploaded'
-            unity-license-var-name: 'UNITY_ENCODED_LICENSE'
-            unity-username-var-name: 'UNITY_USERNAME'
+            unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
+            unity-serial-var-name: 'UNITY_SERIAL'
             executor:
               name: 'unity/macos'
               editor_version: '2022.3.33f1'
@@ -94,9 +94,9 @@ usage:
         - unity/build:
             name: 'build-osx-il2cpp'
             step-name: 'Build macOS IL2CPP'
-            unity-license-var-name: 'UNITY_ENCODED_LICENSE'
-            unity-username-var-name: 'UNITY_USERNAME'
+            unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
+            unity-serial-var-name: 'UNITY_SERIAL'
             executor:
               name: 'unity/macos'
               resource_class: "macos.m1.medium.gen1"

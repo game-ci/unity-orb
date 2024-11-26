@@ -2,9 +2,9 @@ description: >
   This command returns the license used to build or test the project.
 
 parameters:
-  unity-username-var-name:
+  unity-email-var-name:
     type: env_var_name
-    default: "UNITY_USERNAME"
+    default: "UNITY_EMAIL"
     description: |
       Enter the name of the environment variable containing your Unity username.
   unity-password-var-name:
@@ -12,13 +12,23 @@ parameters:
     default: "UNITY_PASSWORD"
     description: |
       Enter the name of the environment variable containing your Unity password.
+  unity-serial-var-name:
+    type: env_var_name
+    default: "UNITY_SERIAL"
+    description: |
+      Enter the name of the environment variable containing your Unity serial number.
+      Required even for personal license.
+      TODO: Improve documentation on how to extract from personal license, it's something like this:
+        cat Unity_lic.ulf | grep DeveloperData | sed -E 's/.*Value="([^"]+)".*/\1/' | base64 --decode
+      For future versions, we could simply request the user to provide the ulf file and we could do the extraction.
 
 steps:
   - run:
       name: Return the Unity license
       environment:
-        PARAM_UNITY_USERNAME_VAR_NAME: << parameters.unity-username-var-name >>
+        PARAM_UNITY_EMAIL_VAR_NAME: << parameters.unity-email-var-name >>
         PARAM_UNITY_PASSWORD_VAR_NAME: << parameters.unity-password-var-name >>
+        PARAM_UNITY_SERIAL_VAR_NAME: << parameters.unity-serial-var-name >>
         SCRIPT_RETURN_LICENSE_LINUX: << include(scripts/linux/return-license.sh) >>
         SCRIPT_RETURN_LICENSE_WINDOWS: << include(scripts/windows/return-license.sh) >>
         SCRIPT_RETURN_LICENSE_MACOS: << include(scripts/macos/return-license.sh) >>

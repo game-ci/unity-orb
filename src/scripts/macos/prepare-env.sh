@@ -79,33 +79,30 @@ check_and_install_unity_editor() {
 }
 
 resolve_unity_serial() {
-  if [ -n "$unity_username" ] && [ -n "$unity_password" ]; then
-    # Serial provided.
-    if [ -n "$unity_serial" ]; then
-      printf '%s\n' "Detected Unity serial."
-      readonly resolved_unity_serial="$unity_serial"
+  if [ -n "$unity_email" ] && [ -n "$unity_password" ] && [ -n "$unity_serial" ]; then
+    printf '%s\n' "Detected Unity serial."
+    resolved_unity_serial="$unity_serial"
 
-    # License provided.
-    elif [ -n "$unity_encoded_license" ]; then
-      printf '%s\n' "No serial detected. Extracting it from the encoded license."
+  # License provided.
+  elif [ -n "$unity_encoded_license" ]; then
+    printf '%s\n' "No serial detected. Extracting it from the encoded license."
 
-      if ! extract_serial_from_license; then
-        printf '%s\n' "Failed to parse the serial from the Unity license."
-        printf '%s\n' "Please try again or open an issue."
-        printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation#personal-license"
-        return 1
-
-      else
-        readonly resolved_unity_serial="$decoded_unity_serial"
-      fi
-
-    # Nothing provided.
-    else
-      printf '%s\n' "No serial or encoded license found."
-      printf '%s\n' "Please run the script again with a serial or encoded license file."
-      printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation"
+    if ! extract_serial_from_license; then
+      printf '%s\n' "Failed to parse the serial from the Unity license."
+      printf '%s\n' "Please try again or open an issue."
+      printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation#personal-license"
       return 1
+
+    else
+      readonly resolved_unity_serial="$decoded_unity_serial"
     fi
+
+  # Nothing provided.
+  else
+    printf '%s\n' "No serial or encoded license found."
+    printf '%s\n' "Please run the script again with a serial or encoded license file."
+    printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation"
+    return 1
   fi
 
   return 0
@@ -160,7 +157,7 @@ set -x
   -batchmode \
   -quit \
   -nographics \
-  -username "$unity_username" \
+  -username "$unity_email" \
   -password "$unity_password" \
   -serial "$resolved_unity_serial" \
   -logfile /dev/stdout

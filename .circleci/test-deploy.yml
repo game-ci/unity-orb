@@ -77,20 +77,13 @@ jobs:
 workflows:
   test-build:
     jobs:
-      # Activation file
-      - unity/create-activation-file:
-          name: "create-activation-file"
-      - unity/create-activation-file:
-          name: "create-activation-file-with-parameter"
-          editor_version: 2022.1.11f1
-
       # Tests
       - unity/test:
           name: "test-linux"
           step-name: "Check if the tests run and results are uploaded"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "linux-il2cpp"
@@ -104,9 +97,9 @@ workflows:
       - unity/test:
           name: "test-linux-with-custom-parameters"
           step-name: "Check if test filter in custom parameter works"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "linux-il2cpp"
@@ -121,9 +114,10 @@ workflows:
       # - unity/test:
       #     name: "test-windows"
       #     step-name: "Check if the tests run and results are uploaded"
-      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-email-var-name: "UNITY_EMAIL"
       #     unity-password-var-name: "UNITY_PASSWORD"
+      #     unity-serial-var-name: "UNITY_SERIAL"
+      #     serial-password-var-name: "UNITY_SERIAL"
       #     executor:
       #       name: "unity/windows-2019"
       #       size: "large"
@@ -137,9 +131,9 @@ workflows:
       # - unity/test:
       #     name: "test-windows-with-custom-parameters"
       #     step-name: "Check if test filter in custom parameter works"
-      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-email-var-name: "UNITY_EMAIL"
       #     unity-password-var-name: "UNITY_PASSWORD"
+      #     unity-serial-var-name: "UNITY_SERIAL"
       #     executor:
       #       name: "unity/windows-2019"
       #       size: "large"
@@ -154,9 +148,9 @@ workflows:
       - unity/test:
           name: "test-osx"
           step-name: "Check if the tests run and results are uploaded"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
@@ -169,9 +163,9 @@ workflows:
       - unity/test:
           name: "test-osx-with-custom-parameters"
           step-name: "Check if test filter in custom parameter works"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
@@ -187,9 +181,9 @@ workflows:
       - unity/build:
           name: "build-linux64-il2cpp"
           step-name: "Build StandaloneLinux64"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "linux-il2cpp"
@@ -204,9 +198,9 @@ workflows:
       # - unity/build:
       #     name: "build-Windows64-il2cpp"
       #     step-name: "Build StandaloneWindows64 il2cpp"
-      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-email-var-name: "UNITY_EMAIL"
       #     unity-password-var-name: "UNITY_PASSWORD"
+      #     unity-serial-var-name: "UNITY_SERIAL"
       #     executor:
       #       name: "unity/windows-2019"
       #       size: "large"
@@ -221,9 +215,9 @@ workflows:
       - unity/build:
           name: "build-osx-il2cpp"
           step-name: "Build macOS IL2CPP"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
@@ -239,9 +233,9 @@ workflows:
       - unity/build:
           name: "build-linux64-mono"
           step-name: "Build StandaloneLinux64"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "base"
@@ -256,9 +250,9 @@ workflows:
       - unity/build:
           name: "build-Windows64-mono"
           step-name: "Build StandaloneWindows64"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "windows-mono"
@@ -272,9 +266,9 @@ workflows:
       - unity/build:
           name: "build-osx-mono"
           step-name: "Build StandaloneOSX"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "mac-mono"
@@ -290,9 +284,9 @@ workflows:
       - unity/build:
           name: "build-webgl"
           step-name: "Build WebGL"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "webgl"
@@ -307,9 +301,9 @@ workflows:
       - unity/build:
           name: "build-android"
           step-name: "Build Android"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "android"
@@ -323,9 +317,9 @@ workflows:
       - unity/build:
           name: "build-ios"
           step-name: "Build iOS"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "ios"
@@ -339,9 +333,9 @@ workflows:
       # - unity/build:
       #     name: "build-tvOS"
       #     step-name: "Build Apple's tvOS"
-      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-email-var-name: "UNITY_EMAIL"
       #     unity-password-var-name: "UNITY_PASSWORD"
+      #     unity-serial-var-name: "UNITY_SERIAL"
       #     executor:
       #       name: "unity/windows-2019"
       #       size: "large"
@@ -358,9 +352,9 @@ workflows:
       - unity/build:
           name: "build-without-artifacts"
           step-name: "Build StandaloneLinux64 with no artifacts"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "base"
@@ -375,9 +369,9 @@ workflows:
       # - unity/build:
       #     name: "build-with-custom-method-windows"
       #     step-name: "Build with custom method in Windows"
-      #     unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-      #     unity-username-var-name: "UNITY_USERNAME"
+      #     unity-email-var-name: "UNITY_EMAIL"
       #     unity-password-var-name: "UNITY_PASSWORD"
+      #     unity-serial-var-name: "UNITY_SERIAL"
       #     executor:
       #       name: "unity/windows-2019"
       #       size: "large"
@@ -393,9 +387,9 @@ workflows:
       - unity/build:
           name: "build-with-custom-method-osx"
           step-name: "Build with custom method in macOS"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
@@ -410,9 +404,9 @@ workflows:
       - unity/build:
           name: "build-with-custom-method-linux"
           step-name: "Build with custom method in Linux"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "linux-il2cpp"
@@ -429,9 +423,9 @@ workflows:
       - unity/build:
           name: "build-with-workspace"
           step-name: "Build StandaloneLinux64 with workspace"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "base"
@@ -450,9 +444,9 @@ workflows:
       - unity/build:
           name: "compress-build-with-workspace"
           step-name: "Compress build StandaloneLinux64 with workspace"
-          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
-          unity-username-var-name: "UNITY_USERNAME"
+          unity-email-var-name: "UNITY_EMAIL"
           unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
           executor:
             name: "unity/ubuntu"
             target_platform: "base"

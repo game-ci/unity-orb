@@ -19,7 +19,7 @@ trap trap_exit EXIT
 resolve_unity_serial() {
   local exit_code=0
 
-  if [ -n "$unity_username" ] && [ -n "$unity_password" ]; then
+  if [ -n "$unity_email" ] && [ -n "$unity_password" ]; then
     # Serial provided.
     if [ -n "$unity_serial" ]; then
       printf '%s\n' "Detected Unity serial."
@@ -104,7 +104,7 @@ set -x
 docker run -dit \
   --name "$container_name" \
   --env PROJECT_PATH="C:/unity_project" \
-  --env UNITY_USERNAME="$unity_username" \
+  --env UNITY_EMAIL="$unity_email" \
   --env UNITY_PASSWORD="$unity_password" \
   --env UNITY_SERIAL="$resolved_unity_serial" \
   --volume "$unity_project_full_path":C:/unity_project \
@@ -124,4 +124,4 @@ docker exec "$container_name" powershell 'reg import C:\regkeys\winsdk.reg'
 docker exec "$container_name" powershell 'regsvr32 /s C:\ProgramData\Microsoft\VisualStudio\Setup\x64\Microsoft.VisualStudio.Setup.Configuration.Native.dll'
 
 # Activate Unity
-docker exec "$container_name" powershell '& "C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe" -batchmode -quit -nographics -username $Env:UNITY_USERNAME -password $Env:UNITY_PASSWORD -serial $Env:UNITY_SERIAL -logfile | Out-Host'
+docker exec "$container_name" powershell '& "C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe" -batchmode -quit -nographics -username $Env:UNITY_EMAIL -password $Env:UNITY_PASSWORD -serial $Env:UNITY_SERIAL -logfile | Out-Host'

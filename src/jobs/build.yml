@@ -11,9 +11,9 @@ parameters:
     type: executor
     description: |
       Pick an Executor to run the build job with.
-  unity-username-var-name:
+  unity-email-var-name:
     type: env_var_name
-    default: "UNITY_USERNAME"
+    default: "UNITY_EMAIL"
     description: |
       Enter the name of the environment variable containing your Unity username.
   unity-password-var-name:
@@ -26,13 +26,10 @@ parameters:
     default: "UNITY_SERIAL"
     description: |
       Enter the name of the environment variable containing your Unity serial number.
-      Required if you have a Plus or Pro license.
-  unity-license-var-name:
-    type: env_var_name
-    default: "UNITY_ENCODED_LICENSE"
-    description: |
-      Enter the name of the environment variable containing your Unity license file encoded in base64.
-      Required if you have a Personal license.
+      Required even for personal license.
+      TODO: Improve documentation on how to extract from personal license, it's something like this:
+        cat Unity_lic.ulf | grep DeveloperData | sed -E 's/.*Value="([^"]+)".*/\1/' | base64 --decode
+      For future versions, we could simply request the user to provide the ulf file and we could do the extraction.
   project-path:
     type: string
     default: "."
@@ -109,10 +106,9 @@ steps:
         git submodule update --init
       condition: << parameters.fetch-submodules >>
   - prepare-env:
-      unity-username-var-name: << parameters.unity-username-var-name >>
+      unity-email-var-name: << parameters.unity-email-var-name >>
       unity-password-var-name: << parameters.unity-password-var-name >>
       unity-serial-var-name: << parameters.unity-serial-var-name >>
-      unity-license-var-name: << parameters.unity-license-var-name >>
       project-path: <<parameters.project-path>>
       no_output_timeout: << parameters.no_output_timeout>>
   - build:
@@ -130,5 +126,5 @@ steps:
       condition: <<parameters.return-license>>
       steps:
         - return-license:
-            unity-username-var-name: << parameters.unity-username-var-name >>
+            unity-email-var-name: << parameters.unity-email-var-name >>
             unity-password-var-name: << parameters.unity-password-var-name >>
