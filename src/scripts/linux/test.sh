@@ -3,8 +3,10 @@
 # shellcheck disable=SC2154
 
 parse_results_to_junit() {
-  # Intall dependencies for the JUnit parser.
-  apt-get update && apt-get install -y default-jre libsaxonb-java
+  # Install dependencies for the JUnit parser. Retry: Ubuntu mirrors have outages.
+  # shellcheck disable=SC2329 # Called through retry.
+  install_saxon() { apt-get update && apt-get install -y default-jre libsaxonb-java; }
+  retry install_saxon
 
   # Parse Unity's results xml to JUnit format.
   printf '%s\n' "$DEPENDENCY_NUNIT_TRANSFORM" >"$base_dir/nunit3-junit.xslt"
