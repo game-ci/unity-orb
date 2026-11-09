@@ -4,7 +4,7 @@
 
 parse_results_to_junit() {
   # Install dependencies for the JUnit parser. Retry: Ubuntu mirrors have outages.
-  # shellcheck disable=SC2329 # Called through retry.
+  # shellcheck disable=SC2317,SC2329 # Called through retry.
   install_saxon() { apt-get update && apt-get install -y default-jre libsaxonb-java; }
   retry install_saxon
 
