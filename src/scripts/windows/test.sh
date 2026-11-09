@@ -2,19 +2,7 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2154,SC2016
 
-trap_exit() {
-  local exit_status="$?"
-
-  if [ "$exit_status" -ne 0 ]; then
-    printf '%s\n' 'The script did not complete successfully.'
-
-    printf '%s\n' "Removing the container \"$CONTAINER_NAME\"."
-    docker rm -f "$CONTAINER_NAME" &> /dev/null || true
-
-    exit "$exit_status"
-  fi
-}
-trap trap_exit EXIT
+# Keep the container when this step fails: the return-license step needs it and removes it.
 
 # Add necessary values in the environment variables.
 docker exec "$CONTAINER_NAME" powershell "[System.Environment]::SetEnvironmentVariable('TEST_PLATFORM','$PARAM_TEST_PLATFORM', [System.EnvironmentVariableTarget]::Machine)"
