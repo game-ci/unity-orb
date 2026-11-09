@@ -14,7 +14,8 @@ activate_unity() {
     -quit \
     -username "$unity_email" \
     -password "$unity_password" \
-    -serial "$unity_serial"
+    -serial "$unity_serial" \
+    | mask-serial
   [ -f "$unity_license_file" ]
 }
 

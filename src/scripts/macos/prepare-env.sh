@@ -87,7 +87,9 @@ activate_unity() {
     -username "$unity_email" \
     -password "$unity_password" \
     -serial "$unity_serial" \
-    -logfile /dev/stdout
+    -logfile /dev/stdout \
+    | mask-serial || return 1
+  [ -f "$unity_license_file_path/Unity_lic.ulf" ]
 }
 
 printf '%s\n' "Activating Unity with email, password and serial."

@@ -37,7 +37,7 @@ extract-serial-from-license() {
 
   case "$license" in
     *DeveloperData*) ;;
-    *) license="$(printf '%s' "$license" | base64 --decode)" || return 1 ;;
+    *) license="$(printf '%s' "$license" | tr -d '[:space:]' | base64 --decode)" || return 1 ;;
   esac
 
   printf '%s\n' "$license" \
@@ -59,4 +59,10 @@ retry() {
     attempt=$((attempt + 1))
     delay=$((delay * 2))
   done
+}
+
+# Hide the serial ($unity_serial) in Unity's output. Unity prints it with only the last 4 characters
+# replaced by "XXXX", which CircleCI's secret masking doesn't catch.
+mask-serial() {
+  sed "s/${unity_serial%????}/[masked]/g"
 }

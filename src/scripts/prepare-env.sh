@@ -28,7 +28,9 @@ if [ -z "$unity_serial" ] && [ -n "$unity_license" ]; then
   unity_serial="$(extract-serial-from-license "$unity_license")" || unity_serial=""
 fi
 
-if [ -z "$unity_serial" ]; then
+# Serials look like "XX-XXXX-XXXX-XXXX-XXXX-XXXX". Ignore stray whitespace from copy-pasting.
+unity_serial="${unity_serial//[[:space:]]/}"
+if [ "${#unity_serial}" -lt 8 ] || [[ "$unity_serial" == *[!A-Za-z0-9-]* ]]; then
   printf '%s\n' "No Unity serial found. Set \"$PARAM_UNITY_SERIAL_VAR_NAME\" or \"$PARAM_UNITY_LICENSE_VAR_NAME\" to a valid value."
   printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation"
   exit 1

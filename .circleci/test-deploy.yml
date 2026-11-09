@@ -95,6 +95,21 @@ workflows:
           context: orb-testing-unity
           pre-steps: *mono
       - unity/test:
+          name: "test-linux-personal-license"
+          step-name: "Check if the serial is extracted from the license file"
+          unity-serial-var-name: "UNITY_SERIAL_UNSET"
+          unity-license-var-name: "UNITY_ENCODED_LICENSE_2021"
+          executor:
+            name: "unity/ubuntu"
+            target_platform: "base"
+            editor_version: "2022.3.33f1"
+            resource_class: "medium"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          test-platform: "editmode"
+          filters: *filters
+          context: orb-testing-unity
+          pre-steps: *mono
+      - unity/test:
           name: "test-linux-with-custom-parameters"
           step-name: "Check if test filter in custom parameter works"
           unity-email-var-name: "UNITY_EMAIL"

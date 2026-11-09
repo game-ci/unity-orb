@@ -16,6 +16,7 @@ parameters:
 steps:
   - run:
       name: Return the Unity license
+      when: always
       environment:
         PARAM_UNITY_EMAIL_VAR_NAME: << parameters.unity-email-var-name >>
         PARAM_UNITY_PASSWORD_VAR_NAME: << parameters.unity-password-var-name >>

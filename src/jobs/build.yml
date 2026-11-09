@@ -69,15 +69,15 @@ parameters:
     description: Whether to persist the build output to workspace.
   return-license:
     type: boolean
-    default: false
+    default: true
     description: |
-      Whether to return the license used to build the project.
-      Unity only allows returning professional licenses.
+      Whether to return the license at the end of the job, even when it fails.
+      Keep it enabled so CI machines don\'t use up the activations allowed for your license.
   fetch-submodules:
     type: boolean
-    default: false
+    default: true
     description: |
-      Whether to fetch git submodules
+      Whether to fetch git submodules.
   no_output_timeout:
     type: string
     default: "20m"

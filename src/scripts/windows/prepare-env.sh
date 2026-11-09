@@ -35,9 +35,9 @@ fi
 mkdir -p "$base_dir/build" || { printf '%s\n' "Unable to create the build directory"; exit 1; }
 mkdir -p "$base_dir/test" || { printf '%s\n' "Unable to create the test directory"; exit 1; }
 
-set -x
-
 # Run the container and prevent it from exiting.
+# No "set -x" here: it would print the serial, which isn't masked when extracted from the license.
+printf '%s\n' "Starting container \"$container_name\" from unityci/editor:windows-${GAMECI_EDITOR_VERSION}-${GAMECI_TARGET_PLATFORM}-3."
 # shellcheck disable=SC2140
 docker run -dit \
   --name "$container_name" \
@@ -55,11 +55,9 @@ docker run -dit \
   "unityci/editor:windows-${GAMECI_EDITOR_VERSION}-${GAMECI_TARGET_PLATFORM}-3" \
   powershell
 
-set +x
-
 # Register the Windows SDK and VCC Tools.
 docker exec "$container_name" powershell 'reg import C:\regkeys\winsdk.reg'
 docker exec "$container_name" powershell 'regsvr32 /s C:\ProgramData\Microsoft\VisualStudio\Setup\x64\Microsoft.VisualStudio.Setup.Configuration.Native.dll'
 
 # Activate Unity
-docker exec "$container_name" powershell '& "C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe" -batchmode -quit -nographics -username $Env:UNITY_EMAIL -password $Env:UNITY_PASSWORD -serial $Env:UNITY_SERIAL -logfile | Out-Host'
+docker exec "$container_name" powershell '& "C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe" -batchmode -quit -nographics -username $Env:UNITY_EMAIL -password $Env:UNITY_PASSWORD -serial $Env:UNITY_SERIAL -logfile | Out-Host' | mask-serial
