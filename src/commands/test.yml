@@ -64,9 +64,5 @@ steps:
   - store_test_results:
       path: << parameters.project-path >>/<< parameters.test-platform >>-junit-results.xml
   - run:
-      name: Fail if any test failed
-      command: |
-        if [ -f .unity-tests-failed ]; then
-          echo "Some tests failed. See the \"Tests\" tab for details."
-          exit 1
-        fi
+      name: Fail if any test failed (see the Tests tab)
+      command: test ! -f .unity-tests-failed

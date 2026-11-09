@@ -2,7 +2,7 @@
 # Checks for src/scripts/utils.sh. Run: bash tests/utils_test.sh
 set -euo pipefail
 
-# shellcheck source=src/scripts/utils.sh
+# shellcheck disable=SC1091
 source "$(dirname "$0")/../src/scripts/utils.sh"
 
 fail() { printf 'FAIL: %s\n' "$1"; exit 1; }
