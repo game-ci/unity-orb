@@ -7,7 +7,7 @@ usage:
   version: 2.1
 
   orbs:
-    unity: game-ci/unity@1.8.0
+    unity: game-ci/unity@2.0.0
 
   workflows:
     test-build-with-executors:
@@ -87,7 +87,7 @@ usage:
             executor:
               name: 'unity/macos'
               editor_version: '2022.3.33f1'
-              resource_class: 'macos.m1.medium.gen1'
+              resource_class: 'm4pro.medium'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             test-platform: 'playmode'
             context: unity
@@ -99,7 +99,7 @@ usage:
             unity-serial-var-name: "UNITY_SERIAL"
             executor:
               name: 'unity/macos'
-              resource_class: "macos.m1.medium.gen1"
+              resource_class: "m4pro.medium"
               editor_version: '2022.3.33f1'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             build-target: StandaloneOSX

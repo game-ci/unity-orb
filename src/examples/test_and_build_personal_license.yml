@@ -1,5 +1,6 @@
 description: >
   Drop-in solution to automatically run tests and build your Unity project using a Personal license.
+  The serial is extracted from the license file (.ulf) stored in the UNITY_LICENSE environment variable.
   Make sure to read the documentation before using the orb: https://game.ci/docs/circleci/getting-started.
   For runner examples, see: https://game.ci/docs/circleci/executors#macos-runner and https://game.ci/docs/circleci/executors#windows-runner.
 
@@ -7,7 +8,7 @@ usage:
   version: 2.1
 
   orbs:
-    unity: game-ci/unity@1.8.0
+    unity: game-ci/unity@2.0.0
 
   workflows:
     test-build-with-executors:
@@ -19,7 +20,7 @@ usage:
             step-name: 'Check if the tests run and results are uploaded'
             unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
-            unity-serial-var-name: 'UNITY_SERIAL'
+            unity-license-var-name: 'UNITY_LICENSE'
             executor:
               name: 'unity/ubuntu'
               target_platform: 'linux-il2cpp'
@@ -33,7 +34,7 @@ usage:
             step-name: 'Build StandaloneLinux64'
             unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
-            unity-serial-var-name: 'UNITY_SERIAL'
+            unity-license-var-name: 'UNITY_LICENSE'
             executor:
               name: 'unity/ubuntu'
               target_platform: 'linux-il2cpp'
@@ -51,7 +52,7 @@ usage:
             step-name: 'Check if the tests run and results are uploaded'
             unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
-            unity-serial-var-name: 'UNITY_SERIAL'
+            unity-license-var-name: 'UNITY_LICENSE'
             executor:
               name: 'unity/windows-2022'
               size: 'large'
@@ -65,7 +66,7 @@ usage:
             step-name: 'Build StandaloneWindows64 il2cpp'
             unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
-            unity-serial-var-name: 'UNITY_SERIAL'
+            unity-license-var-name: 'UNITY_LICENSE'
             executor:
               name: 'unity/windows-2019'
               size: 'large'
@@ -83,11 +84,11 @@ usage:
             step-name: 'Check if the tests run and results are uploaded'
             unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
-            unity-serial-var-name: 'UNITY_SERIAL'
+            unity-license-var-name: 'UNITY_LICENSE'
             executor:
               name: 'unity/macos'
               editor_version: '2022.3.33f1'
-              resource_class: 'macos.m1.medium.gen1'
+              resource_class: 'm4pro.medium'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             test-platform: 'playmode'
             context: unity
@@ -96,10 +97,10 @@ usage:
             step-name: 'Build macOS IL2CPP'
             unity-email-var-name: 'UNITY_EMAIL'
             unity-password-var-name: 'UNITY_PASSWORD'
-            unity-serial-var-name: 'UNITY_SERIAL'
+            unity-license-var-name: 'UNITY_LICENSE'
             executor:
               name: 'unity/macos'
-              resource_class: "macos.m1.medium.gen1"
+              resource_class: "m4pro.medium"
               editor_version: '2022.3.33f1'
             project-path: 'Unity2D-Demo-Game-CI-CD/src'
             build-target: StandaloneOSX

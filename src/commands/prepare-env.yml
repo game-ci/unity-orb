@@ -6,7 +6,7 @@ parameters:
     type: env_var_name
     default: "UNITY_EMAIL"
     description: |
-      Enter the name of the environment variable containing your Unity username.
+      Enter the name of the environment variable containing your Unity account email.
   unity-password-var-name:
     type: env_var_name
     default: "UNITY_PASSWORD"
@@ -17,7 +17,13 @@ parameters:
     default: "UNITY_SERIAL"
     description: |
       Enter the name of the environment variable containing your Unity serial number.
-      Required if you have a Plus or Pro license.
+      Required for Plus or Pro licenses. For Personal licenses, leave it unset and use "unity-license-var-name" instead.
+  unity-license-var-name:
+    type: env_var_name
+    default: "UNITY_LICENSE"
+    description: |
+      Enter the name of the environment variable containing your Unity license file (.ulf) content, raw or base64-encoded.
+      Only used when no serial is set: the serial is extracted from the license file (Personal licenses).
   cache-version:
     type: string
     default: "v1"
@@ -51,6 +57,7 @@ steps:
         PARAM_UNITY_EMAIL_VAR_NAME: << parameters.unity-email-var-name >>
         PARAM_UNITY_PASSWORD_VAR_NAME: << parameters.unity-password-var-name >>
         PARAM_UNITY_SERIAL_VAR_NAME: << parameters.unity-serial-var-name >>
+        PARAM_UNITY_LICENSE_VAR_NAME: << parameters.unity-license-var-name >>
         PARAM_PROJECT_PATH: << parameters.project-path >>
         SCRIPT_PREPARE_ENV_LINUX: << include(scripts/linux/prepare-env.sh) >>
         SCRIPT_PREPARE_ENV_WINDOWS: << include(scripts/windows/prepare-env.sh) >>

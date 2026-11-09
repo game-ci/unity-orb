@@ -15,7 +15,7 @@ parameters:
     type: env_var_name
     default: "UNITY_EMAIL"
     description: |
-      Enter the name of the environment variable containing your Unity username.
+      Enter the name of the environment variable containing your Unity account email.
   unity-password-var-name:
     type: env_var_name
     default: "UNITY_PASSWORD"
@@ -26,10 +26,13 @@ parameters:
     default: "UNITY_SERIAL"
     description: |
       Enter the name of the environment variable containing your Unity serial number.
-      Required even for personal license.
-      TODO: Improve documentation on how to extract from personal license, it's something like this:
-        cat Unity_lic.ulf | grep DeveloperData | sed -E 's/.*Value="([^"]+)".*/\1/' | base64 --decode
-      For future versions, we could simply request the user to provide the ulf file and we could do the extraction.
+      Required for Plus or Pro licenses. For Personal licenses, leave it unset and use "unity-license-var-name" instead.
+  unity-license-var-name:
+    type: env_var_name
+    default: "UNITY_LICENSE"
+    description: |
+      Enter the name of the environment variable containing your Unity license file (.ulf) content, raw or base64-encoded.
+      Only used when no serial is set: the serial is extracted from the license file (Personal licenses).
   project-path:
     type: string
     default: "."
@@ -99,16 +102,19 @@ executor: << parameters.executor >>
 
 steps:
   - checkout
-  - run:
-      name: Fetch submodules
-      command: |
-        git submodule sync
-        git submodule update --init
+  - when:
       condition: << parameters.fetch-submodules >>
+      steps:
+        - run:
+            name: Fetch submodules
+            command: |
+              git submodule sync
+              git submodule update --init
   - prepare-env:
       unity-email-var-name: << parameters.unity-email-var-name >>
       unity-password-var-name: << parameters.unity-password-var-name >>
       unity-serial-var-name: << parameters.unity-serial-var-name >>
+      unity-license-var-name: << parameters.unity-license-var-name >>
       project-path: <<parameters.project-path>>
       no_output_timeout: << parameters.no_output_timeout>>
   - build:

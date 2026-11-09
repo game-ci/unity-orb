@@ -8,6 +8,14 @@ filters: &filters
   tags:
     only: /.*/
 
+jobs:
+  test-scripts:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run: bash tests/utils_test.sh
+
 workflows:
   lint-pack:
     jobs:
@@ -20,9 +28,11 @@ workflows:
           filters: *filters
       - shellcheck/check:
           filters: *filters
+      - test-scripts:
+          filters: *filters
       - orb-tools/continue:
           orb_name: unity
           pipeline_number: << pipeline.number >>
           vcs_type: << pipeline.project.type >>
-          requires: [orb-tools/lint, orb-tools/pack, orb-tools/review, shellcheck/check]
+          requires: [orb-tools/lint, orb-tools/pack, orb-tools/review, shellcheck/check, test-scripts]
           filters: *filters

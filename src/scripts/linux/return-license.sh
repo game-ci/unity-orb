@@ -11,6 +11,5 @@ unity-editor \
   -returnlicense \
   -username "$unity_email" \
   -password "$unity_password" \
-  -serial "$unity_serial" \
   -logfile /dev/stdout
 set +x

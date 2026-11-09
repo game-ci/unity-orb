@@ -111,23 +111,22 @@ workflows:
           filters: *filters
           context: orb-testing-unity
           pre-steps: *mono
-      # - unity/test:
-      #     name: "test-windows"
-      #     step-name: "Check if the tests run and results are uploaded"
-      #     unity-email-var-name: "UNITY_EMAIL"
-      #     unity-password-var-name: "UNITY_PASSWORD"
-      #     unity-serial-var-name: "UNITY_SERIAL"
-      #     serial-password-var-name: "UNITY_SERIAL"
-      #     executor:
-      #       name: "unity/windows-2019"
-      #       size: "large"
-      #       editor_version: "2022.3.33f1"
-      #       target_platform: "windows-il2cpp"
-      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
-      #     test-platform: "playmode"
-      #     filters: *filters
-      #     context: orb-testing-unity
-      #     pre-steps: *mono
+      - unity/test:
+          name: "test-windows"
+          step-name: "Check if the tests run and results are uploaded"
+          unity-email-var-name: "UNITY_EMAIL"
+          unity-password-var-name: "UNITY_PASSWORD"
+          unity-serial-var-name: "UNITY_SERIAL"
+          executor:
+            name: "unity/windows-2022"
+            size: "large"
+            editor_version: "2022.3.33f1"
+            target_platform: "windows-il2cpp"
+          project-path: "Unity2D-Demo-Game-CI-CD/src"
+          test-platform: "playmode"
+          filters: *filters
+          context: orb-testing-unity
+          pre-steps: *mono
       # - unity/test:
       #     name: "test-windows-with-custom-parameters"
       #     step-name: "Check if test filter in custom parameter works"
@@ -154,7 +153,7 @@ workflows:
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
-            resource_class: "macos.m1.medium.gen1"
+            resource_class: "m4pro.medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           test-platform: "playmode"
           filters: *filters
@@ -169,7 +168,7 @@ workflows:
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
-            resource_class: "macos.m1.medium.gen1"
+            resource_class: "m4pro.medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           custom-parameters: "-testFilter EnemyMovesLeft -customParam1 potato -customParam2 $CIRCLE_WORKFLOW_ID"
           test-platform: "playmode"
@@ -221,7 +220,7 @@ workflows:
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
-            resource_class: "macos.m1.medium.gen1"
+            resource_class: "m4pro.medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneOSX
           compress: true
@@ -393,7 +392,7 @@ workflows:
           executor:
             name: "unity/macos"
             editor_version: "2022.3.33f1"
-            resource_class: "macos.m1.medium.gen1"
+            resource_class: "m4pro.medium"
           project-path: "Unity2D-Demo-Game-CI-CD/src"
           build-target: StandaloneOSX
           build-method: "MyCustomBuildCommand.MyCustomBuildMethod"
