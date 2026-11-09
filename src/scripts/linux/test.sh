@@ -3,14 +3,13 @@
 # shellcheck disable=SC2154
 
 parse_results_to_junit() {
-  # Install dependencies for the JUnit parser. Retry: Ubuntu mirrors have outages.
+  # Install xsltproc to convert Unity's results to JUnit. Retry: Ubuntu mirrors have outages.
   # shellcheck disable=SC2329 # Called through retry.
-  install_saxon() { apt-get update && apt-get install -y default-jre libsaxonb-java; }
-  retry install_saxon
+  install_xsltproc() { apt-get update && apt-get install -y --no-install-recommends xsltproc; }
+  command -v xsltproc > /dev/null || retry install_xsltproc
 
-  # Parse Unity's results xml to JUnit format.
-  printf '%s\n' "$DEPENDENCY_NUNIT_TRANSFORM" >"$base_dir/nunit3-junit.xslt"
-  saxonb-xslt -s "$unity_project_full_path/$PARAM_TEST_PLATFORM-results.xml" -xsl "$base_dir/nunit3-junit.xslt" >"$unity_project_full_path/$PARAM_TEST_PLATFORM-junit-results.xml"
+  printf '%s\n' "$DEPENDENCY_NUNIT_TRANSFORM" > "$base_dir/nunit3-junit.xslt"
+  xsltproc "$base_dir/nunit3-junit.xslt" "$unity_project_full_path/$PARAM_TEST_PLATFORM-results.xml" > "$unity_project_full_path/$PARAM_TEST_PLATFORM-junit-results.xml"
 }
 
 unity_exit_code=0
