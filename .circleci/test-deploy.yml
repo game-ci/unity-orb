@@ -111,22 +111,22 @@ workflows:
           filters: *filters
           context: orb-testing-unity
           pre-steps: *mono
-      - unity/test:
-          name: "test-windows"
-          step-name: "Check if the tests run and results are uploaded"
-          unity-email-var-name: "UNITY_EMAIL"
-          unity-password-var-name: "UNITY_PASSWORD"
-          unity-serial-var-name: "UNITY_SERIAL"
-          executor:
-            name: "unity/windows-2022"
-            size: "large"
-            editor_version: "2022.3.33f1"
-            target_platform: "windows-il2cpp"
-          project-path: "Unity2D-Demo-Game-CI-CD/src"
-          test-platform: "playmode"
-          filters: *filters
-          context: orb-testing-unity
-          pre-steps: *mono
+      # - unity/test:
+      #     name: "test-windows" # TODO: Docker Engine fails to start on windows-server-2022-gui
+      #     step-name: "Check if the tests run and results are uploaded"
+      #     unity-email-var-name: "UNITY_EMAIL"
+      #     unity-password-var-name: "UNITY_PASSWORD"
+      #     unity-serial-var-name: "UNITY_SERIAL"
+      #     executor:
+      #       name: "unity/windows-2022"
+      #       size: "large"
+      #       editor_version: "2022.3.33f1"
+      #       target_platform: "windows-il2cpp"
+      #     project-path: "Unity2D-Demo-Game-CI-CD/src"
+      #     test-platform: "playmode"
+      #     filters: *filters
+      #     context: orb-testing-unity
+      #     pre-steps: *mono
       # - unity/test:
       #     name: "test-windows-with-custom-parameters"
       #     step-name: "Check if test filter in custom parameter works"

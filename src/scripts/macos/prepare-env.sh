@@ -64,6 +64,9 @@ check_and_install_unity_editor() {
   return 0
 }
 
+# Older editors (e.g. 2022.3) run x86_64 helpers like the Package Manager server, which need Rosetta 2.
+arch -x86_64 /usr/bin/true 2> /dev/null || softwareupdate --install-rosetta --agree-to-license
+
 # Install the Editor if not already installed.
 if ! check_and_install_unity_editor; then
   printf '%s\n' "Something went wrong."
