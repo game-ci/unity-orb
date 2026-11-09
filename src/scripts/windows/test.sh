@@ -24,7 +24,7 @@ rm -f "$base_dir/test/results.xml"
 unity_exit_code=0
 set -x
 # $LASTEXITCODE stays empty when Unity can't be started: treat it as a failure.
-docker exec "$CONTAINER_NAME" powershell "& 'C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe' ${test_args[*]} -logfile | Out-Host; if (\$null -eq \$LASTEXITCODE) { exit 1 }; exit \$LASTEXITCODE" || unity_exit_code=$?
+docker exec "$CONTAINER_NAME" powershell "& \$Env:UNITY_PATH/Editor/Unity.exe ${test_args[*]} -logfile | Out-Host; if (\$null -eq \$LASTEXITCODE) { exit 1 }; exit \$LASTEXITCODE" || unity_exit_code=$?
 set +x
 
 # Exit code 2 means some tests failed: parse and upload the results first. Anything else is a crash.
