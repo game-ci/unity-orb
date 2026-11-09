@@ -4,7 +4,7 @@
 
 parse_results_to_junit() {
   # Install xsltproc to convert Unity's results to JUnit. Retry: Ubuntu mirrors have outages.
-  # shellcheck disable=SC2329 # Called through retry.
+  # shellcheck disable=SC2317,SC2329 # Called through retry.
   install_xsltproc() { apt-get update && apt-get install -y --no-install-recommends xsltproc; }
   command -v xsltproc > /dev/null || retry install_xsltproc
 
