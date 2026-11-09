@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2034,SC2329 # Variables and the docker stub are used by the sourced script.
+# shellcheck disable=SC2034,SC2317,SC2329 # Variables and the docker stub are used by the sourced script.
 # Checks exit code handling in src/scripts/windows/test.sh with a fake docker. Run: bash tests/windows_test_test.sh
 set -uo pipefail
 
