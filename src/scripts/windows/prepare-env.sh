@@ -16,6 +16,9 @@ trap_exit() {
 }
 trap trap_exit EXIT
 
+# Start Docker. Recent CircleCI Windows images don't start it by default.
+docker info &> /dev/null || powershell 'Start-Service docker'
+
 # Install the Windows 10 SDK.
 choco upgrade windows-sdk-10.1 visualstudio2022-workload-vctools --no-progress -y
 

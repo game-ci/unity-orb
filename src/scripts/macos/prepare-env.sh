@@ -8,20 +8,6 @@ readonly unity_editor_path="/Applications/Unity/Hub/Editor/$UNITY_EDITOR_VERSION
 printf '%s\n' "export UNITY_HUB_PATH=\"$unity_hub_path\"" >> "$BASH_ENV"
 printf '%s\n' "export UNITY_EDITOR_PATH=$unity_editor_path" >> "$BASH_ENV"
 
-check_and_install_rosetta() {
-  if ! /usr/bin/pgrep oahd &> /dev/null; then
-    echo "Rosetta 2 is not installed. Installing it now..."
-    if softwareupdate --install-rosetta --agree-to-license; then
-      echo "Rosetta 2 installed successfully."
-    else
-      echo "Failed to install Rosetta 2."
-      exit 1
-    fi
-  else
-    echo "Rosetta 2 is already installed."
-  fi
-}
-
 check_and_install_unity_hub() {
   if [ ! -f "$unity_hub_path" ]; then
     printf '%s\n' "Could not find Unity Hub at \"$unity_hub_path\"."
@@ -58,7 +44,7 @@ check_and_install_unity_editor() {
       changeset="$(npx unity-changeset "$UNITY_EDITOR_VERSION")"
 
       set -x
-      arch -x86_64 "$unity_hub_path" -- --headless install --version "$UNITY_EDITOR_VERSION" --changeset "$changeset" --module mac-il2cpp --childModules -a arm64
+      "$unity_hub_path" -- --headless install --version "$UNITY_EDITOR_VERSION" --changeset "$changeset" --module mac-il2cpp --childModules --architecture arm64
       set +x
 
       if [ -f "$unity_editor_path" ]; then
@@ -77,9 +63,6 @@ check_and_install_unity_editor() {
 
   return 0
 }
-
-# Check and install Rosetta 2 if not already installed.
-check_and_install_rosetta
 
 # Install the Editor if not already installed.
 if ! check_and_install_unity_editor; then
