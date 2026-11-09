@@ -60,4 +60,10 @@ docker exec "$container_name" powershell 'reg import C:\regkeys\winsdk.reg'
 docker exec "$container_name" powershell 'regsvr32 /s C:\ProgramData\Microsoft\VisualStudio\Setup\x64\Microsoft.VisualStudio.Setup.Configuration.Native.dll'
 
 # Activate Unity
-docker exec "$container_name" powershell '& "C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe" -batchmode -quit -nographics -username $Env:UNITY_EMAIL -password $Env:UNITY_PASSWORD -serial $Env:UNITY_SERIAL -logfile | Out-Host' | mask-serial
+(set -o pipefail; docker exec "$container_name" powershell '& "C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe" -batchmode -quit -nographics -username $Env:UNITY_EMAIL -password $Env:UNITY_PASSWORD -serial $Env:UNITY_SERIAL -logfile | Out-Host' | mask-serial) || exit 1
+
+# Like on Linux, check the license file rather than Unity's exit code.
+if ! docker exec "$container_name" powershell 'if (!(Test-Path C:\ProgramData\Unity\Unity_lic.ulf)) { exit 1 }'; then
+  printf '%s\n' "Failed to activate Unity. Please check your credentials or open an issue."
+  exit 1
+fi

@@ -32,9 +32,16 @@ test_args=(
 [ -n "$custom_parameters" ] && test_args+=( '$Env:CUSTOM_PARAMS.split()' )
 
 # Run the tests.
+unity_exit_code=0
 set -x
-docker exec "$CONTAINER_NAME" powershell "& 'C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe' ${test_args[*]} -logfile | Out-Host"
+docker exec "$CONTAINER_NAME" powershell "& 'C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe' ${test_args[*]} -logfile | Out-Host; exit \$LASTEXITCODE" || unity_exit_code=$?
 set +x
+
+# Exit code 2 means some tests failed: parse and upload the results first. Anything else is a crash.
+if [ "$unity_exit_code" -ne 0 ] && [ "$unity_exit_code" -ne 2 ]; then
+  printf '%s\n' "Run failed. Exit code $unity_exit_code"
+  exit "$unity_exit_code"
+fi
 
 # Install JDK to run Saxon.
 docker exec "$CONTAINER_NAME" powershell 'choco upgrade jdk8 --no-progress -y'
@@ -55,3 +62,5 @@ docker exec "$CONTAINER_NAME" powershell '((Get-Content C:/test/junit-results.xm
 
 # Move test results to project folder for upload.
 mv "$base_dir"/test/junit-results-lf.xml "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-junit-results.xml
+
+if [ "$unity_exit_code" -eq 2 ]; then touch "$base_dir/.unity-tests-failed"; fi
