@@ -487,6 +487,7 @@ workflows:
             - orb-tools/pack
             - test-linux
             - test-linux-with-custom-parameters
+            - test-linux-personal-license
             # - test-windows # TODO: Investigate Windows activation error
             # - test-windows-with-custom-parameters # TODO: Investigate Windows activation error
             - test-osx

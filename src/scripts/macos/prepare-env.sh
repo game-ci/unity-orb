@@ -87,7 +87,7 @@ activate_unity() {
     -username "$unity_email" \
     -password "$unity_password" \
     -serial "$unity_serial" \
-    -logfile /dev/stdout \
+    -logfile - \
     | mask-serial || return 1
   [ -f "$unity_license_file_path/Unity_lic.ulf" ]
 }

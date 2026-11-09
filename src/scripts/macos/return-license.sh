@@ -11,6 +11,6 @@ set -x
   -returnlicense \
   -username "$unity_email" \
   -password "$unity_password" \
-  -logfile /dev/stdout \
+  -logfile - \
   | mask-serial
 set +x
