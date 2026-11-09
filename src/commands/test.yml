@@ -63,3 +63,6 @@ steps:
         - <<parameters.project-path>>/Library/
   - store_test_results:
       path: << parameters.project-path >>/<< parameters.test-platform >>-junit-results.xml
+  - run:
+      name: Fail if any test failed (see the Tests tab)
+      command: test ! -f .unity-tests-failed

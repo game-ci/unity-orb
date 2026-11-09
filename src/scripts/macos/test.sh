@@ -6,19 +6,11 @@ check_and_install_saxonb() {
   if ! brew list saxon-b &> /dev/null; then
     printf '%s\n' "Saxon-B is required to parse Unity's XML results to the JUnit format."
     printf '%s\n' "Installing it with Brew."
-    
-    if brew install saxon-b; then
-      printf '%s\n' "Saxon-B installed successfully."
-      saxonb_jar="$(brew --prefix saxon-b | xargs -I saxon_path find saxon_path/ -name saxon9.jar)"
-      return 0
-
-    else
-      printf '%s\n' "Something went wrong."
-      printf '%s\n' "Please try again or open an issue."
-      return 1
-
-    fi
+    brew install saxon-b || return 1
   fi
+
+  saxonb_jar="$(find "$(brew --prefix saxon-b)/" -name saxon9.jar | head -n 1)"
+  [ -n "$saxonb_jar" ]
 }
 
 check_and_install_java() {
@@ -26,7 +18,7 @@ check_and_install_java() {
     printf '%s\n' "Java is required to parse Unity's XML results to JUnit."
     printf '%s\n' "Installing it with Brew."
     
-    if brew cask install java; then
+    if brew install --cask temurin; then
       printf '%s\n' "Java installed successfully."
       return 0
 
@@ -69,6 +61,7 @@ parse_xml_to_junit() {
   fi
 }
 
+unity_exit_code=0
 set -x
 # Run the tests.
 # shellcheck disable=SC2086 # $custom_parameters needs to be unquoted. Otherwise it will be treated as a single parameter.
@@ -80,9 +73,7 @@ set -x
   -testPlatform "$PARAM_TEST_PLATFORM" \
   -testResults "$base_dir/results.xml" \
   -logfile /dev/stdout \
-  $custom_parameters
-
-unity_exit_code=$?
+  $custom_parameters || unity_exit_code=$?
 set +x
 
 if [ "$unity_exit_code" -eq 0 ]; then
@@ -92,6 +83,8 @@ if [ "$unity_exit_code" -eq 0 ]; then
 elif [ "$unity_exit_code" -eq 2 ]; then
   printf '%s\n' "Run succeeded, some tests failed.";
   if ! parse_xml_to_junit; then exit 1; fi
+  # Defer the failure so the results get uploaded first.
+  touch "$base_dir/.unity-tests-failed"
 
 elif [ "$unity_exit_code" -eq 3 ]; then
   printf '%s\n' "Run failure (other failure).";

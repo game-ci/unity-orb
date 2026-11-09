@@ -9,7 +9,8 @@ set -x
   -batchmode \
   -nographics \
   -returnlicense \
-  -username "$unity_username" \
+  -username "$unity_email" \
   -password "$unity_password" \
-  -logfile /dev/stdout
+  -logfile - \
+  | mask-serial
 set +x

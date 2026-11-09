@@ -2,11 +2,11 @@ description: >
   This command returns the license used to build or test the project.
 
 parameters:
-  unity-username-var-name:
+  unity-email-var-name:
     type: env_var_name
-    default: "UNITY_USERNAME"
+    default: "UNITY_EMAIL"
     description: |
-      Enter the name of the environment variable containing your Unity username.
+      Enter the name of the environment variable containing your Unity account email.
   unity-password-var-name:
     type: env_var_name
     default: "UNITY_PASSWORD"
@@ -16,8 +16,9 @@ parameters:
 steps:
   - run:
       name: Return the Unity license
+      when: always
       environment:
-        PARAM_UNITY_USERNAME_VAR_NAME: << parameters.unity-username-var-name >>
+        PARAM_UNITY_EMAIL_VAR_NAME: << parameters.unity-email-var-name >>
         PARAM_UNITY_PASSWORD_VAR_NAME: << parameters.unity-password-var-name >>
         SCRIPT_RETURN_LICENSE_LINUX: << include(scripts/linux/return-license.sh) >>
         SCRIPT_RETURN_LICENSE_WINDOWS: << include(scripts/windows/return-license.sh) >>

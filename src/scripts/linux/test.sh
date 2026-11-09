@@ -11,6 +11,7 @@ parse_results_to_junit() {
   saxonb-xslt -s "$unity_project_full_path/$PARAM_TEST_PLATFORM-results.xml" -xsl "$base_dir/nunit3-junit.xslt" >"$unity_project_full_path/$PARAM_TEST_PLATFORM-junit-results.xml"
 }
 
+unity_exit_code=0
 set -x
 # shellcheck disable=SC2086 # $custom_parameters needs to be unquoted. Otherwise it will be treated as a single parameter.
 ${UNITY_EXECUTABLE:-xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' unity-editor} \
@@ -25,8 +26,7 @@ ${UNITY_EXECUTABLE:-xvfb-run --auto-servernum --server-args='-screen 0 640x480x2
   -coverageResultsPath "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage \
   -coverageOptions "generateAdditionalMetrics;generateHtmlReport;generateHtmlReportHistory;generateBadgeReport;" \
   -debugCodeOptimization \
-  $custom_parameters
-unity_exit_code=$?
+  $custom_parameters || unity_exit_code=$?
 set +x
 
 if [ "$unity_exit_code" -eq 0 ] || [ "$unity_exit_code" -eq 2 ]; then
@@ -41,15 +41,12 @@ fi
 code_coverage_package="com.unity.testtools.codecoverage"
 package_manifest_path="$unity_project_full_path/Packages/manifest.json"
 
-# Check if the Code Coverage package is installed and move the coverage results to the root of the project.
 if grep -q "$code_coverage_package" "$package_manifest_path"; then
-  grep "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/Report/Summary.xml Linecoverage
-  mv "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/"$CIRCLE_PROJECT_REPONAME"-opencov/*Mode/TestCoverageResults_*.xml "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/coverage.xml
-  rm -r "$unity_project_full_path"/"$PARAM_TEST_PLATFORM"-coverage/"$CIRCLE_PROJECT_REPONAME"-opencov/
+  grep Linecoverage "$unity_project_full_path/$PARAM_TEST_PLATFORM-coverage/Report/Summary.xml" || true
 else
-  {
-    echo -e "\033[33mCode Coverage package not found in $package_manifest_path. Please install the package \"Code Coverage\" through Unity's Package Manager to enable coverage reports.\033[0m"
-  } 2>/dev/null
+  printf '\033[33m%s\033[0m\n' "Code Coverage package not found in $package_manifest_path. Install the \"Code Coverage\" package through Unity's Package Manager to enable coverage reports."
 fi
 
+# Exit code 2 means some tests failed: defer the failure so the results get uploaded first.
+if [ "$unity_exit_code" -eq 2 ]; then touch "$base_dir/.unity-tests-failed"; exit 0; fi
 exit "$unity_exit_code"
