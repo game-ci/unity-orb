@@ -28,7 +28,8 @@ build_args=(
 # Versioning of the project needs work. This is how it's done in the GHA:
 # https://github.com/game-ci/unity-builder/blob/main/src/model/versioning.ts
 set -x
-docker exec "$CONTAINER_NAME" powershell "& \$Env:UNITY_PATH/Editor/Unity.exe ${build_args[*]} -logfile | Out-Host"
+# Exit with Unity's exit code; $LASTEXITCODE stays empty when Unity can't be started.
+docker exec "$CONTAINER_NAME" powershell "& \$Env:UNITY_PATH/Editor/Unity.exe ${build_args[*]} -logfile | Out-Host; if (\$null -eq \$LASTEXITCODE) { exit 1 }; exit \$LASTEXITCODE"
 exit_code="$?"
 set +x
 
