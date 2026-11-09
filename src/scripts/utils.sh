@@ -61,8 +61,8 @@ retry() {
   done
 }
 
-# Hide the serial ($unity_serial) in Unity's output. Unity prints it with only the last 4 characters
-# replaced by "XXXX", which CircleCI's secret masking doesn't catch.
+# Hide serials in Unity's output. Unity prints them with only the last 4 characters replaced by
+# "XXXX", which CircleCI's secret masking doesn't catch.
 mask-serial() {
-  sed "s/${unity_serial%????}/[masked]/g"
+  sed -E 's/[A-Z0-9]{2}(-[A-Z0-9]{4}){5}/[masked]/g'
 }

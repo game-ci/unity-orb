@@ -48,10 +48,11 @@ parameters:
       More information can be found on: https://docs.unity3d.com/Packages/com.unity.test-framework@2.0/manual/reference-command-line.html
   return-license:
     type: boolean
-    default: true
+    default: false
     description: |
       Whether to return the license at the end of the job, even when it fails.
-      Keep it enabled so CI machines don\'t use up the activations allowed for your license.
+      Don't enable it for jobs running in parallel with the same license: GameCI's Linux images share a machine ID,
+      so returning the license in one job deactivates Unity in the others.
   no_output_timeout:
     type: string
     default: "20m"
