@@ -12,16 +12,16 @@ parameters:
     description: |
       Resource class used for the executor.
       If you are receiving a "CircleCI received exit code 137" from the build job, you may need to increase the resource class.
-      For details on resource class availability, see https://circleci.com/docs/using-macos#available-resource-classes.
+      For details on resource class availability, see https://circleci.com/docs/guides/execute/using-macos/.
     type: enum
-    default: macos.m1.medium.gen1
-    enum: [ macos.m1.medium.gen1, macos.m1.large.gen1 ]
+    default: m4pro.medium
+    enum: [ m4pro.medium, m4pro.large ]
   xcode_version:
     description: |
       Pick the Xcode version.
-      Available options can be found at https://circleci.com/docs/using-macos#supported-xcode-versions.
+      Available options can be found at https://circleci.com/docs/guides/execute/using-macos/.
     type: string
-    default: 15.4.0
+    default: 16.4.0
 
 macos:
   xcode: << parameters.xcode_version >>

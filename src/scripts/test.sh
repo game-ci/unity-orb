@@ -4,6 +4,9 @@
 readonly base_dir="${CIRCLE_WORKING_DIRECTORY/\~/$HOME}"
 readonly unity_project_full_path="$base_dir/$PARAM_PROJECT_PATH"
 
+# Remove a marker left by a previous run on a reused runner working directory.
+rm -f "$base_dir/.unity-tests-failed"
+
 # Import "utils.sh".
 eval "$SCRIPT_UTILS"
 
