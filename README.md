@@ -69,20 +69,13 @@ circleci namespace create $NAMESPACE --org-id $ORG_ID
 # Note: Error: To create private orbs, your organization must enable the 'Allow private orbs' feature in Org Settings > Security.
 circleci orb create $NAMESPACE/$ORB_NAME --private
 
-# Pack the Orb configuration from the source directory
-circleci orb pack $SRC_DIR > $OUTPUT_FILE
-
-# Validate the packed Orb before publishing it
-circleci orb validate $OUTPUT_FILE
-
-# Publish the packed Orb to a development version
-circleci orb publish $OUTPUT_FILE $NAMESPACE/$ORB_NAME@$DEV_VERSION
-
-# Promote the Orb to a stable release version
-circleci orb publish promote $NAMESPACE/$ORB_NAME@$DEV_VERSION $RELEASE_TYPE
-
-# You can now use the Orb in your CircleCI configuration
-echo "Orb published successfully"
+# Pack and validate the Orb, publish it to a development version, then promote it to a stable release.
+# Each step runs only if the previous one succeeded.
+circleci orb pack $SRC_DIR > $OUTPUT_FILE &&
+  circleci orb validate $OUTPUT_FILE &&
+  circleci orb publish $OUTPUT_FILE $NAMESPACE/$ORB_NAME@$DEV_VERSION &&
+  circleci orb publish promote $NAMESPACE/$ORB_NAME@$DEV_VERSION $RELEASE_TYPE &&
+  echo "Orb published successfully. You can now use it in your CircleCI configuration."
 
 # Retrieve information about the Orb
 circleci orb info $NAMESPACE/$ORB_NAME
