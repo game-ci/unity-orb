@@ -14,7 +14,7 @@ Easily build and test your Unity project.
 
 ### How to Contribute
 
-We welcome [issues](https://github.com/game-ci/unity-orb/issues) to and [pull requests](https://github.com/game-ci/unity-orb/pulls) against this repository!
+We welcome [issues](https://github.com/game-ci/unity-orb/issues) and [pull requests](https://github.com/game-ci/unity-orb/pulls) against this repository! For detailed guidelines, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ### How to Publish An Update (for maintainers)
 
@@ -71,6 +71,9 @@ circleci orb create $NAMESPACE/$ORB_NAME --private
 
 # Pack the Orb configuration from the source directory
 circleci orb pack $SRC_DIR > $OUTPUT_FILE
+
+# Validate the packed Orb before publishing it
+circleci orb validate $OUTPUT_FILE
 
 # Publish the packed Orb to a development version
 circleci orb publish $OUTPUT_FILE $NAMESPACE/$ORB_NAME@$DEV_VERSION
