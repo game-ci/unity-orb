@@ -2,8 +2,7 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2154
 
-set -x
-# Return license
+# Return license. No "set -x": the command contains the password.
 unity-editor \
   -quit \
   -batchmode \
@@ -13,4 +12,3 @@ unity-editor \
   -password "$unity_password" \
   -logfile /dev/stdout \
   | mask-serial
-set +x
