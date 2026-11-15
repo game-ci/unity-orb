@@ -48,6 +48,11 @@ check_and_install_unity_editor() {
 
     changeset="$(npx unity-changeset "$UNITY_EDITOR_VERSION")"
 
+    # The CLI only accepts an existing install directory.
+    if ! mkdir -p "$unity_editors_path" 2> /dev/null; then
+      sudo mkdir -p "$unity_editors_path" && sudo chown -R "$(id -u):$(id -g)" "$unity_editors_path" || return 1
+    fi
+
     set -x
     if ! unity install-path --set "$unity_editors_path" --non-interactive \
       || ! unity install "$UNITY_EDITOR_VERSION" --changeset "$changeset" --module mac-il2cpp --child-modules \
