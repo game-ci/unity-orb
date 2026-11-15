@@ -21,7 +21,7 @@ We welcome [issues](https://github.com/game-ci/unity-orb/issues) and [pull reque
 1. Merge pull requests with desired changes to the main branch.
     - For the best experience, squash-and-merge and use [Conventional Commit Messages](https://conventionalcommits.org/).
 2. Find the current version of the orb.
-    - You can run `circleci orb get game-ci/unity --json --jq .latest_version` to see the current version.| grep "Latest"` to see the current version.
+    - You can run `circleci orb get game-ci/unity --json --jq .latest_version` to see the current version.
 3. Create a [new Release](https://github.com/game-ci/unity-orb/releases/new) on GitHub.
     - Click "Choose a tag" and _create_ a new [semantically versioned](http://semver.org/) tag. (ex: v1.0.0)
       - We will have an opportunity to change this before we publish if needed after the next step.
@@ -82,4 +82,3 @@ Then reference it from a pipeline in the same organization (private orbs are onl
 orbs:
   unity: your-username/unity-orb-private@0.0.1
 ```
-
