@@ -62,7 +62,8 @@ retry() {
 }
 
 # Hide serials in Unity's output. Unity prints them with only the last 4 characters replaced by
-# "XXXX", which CircleCI's secret masking doesn't catch.
+# "XXXX", which CircleCI's secret masking doesn't catch. Also hide the access token prefix the
+# licensing client prints ("Successfully updated the access token <prefix>...").
 mask-serial() {
-  sed -E 's/[A-Z0-9]{2}(-[A-Z0-9]{4}){5}/[masked]/g'
+  sed -E -e 's/[A-Z0-9]{2}(-[A-Z0-9]{4}){5}/[masked]/g' -e 's/(access token )[^[:space:]]+/\1[masked]/g'
 }
