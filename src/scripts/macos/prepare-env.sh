@@ -11,9 +11,14 @@ printf '%s\n' "export UNITY_EDITOR_PATH=$unity_editor_path" >> "$BASH_ENV"
 # Unity's standalone CLI (`unity`) replaces it.
 check_and_install_unity_cli() {
   if ! command -v unity &> /dev/null; then
-    printf '%s\n' "Could not find the Unity CLI. Installing it with brew..."
+    printf '%s\n' "Could not find the Unity CLI. Installing it with Unity's install script..."
 
-    if ! brew install --cask unity-cli || ! command -v unity &> /dev/null; then
+    # The script installs to ~/.unity/bin; make it available to this step and to later steps.
+    curl -fsSL https://unity.com/install.sh | bash
+    export PATH="$HOME/.unity/bin:$PATH"
+    printf '%s\n' "export PATH=\"$HOME/.unity/bin:\$PATH\"" >> "$BASH_ENV"
+
+    if ! command -v unity &> /dev/null; then
       printf '%s\n' "Could not install the Unity CLI."
       printf '%s\n' "Please try again or open an issue."
       return 1
