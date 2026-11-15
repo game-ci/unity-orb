@@ -13,8 +13,9 @@ check_and_install_unity_cli() {
   if ! command -v unity &> /dev/null; then
     printf '%s\n' "Could not find the Unity CLI. Installing it with Unity's install script..."
 
-    # The script installs to ~/.unity/bin; make it available to this step and to later steps.
-    curl -fsSL https://unity.com/install.sh | bash
+    # Pinned for reproducible builds; the script verifies the binary against its manifest's SHA-256.
+    # It installs to ~/.unity/bin; make that available to this step and to later steps.
+    curl -fsSL https://unity.com/install.sh | UNITY_CLI_VERSION=1.0.0 bash
     export PATH="$HOME/.unity/bin:$PATH"
     printf '%s\n' "export PATH=\"$HOME/.unity/bin:\$PATH\"" >> "$BASH_ENV"
 
