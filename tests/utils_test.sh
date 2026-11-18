@@ -21,6 +21,7 @@ license="<?xml version=\"1.0\" encoding=\"UTF-8\"?><root><License id=\"Terms\">
 # mask-serial: hides full and partially masked serials.
 [ "$(printf '%s\n' 'assigned to (masked): "SC-ABCD-1234-EFGH-5678-XXXX"' | mask-serial)" = 'assigned to (masked): "[masked]"' ] || fail "mask partial serial"
 [ "$(printf '%s\n' "serial $serial" | mask-serial)" = "serial [masked]" ] || fail "mask full serial"
+[ "$(printf '%s\n' '[Licensing::Client] Successfully updated the access token 1a2b3c4d...' | mask-serial)" = '[Licensing::Client] Successfully updated the access token [masked]' ] || fail "mask access token"
 
 # retry: succeeds on the 2nd attempt. Skip the backoff delay.
 sleep() { :; }
